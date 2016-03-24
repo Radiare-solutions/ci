@@ -9,7 +9,7 @@ class IndicationController extends Controller {
     public function index() {
        $indicationObj = new Indication();
        
-       print_r(Indication::all()); 
+       echo $indicationObj->find('56f432f5b720531878f8c92e');
        
     }
     
