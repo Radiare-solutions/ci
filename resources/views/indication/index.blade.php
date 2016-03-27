@@ -82,502 +82,68 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                        $details = json_decode($details);
+                        $i = 1;
+                        foreach ($details as $detail) {
+                            foreach ($detail->indicationName as $indicationName) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><?php echo $indicationName; ?></td>
+                                    <td><?php echo $detail->therapyName; ?></td>
+                                    <td class="text-center">
+                                        <ul class="icons-list">
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="icon-menu9"></i>
+                                                </a>
 
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li class="dropdown-header">Options</li>
+                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                                    <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                                    <li class="dropdown-header">Export</li>
+                                                    <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
+                                                    <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
+                                                    <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>Abo-incompatible Renal Transplant</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>Acute Graft-Versus-Host Disease</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Acute myeloid leukemia</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Age-related macular degeneration</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>All Autoimmune Indications</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Alzheimer Disease</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>ANCA-associated systemic vasculitis</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Adalimumab</td>
-                            <td>Autoimmune</td>
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                            <li class="dropdown-header">Export</li>
-                                            <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                            <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                            <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
+                                    </td>
+                                </tr>
+                                <?php
+                                    $i++;
+                            }
+                        }
+                        ?>                        
                     </tbody>
                 </table>
             </div>
 
+            <!-- start of edit popup -->
+            <!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+            <!-- end of edit popup -->
+            
             <div id="modal_form_vertical" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -599,36 +165,42 @@
                                         <label>Therapeutic Area:</label>
                                         <select class="select">
                                             <option value=""></option>
-                                            <option value="174">Abo-incompatible Renal Transplant</option>
-                                            <option value="189">Acute Graft-Versus-Host Disease</option>
-                                            <option value="36">Acute myeloid leukemia</option>
-                                            <option value="212">Age-related macular degeneration</option>
-                                            <option value="24">All Autoimmune Indications</option>
-                                            <option value="111">Alzheimer Disease</option>
-                                            <option value="26">ANCA-associated systemic vasculitis</option>
-                                            <option value="92">ANCA-Associated Vasculitis</option>
-                                            <option value="1">Ankylosing spondylitis</option>
-                                            <option value="211">Anti-Synthetase Syndrome</option>
-                                            <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                            <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                            <option value="93">Autoimmune Diseases</option>
-                                            <option value="81">Autoimmune Thrombocytopenia</option>
-                                            <option value="10">Axial Spondylarthritis</option>
-                                            <option value="77">B Cell Indolent Lymphomas</option>
-                                            <option value="169">B-cell Lymphoma</option>
-                                            <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                            <option value="98">Behçet’s Syndrome</option>
-                                            <option value="18">Behcet’s disease</option>
-                                            <option value="128">Branch Retinal Vein Occlusion</option>
-                                            <option value="38">Breast cancer</option>
-                                            <option value="71">Burkitt Lymphoma</option>
-                                            <option value="56">Cancer</option>
-                                            <option value="160">Central Serous Chorioretinopathy</option>
-                                            <option value="46">Cervical Cancer</option>
-                                            <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                            <option value="134">Chorioretinopathy</option>
-                                            <option value="41">Choroidal Neovascularization</option>
-                                            <option value="67">Chronic Fatigue Syndrome</option>
+                                            <?php
+                                            foreach ($therapy as $therapyDetail) {
+                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Name'] . '</option>';
+                                            }
+                                            ?>
+                                            <!--                                            <option value=""></option>
+                                                                                        <option value="174">Abo-incompatible Renal Transplant</option>
+                                                                                        <option value="189">Acute Graft-Versus-Host Disease</option>
+                                                                                        <option value="36">Acute myeloid leukemia</option>
+                                                                                        <option value="212">Age-related macular degeneration</option>
+                                                                                        <option value="24">All Autoimmune Indications</option>
+                                                                                        <option value="111">Alzheimer Disease</option>
+                                                                                        <option value="26">ANCA-associated systemic vasculitis</option>
+                                                                                        <option value="92">ANCA-Associated Vasculitis</option>
+                                                                                        <option value="1">Ankylosing spondylitis</option>
+                                                                                        <option value="211">Anti-Synthetase Syndrome</option>
+                                                                                        <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
+                                                                                        <option value="162">Appendiceal Epithelial Neoplasms</option>
+                                                                                        <option value="93">Autoimmune Diseases</option>
+                                                                                        <option value="81">Autoimmune Thrombocytopenia</option>
+                                                                                        <option value="10">Axial Spondylarthritis</option>
+                                                                                        <option value="77">B Cell Indolent Lymphomas</option>
+                                                                                        <option value="169">B-cell Lymphoma</option>
+                                                                                        <option value="202">B-cell non-Hodgkin lymphoma</option>
+                                                                                        <option value="98">Behçet’s Syndrome</option>
+                                                                                        <option value="18">Behcet’s disease</option>
+                                                                                        <option value="128">Branch Retinal Vein Occlusion</option>
+                                                                                        <option value="38">Breast cancer</option>
+                                                                                        <option value="71">Burkitt Lymphoma</option>
+                                                                                        <option value="56">Cancer</option>
+                                                                                        <option value="160">Central Serous Chorioretinopathy</option>
+                                                                                        <option value="46">Cervical Cancer</option>
+                                                                                        <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
+                                                                                        <option value="134">Chorioretinopathy</option>
+                                                                                        <option value="41">Choroidal Neovascularization</option>
+                                                                                        <option value="67">Chronic Fatigue Syndrome</option>-->
 
                                         </select>
                                     </div>
