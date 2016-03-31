@@ -101,7 +101,7 @@
 
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li class="dropdown-header">Options</li>
-                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_indication_details('<?php echo $detail->_id;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                     <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                                     <li class="dropdown-header">Export</li>
                                                     <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
@@ -130,44 +130,26 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">Edit Indication</h4>
       </div>
       <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-            <!-- end of edit popup -->
-            
-            <div id="modal_form_vertical" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h5 class="modal-title">Add New Indication</h5>
-                        </div>
-
-                        <form action="#">
+                                <form action="edit_indication" method="post" name="edit_indication" id="edit_indication"> 
+                            <div id="errorResponse"></div>
                             <div class="panel panel-flat">
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <label>Indication:</label>
-                                        <input type="text" class="form-control" placeholder="Enter the New Indication">
+                                        <input type="text" class="form-control" id="indicationName" name="indicationName" placeholder="Enter the New Indication">
                                     </div>
 
 
                                     <div class="form-group">
                                         <label>Therapeutic Area:</label>
-                                        <select class="select">
+                                        <select class="select" name="therapyName" id="therapyName">
                                             <option value=""></option>
                                             <?php
                                             foreach ($therapy as $therapyDetail) {
-                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Name'] . '</option>';
+                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Therapy'] . '</option>';
                                             }
                                             ?>
                                             <!--                                            <option value=""></option>
@@ -205,7 +187,82 @@
                                         </select>
                                     </div>
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
+                                        <button type="button" onclick="edit_indication_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+      </div>      
+    </div>
+
+  </div>
+</div>
+            <!-- end of edit popup -->
+            
+            <div id="modal_form_vertical" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h5 class="modal-title">Add New Indication</h5>
+                        </div>
+
+                        <form action="add_indication" method="post" name="add_indication" id="add_indication"> 
+                            <div id="errorResponse"></div>
+                            <div class="panel panel-flat">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label>Indication:</label>
+                                        <input type="text" class="form-control" name="indicationName" placeholder="Enter the New Indication">
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Therapeutic Area:</label>
+                                        <select class="select" name="therapyName">
+                                            <option value=""></option>
+                                            <?php
+                                            foreach ($therapy as $therapyDetail) {
+                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Therapy'] . '</option>';
+                                            }
+                                            ?>
+                                            <!--                                            <option value=""></option>
+                                                                                        <option value="174">Abo-incompatible Renal Transplant</option>
+                                                                                        <option value="189">Acute Graft-Versus-Host Disease</option>
+                                                                                        <option value="36">Acute myeloid leukemia</option>
+                                                                                        <option value="212">Age-related macular degeneration</option>
+                                                                                        <option value="24">All Autoimmune Indications</option>
+                                                                                        <option value="111">Alzheimer Disease</option>
+                                                                                        <option value="26">ANCA-associated systemic vasculitis</option>
+                                                                                        <option value="92">ANCA-Associated Vasculitis</option>
+                                                                                        <option value="1">Ankylosing spondylitis</option>
+                                                                                        <option value="211">Anti-Synthetase Syndrome</option>
+                                                                                        <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
+                                                                                        <option value="162">Appendiceal Epithelial Neoplasms</option>
+                                                                                        <option value="93">Autoimmune Diseases</option>
+                                                                                        <option value="81">Autoimmune Thrombocytopenia</option>
+                                                                                        <option value="10">Axial Spondylarthritis</option>
+                                                                                        <option value="77">B Cell Indolent Lymphomas</option>
+                                                                                        <option value="169">B-cell Lymphoma</option>
+                                                                                        <option value="202">B-cell non-Hodgkin lymphoma</option>
+                                                                                        <option value="98">Behçet’s Syndrome</option>
+                                                                                        <option value="18">Behcet’s disease</option>
+                                                                                        <option value="128">Branch Retinal Vein Occlusion</option>
+                                                                                        <option value="38">Breast cancer</option>
+                                                                                        <option value="71">Burkitt Lymphoma</option>
+                                                                                        <option value="56">Cancer</option>
+                                                                                        <option value="160">Central Serous Chorioretinopathy</option>
+                                                                                        <option value="46">Cervical Cancer</option>
+                                                                                        <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
+                                                                                        <option value="134">Chorioretinopathy</option>
+                                                                                        <option value="41">Choroidal Neovascularization</option>
+                                                                                        <option value="67">Chronic Fatigue Syndrome</option>-->
+
+                                        </select>
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="button" onclick="add_indication_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
                                     </div>
                                 </div>
                             </div>

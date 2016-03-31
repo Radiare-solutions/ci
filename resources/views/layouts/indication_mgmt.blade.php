@@ -31,6 +31,7 @@
 	<script type="text/javascript" src="{{ URL::asset("js/core/app.js") }}"></script>
 	<script type="text/javascript" src="{{ URL::asset("js/pages/datatables_basic.js") }}"></script>
 	<script type="text/javascript" src="{{ URL::asset("js/pages/form_layouts.js") }}"></script>
+        <script type="text/javascript" src="{{ URL::asset("js/common.js") }}"></script>
 	<!-- /theme JS files -->
 
 </head>

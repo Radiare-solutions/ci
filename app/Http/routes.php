@@ -11,15 +11,23 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Route::get('indication_mgmt', function() {
     return view('indication/index');
 });
 
-Route::get('example', 'Indication\IndicationController@index');
+Route::post('add_indication', 'Indication\IndicationController@store');
+
+Route::post('edit_indication', 'Indication\IndicationController@store');
+
+//Route::post('load_indication', 'Indication\IndicationController@load');
+
+Route::post('load_indication/{id}', ['uses' =>'Indication\IndicationController@load']);
+
+Route::get('/', 'Indication\IndicationController@index');
 /*
 |--------------------------------------------------------------------------
 | Application Routes
