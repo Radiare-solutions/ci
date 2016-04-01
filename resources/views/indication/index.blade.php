@@ -86,11 +86,11 @@
                         $details = json_decode($details);
                         $i = 1;
                         foreach ($details as $detail) {
-                            foreach ($detail->indicationName as $indicationName) {
+                            foreach ($detail->indicationName as $indicationName) {                               
                                 ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><?php echo $indicationName; ?></td>
+                                    <td><?php echo $indicationName->Name; ?></td>
                                     <td><?php echo $detail->therapyName; ?></td>
                                     <td class="text-center">
                                         <ul class="icons-list">
@@ -101,7 +101,7 @@
 
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li class="dropdown-header">Options</li>
-                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_indication_details('<?php echo $detail->_id;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_indication_details('<?php echo $detail->_id;?>', '<?php echo $indicationName->_id;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                     <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                                     <li class="dropdown-header">Export</li>
                                                     <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
@@ -142,7 +142,9 @@
                                         <input type="text" class="form-control" id="indicationName" name="indicationName" placeholder="Enter the New Indication">
                                     </div>
 
-
+                                    <input type="hidden" name="indicationID" id ="indicationID">
+                                    <input type="hidden" name="therapyID" id ="therapyID">
+                                    
                                     <div class="form-group">
                                         <label>Therapeutic Area:</label>
                                         <select class="select" name="therapyName" id="therapyName">
@@ -187,7 +189,7 @@
                                         </select>
                                     </div>
                                     <div class="text-right">
-                                        <button type="button" onclick="edit_indication_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
+                                        <button type="button" onclick="edit_indication_submit();" class="btn btn-primary">Update <i class="icon-arrow-right14 position-right"></i></button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>

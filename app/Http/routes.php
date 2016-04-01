@@ -25,7 +25,7 @@ Route::post('edit_indication', 'Indication\IndicationController@store');
 
 //Route::post('load_indication', 'Indication\IndicationController@load');
 
-Route::post('load_indication/{id}', ['uses' =>'Indication\IndicationController@load']);
+Route::post('load_indication/{id}/{id1}', ['uses' =>'Indication\IndicationController@load']);
 
 Route::get('/', 'Indication\IndicationController@index');
 /*

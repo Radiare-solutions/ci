@@ -31,20 +31,22 @@ function add_indication_submit() {
     });
 }
 
-function load_indication_details(id) {
-    console.log("id : " + id);
-    var url = "load_indication/"+id;
+function load_indication_details(tid, iid) {
+    console.log("id : " + tid + " - " + iid);
+    var url = "load_indication/"+tid+"/"+iid;
     $.ajax({
         type: 'post',
         url: url,
         dataType: 'json',
         success: function (data) {
             var details = (data);
-            console.log(details.indicationName);
+            console.log(details);
             $('#myModal form#edit_indication #indicationName').val(details.indicationName);
             $('#myModal form#edit_indication #therapyName').val(details.therapyName);
-            $("#myModal form#edit_indication #select2-therapyName-container").html(details.therapyName);            
-        },
+            $("#myModal form#edit_indication #select2-therapyName-container").html(details.therapyName);    
+            $('#myModal form#edit_indication #indicationID').val(details.indicationID);
+            $('#myModal form#edit_indication #therapyID').val(details.therapyID);
+        },      
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
@@ -70,15 +72,17 @@ function edit_indication_submit() {
         type: 'post',
         url: url,
         data: data,
+        crossDomain: true,
         dataType: 'json',
         success: function (data) {
-            // success logic
+            // success logic            
             $('form#edit_indication #errorResponse').removeClass("alert alert-danger");
             $('form#edit_indication #errorResponse').show().html("Indication Updated successfully");            
             $('form#edit_indication #errorResponse').addClass("alert alert-success");
             //window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
+            alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
                 var errors = data.responseJSON.message;

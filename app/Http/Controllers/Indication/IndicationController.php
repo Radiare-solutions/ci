@@ -13,8 +13,7 @@ class IndicationController extends Controller {
 
     public function index() {
         $listDetails = array();
-        $therapy = Indication::all();
-        $this->indicationExists();
+        $therapy = Indication::all();        
         foreach ($therapy as $therapyDetail['attributes']) {
             $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
             $details['_id'] = $therapyDetail['attributes']['_id'];
@@ -23,14 +22,15 @@ class IndicationController extends Controller {
             $ob->therapyName = $details['therapyName'];
             $ob->_id = $details['_id'];
             foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
-                //print_r($indicationDetail['Name']);
-                array_push($test, $indicationDetail['Name']);
+               $testing['Name'] = $indicationDetail['Name'];
+               $testing['_id'] = (string) $indicationDetail['_id'];
+               array_push($test, $testing);
             }
             $ob->indicationName = $test;
             array_push($listDetails, $ob);
             //exit;
         }
-
+        
         return view('indication/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
     }
 
@@ -49,50 +49,28 @@ class IndicationController extends Controller {
                         'message' => $errors
                             ], 422);
         } else {
-            $indicationObj = new Indication();
-            $indicationObj->add($request);
+            $this->indicationExists($request);
+            // $indicationObj = new Indication();
+            // $indicationObj->add($request);
 
-            return response()->json([
+            /*return response()->json([
                         'success' => true,
                         'message' => "Indication Added Successfully"
-                            ], 200);
+                            ], 200);*/
         }
     }
 
-    public function indicationExists() {
-        $therapyID = '56efd36c9191b80388f1f1a0';
-        $indication = '456';
-
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) 
-        {
-            return $collection->aggregate(array (
-                array('$unwind' => '$Indication'),
-                array(
-                    '$match' => array(
-                    '_id' => new \MongoDB\BSON\ObjectId('56efd36c9191b80388f1f1a0'),
-                        ),
-                    '$and' => array('Indication.Name' => array('456')),
-                ),
-                array('$project' => array(
-                    'Therapy' => 1,
-                    'Indication' => 1,
-                ))
-            ));
-        });
-        echo '<pre>';
-        print_r($result);
-        exit;
+    public function indicationExists($request) {
+             
+        $obj = new Indication();        
+        $result = $obj->checkIndicationExists($request);                
+        
+        
     }
 
-    public function load($id) {
-        $indicationDetails = Indication::find($id);
-        if (!empty($indicationDetails)) {
-            $details['therapyName'] = $indicationDetails['attributes']['Therapy'];
-            $details['indicationName'] = $indicationDetails['attributes']['Indication'][0]['Name'];
-            return $details;
-        } else {
-            return 0;
-        }
+    public function load($tid, $iid) {
+        $obj = new Indication();
+        return $obj->loadIndicationDetails($tid, $iid);        
     }
 
 }
