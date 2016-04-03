@@ -20,14 +20,20 @@ Route::get('indication_mgmt', function() {
 });
 
 Route::post('add_indication', 'Indication\IndicationController@store');
-
 Route::post('edit_indication', 'Indication\IndicationController@store');
-
-//Route::post('load_indication', 'Indication\IndicationController@load');
-
 Route::post('load_indication/{id}/{id1}', ['uses' =>'Indication\IndicationController@load']);
+Route::get('/indication_mgmt', 'Indication\IndicationController@index');
 
-Route::get('/', 'Indication\IndicationController@index');
+Route::get('/molecule_mgmt', 'Molecule\MoleculeController@index');
+Route::post('add_molecule', 'Molecule\MoleculeController@store');
+Route::post('edit_molecule', 'Molecule\MoleculeController@store');
+Route::post('load_molecule/{id}/{id1}', ['uses' =>'Molecule\MoleculeController@load']);
+
+Route::get('/client_mgmt', 'Client\ClientController@index');
+Route::post('add_client', 'Client\ClientController@store');
+Route::post('edit_client', 'Client\ClientController@store');
+Route::post('load_client/{id}', ['uses' =>'Client\ClientController@load']);
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

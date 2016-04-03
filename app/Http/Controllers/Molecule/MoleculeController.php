@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Indication;
+namespace App\Http\Controllers\Molecule;
 
 use App\Http\Controllers\Controller;
-use App\Models\Indication\Indication;
+use App\Models\Molecule\Molecule;
 use Illuminate\Http\Request;
 use Validator;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
 
-class IndicationController extends Controller {
+class MoleculeController extends Controller {
 
     public function index() {
         $listDetails = array();
-        $therapy = Indication::all();        
+        $therapy = Molecule::all();        
         foreach ($therapy as $therapyDetail['attributes']) {
             $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
             $details['_id'] = $therapyDetail['attributes']['_id'];
@@ -21,22 +21,23 @@ class IndicationController extends Controller {
             $test = array();
             $ob->therapyName = $details['therapyName'];
             $ob->_id = $details['_id'];
-            foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
-               $testing['Name'] = $indicationDetail['Name'];
-               $testing['_id'] = (string) $indicationDetail['_id'];
+            
+            foreach ($therapyDetail['attributes']['Molecule'] as $moleculeDetail) {
+               $testing['Name'] = $moleculeDetail['Name'];
+               $testing['_id'] = (string) $moleculeDetail['_id'];
                array_push($test, $testing);
             }
-            $ob->indicationName = $test;
+            $ob->moleculeName = $test;
             array_push($listDetails, $ob);
             //exit;
         }
         
-        return view('indication/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
+        return view('molecule/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
     }
 
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'indicationName' => 'required',
+                    'moleculeName' => 'required',
                     'therapyName' => 'required',
         ]);
 
@@ -49,25 +50,25 @@ class IndicationController extends Controller {
                         'message' => $errors
                             ], 422);
         } else {
-            $str = $this->indicationExists($request);
-            return response()->json([
-                        'success' => true,
-                        'message' => "Indication ".$str." Successfully"
-                            ], 200);
+            $str = $this->moleculeExists($request);
+//            return response()->json([
+//                        'success' => true,
+//                        'message' => "Molecule ".$str." Successfully"
+//                            ], 200);
         }
     }
 
-    public function indicationExists($request) {
+    public function moleculeExists($request) {
              
-        $obj = new Indication();        
-        return $result = $obj->checkIndicationExists($request);                
+        $obj = new Molecule();        
+        return $result = $obj->checkMoleculeExists($request);                
         
         
     }
 
-    public function load($tid, $iid) {
-        $obj = new Indication();
-        return $obj->loadIndicationDetails($tid, $iid);        
+    public function load($tid, $mid) {
+        $obj = new Molecule();
+        return $obj->loadMoleculeDetails($tid, $mid);        
     }
 
 }

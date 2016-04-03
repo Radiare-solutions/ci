@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Indication;
+namespace App\Models\Molecule;
 
 //use Moloquent;
 //use MongoId;
@@ -16,14 +16,14 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
  *
  * @author Hafiz Waheeduddin
  */
-class Indication extends Eloquent {
+class Molecule extends Eloquent {
 
     protected $collection = "posts";
-    protected $fillable = array('Therapy', 'Indication');
+    protected $fillable = array('Therapy', 'Indication', 'Molecule');
     public $therapyName = "";
-    public $indicationName = "";
+    public $moleculeName = "";
     public $therapyID = "";
-    public $indicationID = "";
+    public $moleculeID = "";
 
     public function posts() {
         // return $this->belongsTo('App\Models\Indication\Indications');
@@ -32,15 +32,15 @@ class Indication extends Eloquent {
 
     public function add($request) {
 
-        $indication = array('Name' => "$request->indicationName", '_id' => new \MongoDB\BSON\ObjectId());
+        $molecule = array('Name' => "$request->moleculeName", '_id' => new \MongoDB\BSON\ObjectId());
         $arr = array("Therapy" => "$request->therapyName");
-        $arr['Indication'] = array($indication);
+        $arr['Molecule'] = array($molecule);
 
         // Indication::create($arr);
         //echo $test;
         //exit;
-        Indication::where('_id', '=', $request->therapyName)
-                ->push('Indication', array($indication));
+        Molecule::where('_id', '=', $request->therapyName)
+                ->push('Molecule', array($molecule));
         //$test = $test->pushAttributeValues("Indication", $indication);
 //        $ob->Therapy = $request->therapyName;
 //        $indication = array(array('Name' => $request->indicationName));
@@ -58,17 +58,18 @@ class Indication extends Eloquent {
 
     public function edit($request) {
         // theraptic area not changed
-        if ($this->therapyID == $request->therapyName) {
+        if ( $request->therapyID == $request->therapyName) {
             $this->therapyID = new \MongoDB\BSON\ObjectId($request->therapyID);
-            $this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
-            $ob = Indication::find($this->therapyID);
-            $indications = $ob->attributes['Indication'];
-            $index = $this->getIndex($this->indicationID, $indications);
+            $this->moleculeID = new \MongoDB\BSON\ObjectId($request->moleculeID);
+            $this->moleculeName = $request->moleculeName;
+            $ob = Molecule::find($this->therapyID);
+            $molecules = $ob->attributes['Molecule'];
+            $index = $this->getIndex($this->moleculeID, $molecules);
 
             // $story = \Illuminate\Support\Facades\DB::collection('posts')->where('_id', $this->therapyID)->update(array('Indication.0.Name' => 'abc'));
             \Illuminate\Support\Facades\DB::collection('posts')->
                     where('_id', $this->therapyID)->
-                    update(array('Indication.' . $index . '.Name' => 'abc')
+                    update(array('Molecule.' . $index . '.Name' => $this->moleculeName)
             );
         }
         // theraptic area changed
@@ -95,64 +96,65 @@ class Indication extends Eloquent {
         }
     }
 
-    public function loadIndicationDetails($tid, $iid) {
+    public function loadMoleculeDetails($tid, $mid) {
         $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
-        $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+        $this->moleculeID = new \MongoDB\BSON\ObjectId($mid);
         $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
             return $collection->aggregate(array(
-                        array('$unwind' => '$Indication'),
-                        array('$unwind' => '$Indication._id'),
+                        array('$unwind' => '$Molecule'),
+                        array('$unwind' => '$Molecule._id'),
                         array(
                             '$match' => array(
                                 '$and' => array(
                                     array('_id' => $this->therapyID),
-                                    array('Indication._id' => array('$in' => array($this->indicationID))),
+                                    array('Molecule._id' => array('$in' => array($this->moleculeID))),
                                 )
                             )
                         ),
                         array('$project' => array(
                                 'Therapy' => 1,
-                                'Indication' => 1,
+                                'Molecule' => 1,
                             )),
             ));
         });
         $details = "";
         foreach ($result as $query) {
             $details['therapyID'] = (string) $query['_id'];
-            $details['indicationID'] = (string) $query['Indication']['_id'];
+            $details['moleculeID'] = (string) $query['Molecule']['_id'];
             $details['therapyName'] = $query['Therapy'];
-            $details['indicationName'] = $query['Indication']['Name'];
+            $details['moleculeName'] = $query['Molecule']['Name'];
         }
         return $details;
     }
 
-    public function checkIndicationExists($request) {
-        // echo "check indication exists";
+    public function checkMoleculeExists($request) {
+        // echo "check molecule exists";
         $this->therapyName = new \MongoDB\BSON\ObjectId($request->therapyName);
-        $this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
-        $this->indicationName = $request->indicationName;
+        $this->moleculeID = new \MongoDB\BSON\ObjectId($request->moleculeID);
+        $this->moleculeName = $request->moleculeName;
         $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
             return $collection->aggregate(array(
-                        array('$unwind' => '$Indication'),
-                        array('$unwind' => '$Indication._id'),
+                        array('$unwind' => '$Molecule'),
+                        array('$unwind' => '$Molecule._id'),
                         array(
                             '$match' => array(
                                 '$and' => array(
                                     array('_id' => $this->therapyName),
-                                    array('Indication._id' => array('$in' => array($this->indicationID))),
+                                    array('Molecule._id' => array('$in' => array($this->moleculeID))),
                                 )
                             )
                         ),
                         array('$project' => array(
                                 'Therapy' => 1,
-                                'Indication' => 1,
+                                'Molecule' => 1,
                             )),
             ));
         });
         $id = "";
         foreach ($result as $query) {
-            $id = $query['Indication']['_id'];
+            $id = $query['Molecule']['_id'];
         }
+        echo "id : ".$id."<br>";
         if (empty($id)) {
             $this->add($request);
             return "Added";
