@@ -18,8 +18,12 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
  */
 class Molecule extends Eloquent {
 
-    protected $collection = "posts";
-    protected $fillable = array('Therapy', 'Indication', 'Molecule');
+    protected $collection = "molecules";
+    protected $fillable = array('Molecule');
+    
+    public $l1id = "";
+    public $l2id = "";
+    
     public $therapyName = "";
     public $moleculeName = "";
     public $therapyID = "";
@@ -30,12 +34,9 @@ class Molecule extends Eloquent {
         // return $this-> ('App\Models\Indication\Post');
     }
 
-    public function add($request) {
+    public function add($request, $id) {
 
-        $molecule = array('Name' => "$request->moleculeName", '_id' => new \MongoDB\BSON\ObjectId());
-        $arr = array("Therapy" => "$request->therapyName");
-        $arr['Molecule'] = array($molecule);
-
+        $molecule = array('Name' => "$request->moleculeName", '_id' => new \MongoDB\BSON\ObjectId());        
         // Indication::create($arr);
         //echo $test;
         //exit;
@@ -128,32 +129,40 @@ class Molecule extends Eloquent {
     }
 
     public function checkMoleculeExists($request) {
-        // echo "check molecule exists";
-        $this->therapyName = new \MongoDB\BSON\ObjectId($request->therapyName);
-        $this->moleculeID = new \MongoDB\BSON\ObjectId($request->moleculeID);
+        //echo "check molecule exists";
+        //exit;
+        $this->l1id = new \MongoDB\BSON\ObjectId($request->level1Name);
+        $this->l2id = new \MongoDB\BSON\ObjectId($request->level2Name);
         $this->moleculeName = $request->moleculeName;
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
+        $result = \Illuminate\Support\Facades\DB::collection('molecules')->raw(function($collection) {
             return $collection->aggregate(array(
-                        array('$unwind' => '$Molecule'),
-                        array('$unwind' => '$Molecule._id'),
+                        array('$unwind' => '$Level1'),
+                        array('$unwind' => '$Level1._id'),
+                        array('$unwind' => '$Level1.Level2'),
+                        array('$unwind' => '$Level1.Level2._id'),
                         array(
                             '$match' => array(
-                                '$and' => array(
-                                    array('_id' => $this->therapyName),
-                                    array('Molecule._id' => array('$in' => array($this->moleculeID))),
+                                '$and' => array(                                    
+                                    array('Level1._id' => array('$in' => array($this->l1id))),
+                                    array('Level1.Level2._id' => array('$in' => array($this->l2id))),
                                 )
                             )
-                        ),
+                        ),                        
                         array('$project' => array(
-                                'Therapy' => 1,
-                                'Molecule' => 1,
+                                'Level1' => 1,                                
                             )),
             ));
         });
         $id = "";
         foreach ($result as $query) {
-            $id = $query['Molecule']['_id'];
-        }
+            // print_r($query['Level1']['_id']);
+            // exit;
+            $i1index = $this->getIndex($this->l1id, $query['Level1']['_id']);
+            echo "1 : ".$i1index."<br>";
+            print_r($query);
+            exit;            
+        }        
+        exit;
         echo "id : ".$id."<br>";
         if (empty($id)) {
             $this->add($request);
@@ -162,6 +171,38 @@ class Molecule extends Eloquent {
             $this->edit($request);
             return "Modified";
         }
+        
+        $this->add($request);
+            return  "Added";
+    }
+    
+    public function loadLevel2Data($l1id) {
+        $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
+        $result = \Illuminate\Support\Facades\DB::collection('molecules')->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Level1'),
+                        array('$unwind' => '$Level1._id'),
+                        array('$unwind' => '$Level1.Level2'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(                                    
+                                    array('Level1._id' => array('$in' => array($this->l1id))),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Level1.Level2' => 1,
+                            )),
+            ));
+        });
+        $str = "";
+        foreach ($result as $query) {
+            $arr = $query['Level1']['Level2'];
+            $id = $arr['_id'];
+            $name = $arr['Name'];
+            $str.= "<option value='".$id."' data-name='".$name."'>".$name."</option>";
+        }
+        return $str;
     }
 
 }

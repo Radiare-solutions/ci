@@ -179,18 +179,19 @@
 									<h5 class="modal-title">Add New Client</h5>
 								</div>
 
-								<form action="#">
+								<form action="add_client" method="post" name="add_client" id="add_client">
+                                                              <div id="errorResponse"></div>
 								<div class="panel panel-flat">
 									<div class="panel-body">
 										<div class="form-group">
 											<label>Client:</label>
-											<input type="text" class="form-control" placeholder="Enter the New Client">
+											<input type="text" class="form-control" name="clientName" id="clientName" placeholder="Enter the New Client">
 										</div>
 										
 
 										
 										<div class="text-right">
-											<button type="submit" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
+											<button type="button" onclick="add_client_submit();" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
 										</div>
 									</div>
 								</div>

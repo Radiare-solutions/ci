@@ -37,8 +37,7 @@ class ClientController extends Controller {
 
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'moleculeName' => 'required',
-                    'therapyName' => 'required',
+                    'clientName' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -50,25 +49,25 @@ class ClientController extends Controller {
                         'message' => $errors
                             ], 422);
         } else {
-            $str = $this->moleculeExists($request);
-//            return response()->json([
-//                        'success' => true,
-//                        'message' => "Molecule ".$str." Successfully"
-//                            ], 200);
+            $str = $this->clientExists($request);
+            return response()->json([
+                        'success' => true,
+                        'message' => "Client ".$str." Successfully"
+                            ], 200);
         }
     }
 
-    public function moleculeExists($request) {
+    public function clientExists($request) {
              
-        $obj = new Molecule();        
-        return $result = $obj->checkMoleculeExists($request);                
+        $obj = new Client();        
+        return $result = $obj->checkClientExists($request);                
         
         
     }
 
-    public function load($tid, $mid) {
-        $obj = new Molecule();
-        return $obj->loadMoleculeDetails($tid, $mid);        
+    public function load($cid) {
+        $obj = new Client();
+        return $obj->loadClientDetails($cid);        
     }
 
 }

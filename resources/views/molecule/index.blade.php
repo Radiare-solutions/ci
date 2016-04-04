@@ -82,8 +82,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!--
                         <?php
-                        $details = json_decode($details);
+                       /* $details = json_decode($details);
                         $i = 1;
                         foreach ($details as $detail) {
                             foreach ($detail->moleculeName as $molecule) {                               
@@ -115,8 +116,9 @@
                                 <?php
                                     $i++;
                             }
-                        }
-                        ?>                        
+                        } */
+                        ?>    
+                        -->
                     </tbody>
                 </table>
             </div>
@@ -150,9 +152,9 @@
                                         <select class="select" name="therapyName" id="therapyName">
                                             <option value=""></option>
                                             <?php
-                                            foreach ($therapy as $therapyDetail) {
+                                            /*foreach ($therapy as $therapyDetail) {
                                                 echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Therapy'] . '</option>';
-                                            }
+                                            }*/
                                             ?>
                                             <!--                                            <option value=""></option>
                                                                                         <option value="174">Abo-incompatible Renal Transplant</option>
@@ -214,55 +216,31 @@
                             <div id="errorResponse"></div>
                             <div class="panel panel-flat">
                                 <div class="panel-body">
+                                    
+                                    <div class="form-group">
+                                        <label>Level 1:</label>
+                                        <select class="select" name="level1Name" onchange="load_level2_data(this.value)" id="level1Name">
+                                            <option value=""></option>
+                                            <?php                                            
+                                            foreach ($level1 as $level1Detail) {
+                                                echo '<option value="' . $level1Detail['_id'] . '">' . $level1Detail['level1Name'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Level 2:</label>
+                                        <select class="select" name="level2Name" id="level2Name">
+                                            <option value=""></option>                                            
+                                        </select>
+                                    </div>
+                                   
                                     <div class="form-group">
                                         <label>Molecule:</label>
                                         <input type="text" class="form-control" name="moleculeName" placeholder="Enter the New Molecule">
                                     </div>
-
-
-                                    <div class="form-group">
-                                        <label>Therapeutic Area:</label>
-                                        <select class="select" name="therapyName">
-                                            <option value=""></option>
-                                            <?php
-                                            foreach ($therapy as $therapyDetail) {
-                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Therapy'] . '</option>';
-                                            }
-                                            ?>
-                                            <!--                                            <option value=""></option>
-                                                                                        <option value="174">Abo-incompatible Renal Transplant</option>
-                                                                                        <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                                                        <option value="36">Acute myeloid leukemia</option>
-                                                                                        <option value="212">Age-related macular degeneration</option>
-                                                                                        <option value="24">All Autoimmune Indications</option>
-                                                                                        <option value="111">Alzheimer Disease</option>
-                                                                                        <option value="26">ANCA-associated systemic vasculitis</option>
-                                                                                        <option value="92">ANCA-Associated Vasculitis</option>
-                                                                                        <option value="1">Ankylosing spondylitis</option>
-                                                                                        <option value="211">Anti-Synthetase Syndrome</option>
-                                                                                        <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                                                        <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                                                        <option value="93">Autoimmune Diseases</option>
-                                                                                        <option value="81">Autoimmune Thrombocytopenia</option>
-                                                                                        <option value="10">Axial Spondylarthritis</option>
-                                                                                        <option value="77">B Cell Indolent Lymphomas</option>
-                                                                                        <option value="169">B-cell Lymphoma</option>
-                                                                                        <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                                                        <option value="98">Behçet’s Syndrome</option>
-                                                                                        <option value="18">Behcet’s disease</option>
-                                                                                        <option value="128">Branch Retinal Vein Occlusion</option>
-                                                                                        <option value="38">Breast cancer</option>
-                                                                                        <option value="71">Burkitt Lymphoma</option>
-                                                                                        <option value="56">Cancer</option>
-                                                                                        <option value="160">Central Serous Chorioretinopathy</option>
-                                                                                        <option value="46">Cervical Cancer</option>
-                                                                                        <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                                                        <option value="134">Chorioretinopathy</option>
-                                                                                        <option value="41">Choroidal Neovascularization</option>
-                                                                                        <option value="67">Chronic Fatigue Syndrome</option>-->
-
-                                        </select>
-                                    </div>
+                                    
                                     <div class="text-right">
                                         <button type="button" onclick="add_molecule_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
                                     </div>
