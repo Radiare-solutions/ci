@@ -83,9 +83,9 @@ class MoleculeController extends Controller {
         
     }
 
-    public function load($mid) {
+    public function load($mid, $index) {
         $obj = new Molecule();
-        return $obj->loadMoleculeDetails($mid);        
+        return $obj->loadMoleculeDetails($mid, $index);        
     }
     
     public function loadLevel2Data($l1id) {

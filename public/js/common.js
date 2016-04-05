@@ -163,9 +163,9 @@ function add_molecule_submit() {
     });
 }
 
-function load_molecule_details(mid) {
-    console.log("id : " + " - " + mid);
-    var url = "load_molecule/"+mid;
+function load_molecule_details(mid, index) {
+    console.log("id : " + " - " + mid + " - " + index);
+    var url = "load_molecule/"+mid+"/"+index;
     $.ajax({
         type: 'post',
         url: url,
@@ -175,6 +175,7 @@ function load_molecule_details(mid) {
             console.log(details);
             $('#myModal form#edit_molecule #moleculeName').val(details.moleculeName);
             $('#myModal form#edit_molecule #mid').val(details.moleculeID);
+            $('#myModal form#edit_molecule #mIndex').val(details.mIndex);
             $("#myModal form#edit_molecule #level1Name option[value='"+details.level1id+"']").prop('selected', true);
             $("#myModal form#edit_molecule #select2-level1Name-container").html(details.level1name);  
             load_level2_data(details.level1id);

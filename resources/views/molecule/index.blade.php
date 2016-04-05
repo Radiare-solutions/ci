@@ -87,6 +87,7 @@
                         $details = json_decode($details);
                         $i = 1;
                         foreach($details as $detail) {
+                            $j = $i-1;
                         ?>
                         <tr>
                                     <td><?php echo $i; ?></td>
@@ -102,7 +103,7 @@
 
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li class="dropdown-header">Options</li>
-                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_molecule_details('<?php echo $detail->mid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_molecule_details('<?php echo $detail->mid;?>', '<?php echo $j;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                     <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                                     <li class="dropdown-header">Export</li>
                                                     <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
@@ -195,6 +196,8 @@
                                         <label>Molecule:</label>
                                         <input type="text" class="form-control" name="moleculeName" id="moleculeName" placeholder="Enter the New Molecule">
                                         <input type="hidden" name="mid" id="mid" >
+                                        <input type="hidden" name="mIndex" id="mIndex" >
+                                        
                                     </div>
                                     
                                     <div class="text-right">
