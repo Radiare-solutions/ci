@@ -76,8 +76,9 @@
                     <thead>
                         <tr>
                             <th>Sl.No</th>
+                            <th>Level 1</th>
+                            <th>Level 2</th>
                             <th>Molecule</th>
-                            <th>Therapeutic Area</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>

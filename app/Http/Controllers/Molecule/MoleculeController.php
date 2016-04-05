@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Molecule;
 
 use App\Http\Controllers\Controller;
 use App\Models\Molecule\Molecule;
+use App\Models\Molecule\Level1;
+use App\Models\Molecule\Level2;
 use Illuminate\Http\Request;
 use Validator;
 use MongoDB\Model;
@@ -13,23 +15,30 @@ class MoleculeController extends Controller {
 
     public function index() {
         $listDetails = array();
-        $levels = Molecule::all();  
+        $level1Details = Level1::all();  
         $level1 = array();
         $level2 = array();
         $molecule = array();
-        foreach ($levels as $levelDetail) {
+        foreach ($level1Details as $levelDetail['attributes']) {
             /*echo '<pre>';
             print_r($levelDetail);
             exit; */
-            foreach($levelDetail['attributes']['Level1'] as $level1Detail) {
-            $level1Details['_id'] = $level1Detail['_id'];
-            $level1Details['level1Name'] = $level1Detail['Name'];
-            array_push($level1, $level1Details);
+            foreach($levelDetail as $level1Detail) {
+//                echo '<pre>';
+//                print_r($level1Detail['_id']);
+//                exit;
+            $level1details['_id'] = (string) $level1Detail['_id'];
+            $level1details['level1Name'] = $level1Detail['Name'];
+            array_push($level1, $level1details);
             }
         }
-//        echo '<pre>';
-//        print_r($level1);
-//        exit;
+        
+        $moleculeDetails = Molecule::all();
+        
+        echo '<pre>';
+        print_r($moleculeDetails->attributes);
+        exit;
+        
         return view('molecule/index', array('level1' => $level1));        
     }
 
@@ -72,7 +81,7 @@ class MoleculeController extends Controller {
     
     public function loadLevel2Data($l1id) {
         // echo "l1id : ".$l1id."<br>";
-        $obj = new Molecule();
+        $obj = new Level2();
         $result = $obj->loadLevel2Data($l1id);
         return response()->json([
                         'success' => true,

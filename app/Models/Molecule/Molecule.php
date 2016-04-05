@@ -20,10 +20,8 @@ class Molecule extends Eloquent {
 
     protected $collection = "molecules";
     protected $fillable = array('Molecule');
-    
     public $l1id = "";
     public $l2id = "";
-    
     public $therapyName = "";
     public $moleculeName = "";
     public $therapyID = "";
@@ -36,7 +34,7 @@ class Molecule extends Eloquent {
 
     public function add($request, $id) {
 
-        $molecule = array('Name' => "$request->moleculeName", '_id' => new \MongoDB\BSON\ObjectId());        
+        $molecule = array('Name' => "$request->moleculeName", '_id' => new \MongoDB\BSON\ObjectId());
         // Indication::create($arr);
         //echo $test;
         //exit;
@@ -59,7 +57,7 @@ class Molecule extends Eloquent {
 
     public function edit($request) {
         // theraptic area not changed
-        if ( $request->therapyID == $request->therapyName) {
+        if ($request->therapyID == $request->therapyName) {
             $this->therapyID = new \MongoDB\BSON\ObjectId($request->therapyID);
             $this->moleculeID = new \MongoDB\BSON\ObjectId($request->moleculeID);
             $this->moleculeName = $request->moleculeName;
@@ -130,52 +128,19 @@ class Molecule extends Eloquent {
 
     public function checkMoleculeExists($request) {
         //echo "check molecule exists";
-        //exit;
+        //exit;        
         $this->l1id = new \MongoDB\BSON\ObjectId($request->level1Name);
         $this->l2id = new \MongoDB\BSON\ObjectId($request->level2Name);
         $this->moleculeName = $request->moleculeName;
-        $result = \Illuminate\Support\Facades\DB::collection('molecules')->raw(function($collection) {
-            return $collection->aggregate(array(
-                        array('$unwind' => '$Level1'),
-                        array('$unwind' => '$Level1._id'),
-                        array('$unwind' => '$Level1.Level2'),
-                        array('$unwind' => '$Level1.Level2._id'),
-                        array(
-                            '$match' => array(
-                                '$and' => array(                                    
-                                    array('Level1._id' => array('$in' => array($this->l1id))),
-                                    array('Level1.Level2._id' => array('$in' => array($this->l2id))),
-                                )
-                            )
-                        ),                        
-                        array('$project' => array(
-                                'Level1' => 1,                                
-                            )),
-            ));
-        });
-        $id = "";
-        foreach ($result as $query) {
-            // print_r($query['Level1']['_id']);
-            // exit;
-            $i1index = $this->getIndex($this->l1id, $query['Level1']['_id']);
-            echo "1 : ".$i1index."<br>";
-            print_r($query);
-            exit;            
-        }        
-        exit;
-        echo "id : ".$id."<br>";
-        if (empty($id)) {
-            $this->add($request);
-            return "Added";
-        } else {
-            $this->edit($request);
-            return "Modified";
-        }
-        
-        $this->add($request);
-            return  "Added";
+        $molecule = array(
+            '_id' => new \MongoDB\BSON\ObjectId(),
+            'Name' => $request->moleculeName,
+            'level1id' => $this->l1id,
+            'level2id' => $this->l2id
+        );
+        Molecule::where(1)->push('Molecule', array($molecule));
     }
-    
+
     public function loadLevel2Data($l1id) {
         $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
         $result = \Illuminate\Support\Facades\DB::collection('molecules')->raw(function($collection) {
@@ -185,7 +150,7 @@ class Molecule extends Eloquent {
                         array('$unwind' => '$Level1.Level2'),
                         array(
                             '$match' => array(
-                                '$and' => array(                                    
+                                '$and' => array(
                                     array('Level1._id' => array('$in' => array($this->l1id))),
                                 )
                             )
@@ -200,7 +165,7 @@ class Molecule extends Eloquent {
             $arr = $query['Level1']['Level2'];
             $id = $arr['_id'];
             $name = $arr['Name'];
-            $str.= "<option value='".$id."' data-name='".$name."'>".$name."</option>";
+            $str.= "<option value='" . $id . "' data-name='" . $name . "'>" . $name . "</option>";
         }
         return $str;
     }
