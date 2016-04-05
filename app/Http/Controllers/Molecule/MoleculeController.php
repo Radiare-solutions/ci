@@ -34,12 +34,21 @@ class MoleculeController extends Controller {
         }
         
         $moleculeDetails = Molecule::all();
+        foreach($moleculeDetails as $moleculeDetail) {
+            $molecul = $moleculeDetail['attributes']['Molecule'];
+            foreach($molecul as $molecule) {
+                $l1id = $molecule['level1id'];
+                $l2id = $molecule['level2id'];
+
+                $test['level1id'] = (string) $l1id;
+                $test['level2id'] = (string) $l2id;
+                $test['mid'] = (string) $molecule['_id'];
+                $test['moleculeName'] = $molecule['Name'];
+                array_push($listDetails, $test);
+            }
+        }
         
-        echo '<pre>';
-        print_r($moleculeDetails->attributes);
-        exit;
-        
-        return view('molecule/index', array('level1' => $level1));        
+        return view('molecule/index', array('level1' => $level1, 'details' => json_encode($listDetails)));        
     }
 
     public function store(Request $request) {
@@ -74,9 +83,9 @@ class MoleculeController extends Controller {
         
     }
 
-    public function load($tid, $mid) {
+    public function load($mid) {
         $obj = new Molecule();
-        return $obj->loadMoleculeDetails($tid, $mid);        
+        return $obj->loadMoleculeDetails($mid);        
     }
     
     public function loadLevel2Data($l1id) {

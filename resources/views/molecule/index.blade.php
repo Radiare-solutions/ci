@@ -75,14 +75,45 @@
                 <table class="table datatable-basic table-bordered">
                     <thead>
                         <tr>
-                            <th>Sl.No</th>
-                            <th>Level 1</th>
-                            <th>Level 2</th>
+                            <th>Sl.No</th>                           
                             <th>Molecule</th>
+                             <th>Level 2</th>
+                            <th>Level 1</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                        $details = json_decode($details);
+                        $i = 1;
+                        foreach($details as $detail) {
+                        ?>
+                        <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><?php echo $detail->moleculeName; ?></td>
+                                    <td><?php echo $detail->level2id; ?></td>
+                                    <td><?php echo $detail->level1id; ?></td>
+                                    <td class="text-center">
+                                        <ul class="icons-list">
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="icon-menu9"></i>
+                                                </a>
+
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li class="dropdown-header">Options</li>
+                                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_molecule_details('<?php echo $detail->mid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                                    <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                                    <li class="dropdown-header">Export</li>
+                                                    <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
+                                                    <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
+                                                    <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                        <?php $i++; } ?>
                         <!--
                         <?php
                        /* $details = json_decode($details);
@@ -140,60 +171,34 @@
                             <div id="errorResponse"></div>
                             <div class="panel panel-flat">
                                 <div class="panel-body">
-                                    <div class="form-group">
-                                        <label>Molecule:</label>
-                                        <input type="text" class="form-control" id="moleculeName" name="moleculeName" placeholder="Enter the New Molecule">
-                                    </div>
-
-                                    <input type="hidden" name="moleculeID" id ="moleculeID">
-                                    <input type="hidden" name="therapyID" id ="therapyID">
                                     
                                     <div class="form-group">
-                                        <label>Therapeutic Area:</label>
-                                        <select class="select" name="therapyName" id="therapyName">
+                                        <label>Level 1:</label>
+                                        <select class="select" name="level1Name" onchange="load_level2_data(this.value)" id="level1Name">
                                             <option value=""></option>
-                                            <?php
-                                            /*foreach ($therapy as $therapyDetail) {
-                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Therapy'] . '</option>';
-                                            }*/
+                                            <?php                                            
+                                            foreach ($level1 as $level1Detail) {
+                                                echo '<option value="' . $level1Detail['_id'] . '">' . $level1Detail['level1Name'] . '</option>';
+                                            }
                                             ?>
-                                            <!--                                            <option value=""></option>
-                                                                                        <option value="174">Abo-incompatible Renal Transplant</option>
-                                                                                        <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                                                        <option value="36">Acute myeloid leukemia</option>
-                                                                                        <option value="212">Age-related macular degeneration</option>
-                                                                                        <option value="24">All Autoimmune Indications</option>
-                                                                                        <option value="111">Alzheimer Disease</option>
-                                                                                        <option value="26">ANCA-associated systemic vasculitis</option>
-                                                                                        <option value="92">ANCA-Associated Vasculitis</option>
-                                                                                        <option value="1">Ankylosing spondylitis</option>
-                                                                                        <option value="211">Anti-Synthetase Syndrome</option>
-                                                                                        <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                                                        <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                                                        <option value="93">Autoimmune Diseases</option>
-                                                                                        <option value="81">Autoimmune Thrombocytopenia</option>
-                                                                                        <option value="10">Axial Spondylarthritis</option>
-                                                                                        <option value="77">B Cell Indolent Lymphomas</option>
-                                                                                        <option value="169">B-cell Lymphoma</option>
-                                                                                        <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                                                        <option value="98">Behçet’s Syndrome</option>
-                                                                                        <option value="18">Behcet’s disease</option>
-                                                                                        <option value="128">Branch Retinal Vein Occlusion</option>
-                                                                                        <option value="38">Breast cancer</option>
-                                                                                        <option value="71">Burkitt Lymphoma</option>
-                                                                                        <option value="56">Cancer</option>
-                                                                                        <option value="160">Central Serous Chorioretinopathy</option>
-                                                                                        <option value="46">Cervical Cancer</option>
-                                                                                        <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                                                        <option value="134">Chorioretinopathy</option>
-                                                                                        <option value="41">Choroidal Neovascularization</option>
-                                                                                        <option value="67">Chronic Fatigue Syndrome</option>-->
-
                                         </select>
                                     </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Level 2:</label>
+                                        <select class="select" name="level2Name" id="level2Name">
+                                            <option value=""></option>                                            
+                                        </select>
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                        <label>Molecule:</label>
+                                        <input type="text" class="form-control" name="moleculeName" id="moleculeName" placeholder="Enter the New Molecule">
+                                        <input type="hidden" name="mid" id="mid" >
+                                    </div>
+                                    
                                     <div class="text-right">
-                                        <button type="button" onclick="edit_molecule_submit();" class="btn btn-primary">Update <i class="icon-arrow-right14 position-right"></i></button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" onclick="edit_molecule_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
                                     </div>
                                 </div>
                             </div>

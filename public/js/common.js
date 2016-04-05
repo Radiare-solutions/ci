@@ -108,7 +108,7 @@ function load_level2_data(l1id) {
             url: url,
             dataType: 'json',
             success: function (data) {            
-                $('form#add_molecule #level2Name').html(data.message);
+                $('#level2Name').html(data.message);
             },      
             error: function (data) {
                 alert(data);
@@ -116,7 +116,7 @@ function load_level2_data(l1id) {
         });
     }
     else {
-        $('form#add_molecule #level2Name').html('');
+        $('#level2Name').html('');
     }
 }
 
@@ -163,9 +163,9 @@ function add_molecule_submit() {
     });
 }
 
-function load_molecule_details(tid, mid) {
-    console.log("id : " + tid + " - " + mid);
-    var url = "load_molecule/"+tid+"/"+mid;
+function load_molecule_details(mid) {
+    console.log("id : " + " - " + mid);
+    var url = "load_molecule/"+mid;
     $.ajax({
         type: 'post',
         url: url,
@@ -174,10 +174,14 @@ function load_molecule_details(tid, mid) {
             var details = (data);
             console.log(details);
             $('#myModal form#edit_molecule #moleculeName').val(details.moleculeName);
-            $("#myModal form#edit_molecule #therapyName option[value='"+details.therapyID+"']").prop('selected', true);
-            $("#myModal form#edit_molecule #select2-therapyName-container").html(details.therapyName);    
+            $('#myModal form#edit_molecule #mid').val(details.moleculeID);
+            $("#myModal form#edit_molecule #level1Name option[value='"+details.level1id+"']").prop('selected', true);
+            $("#myModal form#edit_molecule #select2-level1Name-container").html(details.level1name);  
+            load_level2_data(details.level1id);
+            $("#myModal form#edit_molecule #level2Name option[value='"+details.level2id+"']").prop('selected', true);
+            $("#myModal form#edit_molecule #select2-level2Name-container").html(details.level2name);  
             $('#myModal form#edit_molecule #moleculeID').val(details.moleculeID);
-            $('#myModal form#edit_molecule #therapyID').val(details.therapyID);
+            
         },      
         error: function (data) {
             if (typeof data.responseJSON != "undefined")

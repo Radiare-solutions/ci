@@ -95,32 +95,31 @@ class Molecule extends Eloquent {
         }
     }
 
-    public function loadMoleculeDetails($tid, $mid) {
-        $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
+    public function loadMoleculeDetails($mid) {
         $this->moleculeID = new \MongoDB\BSON\ObjectId($mid);
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array('$unwind' => '$Molecule'),
                         array('$unwind' => '$Molecule._id'),
                         array(
                             '$match' => array(
                                 '$and' => array(
-                                    array('_id' => $this->therapyID),
                                     array('Molecule._id' => array('$in' => array($this->moleculeID))),
                                 )
                             )
                         ),
                         array('$project' => array(
-                                'Therapy' => 1,
                                 'Molecule' => 1,
                             )),
             ));
         });
         $details = "";
         foreach ($result as $query) {
-            $details['therapyID'] = (string) $query['_id'];
+            $details['level1id'] = (string) $query['Molecule']['level1id'];
+            $details['level1name'] = (string) $query['Molecule']['level1id'];
+            $details['level2id'] = (string) $query['Molecule']['level2id'];
+            $details['level2name'] = (string) $query['Molecule']['level2id'];
             $details['moleculeID'] = (string) $query['Molecule']['_id'];
-            $details['therapyName'] = $query['Therapy'];
             $details['moleculeName'] = $query['Molecule']['Name'];
         }
         return $details;
@@ -129,16 +128,49 @@ class Molecule extends Eloquent {
     public function checkMoleculeExists($request) {
         //echo "check molecule exists";
         //exit;        
-        $this->l1id = new \MongoDB\BSON\ObjectId($request->level1Name);
-        $this->l2id = new \MongoDB\BSON\ObjectId($request->level2Name);
-        $this->moleculeName = $request->moleculeName;
-        $molecule = array(
-            '_id' => new \MongoDB\BSON\ObjectId(),
-            'Name' => $request->moleculeName,
-            'level1id' => $this->l1id,
-            'level2id' => $this->l2id
-        );
-        Molecule::where(1)->push('Molecule', array($molecule));
+        if (isset($request->mid)) { // edit
+            $this->l1id = new \MongoDB\BSON\ObjectId($request->mid);
+            $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+                return $collection->aggregate(array(
+                            array('$unwind' => '$Molecule'),
+                            // array('$unwind' => '$Level1._id'),
+                            // array('$unwind' => '$Level1.Level2'),
+                            array(
+                                '$match' => array(
+                                    '$and' => array(
+                                        array('Molecule._id' => array('$in' => array($this->l1id))),
+                                    )
+                                )
+                            ),
+                            /*array('$project' => array(
+                                    'Level1.Level2' => 1,
+                                )), */
+                ));
+            });
+            $id = "";
+             foreach ($result as $query) {
+            echo '<pre>';
+            $id = new \MongoDB\BSON\ObjectId($query['Molecule']['_id']);
+            // print_r($query['Molecule']);
+            //exit;
+             }
+             //echo "id : ".$id."<br>";
+             //Molecule::update(array('invited.key' => 84026702), array('invited.$.used' => true));
+             //exit;
+             $test = new \MongoDB\BSON\ObjectId('56f432f5b720531878f8c935');
+            Molecule::update(array('Molecule.$.Name' => 'rose'));
+        } else {  // insert
+            $this->l1id = new \MongoDB\BSON\ObjectId($request->level1Name);
+            $this->l2id = new \MongoDB\BSON\ObjectId($request->level2Name);
+            $this->moleculeName = $request->moleculeName;
+            $molecule = array(
+                '_id' => new \MongoDB\BSON\ObjectId(),
+                'Name' => $request->moleculeName,
+                'level1id' => $this->l1id,
+                'level2id' => $this->l2id
+            );
+            Molecule::where(1)->push('Molecule', array($molecule));
+        }
     }
 
     public function loadLevel2Data($l1id) {
