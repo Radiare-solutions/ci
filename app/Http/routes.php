@@ -42,6 +42,9 @@ Route::post('load_client/{id}', ['uses' =>'Client\ClientController@load']);
 
 Route::post('add_group', 'Client\ClientController@storeGroup');
 
+Route::post('load_indications/{id}', ['uses' =>'Client\ClientController@loadIndications']);
+
+Route::post('add_indication_entry', 'Client\ClientController@storeIndicationEntry');
 /*
 |--------------------------------------------------------------------------
 | Application Routes

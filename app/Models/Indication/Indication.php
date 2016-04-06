@@ -125,6 +125,30 @@ class Indication extends Eloquent {
         }
         return $details;
     }
+    
+    public function loadIndications($tid) {
+        $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                
+                                    '_id' => $this->therapyID),
+                            
+                            
+                        ),
+                        array('$project' => array(
+                                //'Therapy' => 1,
+                                'Indication' => 1,
+                            )),
+            ));
+        });
+
+        foreach ($result as $query) {  
+            return $query;   
+        }
+
+    }
 
     public function checkIndicationExists($request) {
         // echo "check indication exists";

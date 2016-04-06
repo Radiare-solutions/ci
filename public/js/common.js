@@ -10,9 +10,11 @@ function add_indication_submit() {
         success: function (data) {
             // success logic
             $('form#add_indication #errorResponse').removeClass("alert alert-danger");
-            $('form#add_indication #errorResponse').show().html("Indication Added successfully");            
+            $('form#add_indication #errorResponse').show().html("Indication Added successfully");
             $('form#add_indication #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -33,7 +35,7 @@ function add_indication_submit() {
 
 function load_indication_details(tid, iid) {
     console.log("id : " + tid + " - " + iid);
-    var url = "load_indication/"+tid+"/"+iid;
+    var url = "load_indication/" + tid + "/" + iid;
     $.ajax({
         type: 'post',
         url: url,
@@ -42,11 +44,11 @@ function load_indication_details(tid, iid) {
             var details = (data);
             console.log(details);
             $('#myModal form#edit_indication #indicationName').val(details.indicationName);
-            $("#myModal form#edit_indication #therapyName option[value='"+details.therapyID+"']").prop('selected', true);
-            $("#myModal form#edit_indication #select2-therapyName-container").html(details.therapyName);    
+            $("#myModal form#edit_indication #therapyName option[value='" + details.therapyID + "']").prop('selected', true);
+            $("#myModal form#edit_indication #select2-therapyName-container").html(details.therapyName);
             $('#myModal form#edit_indication #indicationID').val(details.indicationID);
             $('#myModal form#edit_indication #therapyID').val(details.therapyID);
-        },      
+        },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
@@ -77,9 +79,11 @@ function edit_indication_submit() {
         success: function (data) {
             // success logic            
             $('form#edit_indication #errorResponse').removeClass("alert alert-danger");
-            $('form#edit_indication #errorResponse').show().html("Indication Updated successfully");            
+            $('form#edit_indication #errorResponse').show().html("Indication Updated successfully");
             $('form#edit_indication #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -101,23 +105,22 @@ function edit_indication_submit() {
 
 function load_level2_data(l1id, form_action) {
     console.log("level 1 : " + l1id);
-    if(l1id != "") {
-        var url = "load_level2/"+l1id;
+    if (l1id != "") {
+        var url = "load_level2/" + l1id;
         $.ajax({
             type: 'post',
             url: url,
             dataType: 'json',
-            success: function (data) {            
+            success: function (data) {
                 console.log("success");
-                $('form#'+form_action+'_molecule #level2Name').html(data.message);
-            },      
+                $('form#' + form_action + '_molecule #level2Name').html(data.message);
+            },
             error: function (data) {
                 console.log("error");
                 alert(data);
             }
         });
-    }
-    else {
+    } else {
         $('#level2Name').html('');
     }
 }
@@ -125,8 +128,8 @@ function load_level2_data(l1id, form_action) {
 function setLevel2Value(val, name) {
     // $('form#add_molecule #level2Name').
     console.log(val + " - " + name);
-    $("form#add_molecule #level2Name option[value='"+val+"']").prop('selected', true);
-    $("form#add_molecule #select2-level2Name-container").html(name);   
+    $("form#add_molecule #level2Name option[value='" + val + "']").prop('selected', true);
+    $("form#add_molecule #select2-level2Name-container").html(name);
 }
 
 function add_molecule_submit() {
@@ -141,9 +144,11 @@ function add_molecule_submit() {
         success: function (data) {
             // success logic
             $('form#add_molecule #errorResponse').removeClass("alert alert-danger");
-            $('form#add_molecule #errorResponse').show().html("Molecule Added successfully");            
+            $('form#add_molecule #errorResponse').show().html("Molecule Added successfully");
             $('form#add_molecule #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -164,7 +169,7 @@ function add_molecule_submit() {
 
 function load_molecule_details(mid, index) {
     console.log("id : " + " - " + mid + " - " + index);
-    var url = "load_molecule/"+mid+"/"+index;
+    var url = "load_molecule/" + mid + "/" + index;
     $.ajax({
         type: 'post',
         url: url,
@@ -175,14 +180,14 @@ function load_molecule_details(mid, index) {
             $('#myModal form#edit_molecule #moleculeName').val(details.moleculeName);
             $('#myModal form#edit_molecule #mid').val(details.moleculeID);
             $('#myModal form#edit_molecule #mIndex').val(details.mIndex);
-            $("#myModal form#edit_molecule #level1Name option[value='"+details.level1id+"']").prop('selected', true);
-            $("#myModal form#edit_molecule #select2-level1Name-container").html(details.level1name);  
+            $("#myModal form#edit_molecule #level1Name option[value='" + details.level1id + "']").prop('selected', true);
+            $("#myModal form#edit_molecule #select2-level1Name-container").html(details.level1name);
             load_level2_data(details.level1id, 'edit');
-            $("#myModal form#edit_molecule #level2Name option[value='"+details.level2id+"']").prop('selected', true);
-            $("#myModal form#edit_molecule #select2-level2Name-container").html(details.level2name);  
+            $("#myModal form#edit_molecule #level2Name option[value='" + details.level2id + "']").prop('selected', true);
+            $("#myModal form#edit_molecule #select2-level2Name-container").html(details.level2name);
             $('#myModal form#edit_molecule #moleculeID').val(details.moleculeID);
-            
-        },      
+
+        },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
@@ -213,9 +218,11 @@ function edit_molecule_submit() {
         success: function (data) {
             // success logic            
             $('form#edit_molecule #errorResponse').removeClass("alert alert-danger");
-            $('form#edit_molecule #errorResponse').show().html("Molecule Updated successfully");            
+            $('form#edit_molecule #errorResponse').show().html("Molecule Updated successfully");
             $('form#edit_molecule #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -247,9 +254,11 @@ function add_therapeutic_submit() {
         success: function (data) {
             // success logic
             $('form#add_therapeutic #errorResponse').removeClass("alert alert-danger");
-            $('form#add_therapeutic #errorResponse').show().html("Therapeutic Area Added successfully");            
+            $('form#add_therapeutic #errorResponse').show().html("Therapeutic Area Added successfully");
             $('form#add_therapeutic #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -270,7 +279,7 @@ function add_therapeutic_submit() {
 
 function load_therapeutic_details(tid) {
     console.log("id : " + " - " + tid);
-    var url = "load_therapeutic/"+tid;
+    var url = "load_therapeutic/" + tid;
     $.ajax({
         type: 'post',
         url: url,
@@ -279,8 +288,8 @@ function load_therapeutic_details(tid) {
             var details = (data);
             console.log(details);
             $('form#edit_therapeutic #therapeuticName').val(details.therapeuticName);
-            $('form#edit_therapeutic #tid').val(details.therapeuticID);            
-        },      
+            $('form#edit_therapeutic #tid').val(details.therapeuticID);
+        },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
@@ -311,9 +320,11 @@ function edit_therapeutic_submit() {
         success: function (data) {
             // success logic            
             $('form#edit_therapeutic #errorResponse').removeClass("alert alert-danger");
-            $('form#edit_therapeutic #errorResponse').show().html("Therapeutic Updated successfully");            
+            $('form#edit_therapeutic #errorResponse').show().html("Therapeutic Updated successfully");
             $('form#edit_therapeutic #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -346,9 +357,11 @@ function add_client_submit() {
         success: function (data) {
             // success logic
             $('form#add_client #errorResponse').removeClass("alert alert-danger");
-            $('form#add_client #errorResponse').show().html("Client Added successfully");            
+            $('form#add_client #errorResponse').show().html("Client Added successfully");
             $('form#add_client #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -379,9 +392,11 @@ function add_group_submit() {
         success: function (data) {
             // success logic
             $('form#add_bg #errorResponse').removeClass("alert alert-danger");
-            $('form#add_bg #errorResponse').show().html("Business Group Added successfully");            
+            $('form#add_bg #errorResponse').show().html("Business Group Added successfully");
             $('form#add_bg #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -395,6 +410,72 @@ function add_group_submit() {
                 console.log(errorsHtml);
                 $('form#add_bg #errorResponse').show().html(errorsHtml); //this is my div with messages
                 $('form#add_bg #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function load_indication_data(tid) {
+    console.log("tid : " + tid);
+    var url = "load_indications/" + tid;
+    if (tid != "") {
+        $.ajax({
+            type: 'post',
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);
+                $('form#add_indication_entry #indicationName').html(data.message);
+            },
+            error: function (data) {
+                if (typeof data.responseJSON != "undefined")
+                {
+                    var errors = data.responseJSON.message;
+                    var errorsHtml = '';
+
+                    $.each(errors, function (key, value) {
+                        errorsHtml += '<li>' + value + '</li>';
+                    });
+                    console.log(errorsHtml);
+                    $('form#add_indication_entry #errorResponse').show().html(errorsHtml); //this is my div with messages
+                    $('form#add_indication_entry #errorResponse').addClass("alert alert-danger");
+                }
+            }
+        });
+    }
+}
+
+function add_indication_entry_submit() {
+    console.log("submit indication entry");
+    var url = "add_indication_entry";
+    var data = $('#add_indication_entry').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#add_indication_entry #errorResponse').removeClass("alert alert-danger");
+            $('form#add_indication_entry #errorResponse').show().html("Indication Entry Added successfully");
+            $('form#add_indication_entry #errorResponse').addClass("alert alert-success");
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_indication_entry #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_indication_entry #errorResponse').addClass("alert alert-danger");
             }
         }
     });
