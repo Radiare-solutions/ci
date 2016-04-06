@@ -175,7 +175,7 @@
                                     
                                     <div class="form-group">
                                         <label>Level 1:</label>
-                                        <select class="select" name="level1Name" onchange="load_level2_data(this.value)" id="level1Name">
+                                        <select class="select" name="level1Name" onchange="load_level2_data(this.value,'edit')" id="level1Name">
                                             <option value=""></option>
                                             <?php                                            
                                             foreach ($level1 as $level1Detail) {
@@ -228,7 +228,7 @@
                                     
                                     <div class="form-group">
                                         <label>Level 1:</label>
-                                        <select class="select" name="level1Name" onchange="load_level2_data(this.value)" id="level1Name">
+                                        <select class="select" name="level1Name" onchange="load_level2_data(this.value, 'add')" id="level1Name">
                                             <option value=""></option>
                                             <?php                                            
                                             foreach ($level1 as $level1Detail) {

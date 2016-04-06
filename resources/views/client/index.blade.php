@@ -1,6 +1,10 @@
 @extends('layouts/client_mgmt')
 
 @section('content')
+
+<?php
+$details = json_decode($details);
+?>
 		<!-- Page content -->
 		<div class="page-content">
 
@@ -84,8 +88,12 @@
 								</tr>
 							</thead>
 							<tbody>
+                                                            <?php 
+                                                            
+                                                            foreach($details as $detail) {
+                                                            ?>
 						<tr> 
-<th BGCOLOR="#99CCFF" >Merck</th>
+<th BGCOLOR="#99CCFF" >{{ $detail->clientName }}</th>
 
 <td> bg1</td> 
 <td>
@@ -120,7 +128,7 @@
 										</ul>
 									</td>
 </tr>
-
+                                                            <?php } ?>
 <tr> 
 <th BGCOLOR="#99CCFF" >Merck</th>
 <td> bg2</td>
@@ -165,10 +173,10 @@
 							</tbody>
 
 
+                                                </table>
 
 
-
-					</div>
+					
 
 
 					<div id="modal_form_vertical" class="modal fade">
@@ -209,14 +217,18 @@
 									<h5 class="modal-title">Add New Business Group</h5>
 								</div>
 
-								<form action="#">
+								<form action="add_bg" method="post" name="add_bg" id="add_bg">
+                                                                    <div id="errorResponse"></div>
 								<div class="panel panel-flat">
 									<div class="panel-body">
 										<div class="form-group">
 											<label>Client:</label>
-											<select class="select">
-													<option value="1">Merck</option>
-													<option value="2">Blue Ocean</option>
+											<select class="select" name="clientName" id="clientName">
+													<?php
+                                                                                                        foreach($details as $detail) {                                                                                                            
+                                                                                                            echo '<option value="'.$detail->cid.'">'.$detail->clientName.'</option>';
+                                                                                                        }
+                                                                                                        ?>
 											</select>
 										</div>
 
@@ -224,13 +236,13 @@
 
 										<div class="form-group">
 											<label>Business Group:</label>
-											<input type="text" class="form-control" placeholder="Enter the New Client">
+											<input type="text" class="form-control" name="groupName" id="groupName" placeholder="Enter the New Client">
 										</div>
 										
 
 										
 										<div class="text-right">
-											<button type="submit" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
+											<button type="button" onclick="add_group_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
 										</div>
 									</div>
 								</div>

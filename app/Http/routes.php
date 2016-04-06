@@ -30,10 +30,17 @@ Route::post('edit_molecule', 'Molecule\MoleculeController@store');
 Route::post('load_molecule/{id}/{id1}', ['uses' =>'Molecule\MoleculeController@load']);
 Route::post('load_level2/{id}', ['uses' => 'Molecule\MoleculeController@loadLevel2Data']);
 
+Route::get('/therapeutic_mgmt', 'Therapeutic\TherapeuticController@index');
+Route::post('add_therapeutic', 'Therapeutic\TherapeuticController@store');
+Route::post('edit_therapeutic', 'Therapeutic\TherapeuticController@store');
+Route::post('load_therapeutic/{id}', ['uses' =>'Therapeutic\TherapeuticController@load']);
+
 Route::get('/client_mgmt', 'Client\ClientController@index');
 Route::post('add_client', 'Client\ClientController@store');
 Route::post('edit_client', 'Client\ClientController@store');
 Route::post('load_client/{id}', ['uses' =>'Client\ClientController@load']);
+
+Route::post('add_group', 'Client\ClientController@storeGroup');
 
 /*
 |--------------------------------------------------------------------------

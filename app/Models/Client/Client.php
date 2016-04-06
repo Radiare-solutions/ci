@@ -30,15 +30,13 @@ class Client extends Eloquent {
 
     public function add($request) {
 
-        $indication = array('Name' => "$request->indicationName", '_id' => new \MongoDB\BSON\ObjectId());
-        $arr = array("Therapy" => "$request->therapyName");
-        $arr['Indication'] = array($indication);
+        $client = array('Name' => "$request->clientName", '_id' => new \MongoDB\BSON\ObjectId());
+
+        Client::insert($client);
 
         // Indication::create($arr);
         //echo $test;
         //exit;
-        Indication::where('_id', '=', $request->therapyName)
-                ->push('Indication', array($indication));
         //$test = $test->pushAttributeValues("Indication", $indication);
 //        $ob->Therapy = $request->therapyName;
 //        $indication = array(array('Name' => $request->indicationName));
@@ -124,42 +122,55 @@ class Client extends Eloquent {
         return $details;
     }
 
-    public function checkIndicationExists($request) {
+    public function addGroup($request) {
+        $cid = new \MongoDB\BSON\ObjectId($request->clientName);
+        \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $cid)->update(
+                // array('_id' => $this->therapyID),           
+                array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => new \MongoDB\BSON\ObjectId())))
+        );
+    }
+
+    public function checkGroupExists($request) {
+        $this->addGroup($request);
+        return "Added";
+    }
+
+    public function checkClientExists($request) {
         $this->add($request);
         return "Added";
         // echo "check indication exists";
-        /*$this->therapyName = new \MongoDB\BSON\ObjectId($request->therapyName);
-        $this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
-        $this->indicationName = $request->indicationName;
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
-            return $collection->aggregate(array(
-                        array('$unwind' => '$Indication'),
-                        array('$unwind' => '$Indication._id'),
-                        array(
-                            '$match' => array(
-                                '$and' => array(
-                                    array('_id' => $this->therapyName),
-                                    array('Indication._id' => array('$in' => array($this->indicationID))),
-                                )
-                            )
-                        ),
-                        array('$project' => array(
-                                'Therapy' => 1,
-                                'Indication' => 1,
-                            )),
-            ));
-        });
-        $id = "";
-        foreach ($result as $query) {
-            $id = $query['Indication']['_id'];
-        }
-        if (empty($id)) {
-            $this->add($request);
-            return "Added";
-        } else {
-            $this->edit($request);
-            return "Modified";
-        } */
+        /* $this->therapyName = new \MongoDB\BSON\ObjectId($request->therapyName);
+          $this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
+          $this->indicationName = $request->indicationName;
+          $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
+          return $collection->aggregate(array(
+          array('$unwind' => '$Indication'),
+          array('$unwind' => '$Indication._id'),
+          array(
+          '$match' => array(
+          '$and' => array(
+          array('_id' => $this->therapyName),
+          array('Indication._id' => array('$in' => array($this->indicationID))),
+          )
+          )
+          ),
+          array('$project' => array(
+          'Therapy' => 1,
+          'Indication' => 1,
+          )),
+          ));
+          });
+          $id = "";
+          foreach ($result as $query) {
+          $id = $query['Indication']['_id'];
+          }
+          if (empty($id)) {
+          $this->add($request);
+          return "Added";
+          } else {
+          $this->edit($request);
+          return "Modified";
+          } */
     }
 
 }

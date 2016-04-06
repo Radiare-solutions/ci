@@ -35,8 +35,8 @@ class MoleculeController extends Controller {
         
         $moleculeDetails = Molecule::all();
         foreach($moleculeDetails as $moleculeDetail) {
-            $molecul = $moleculeDetail['attributes']['Molecule'];
-            foreach($molecul as $molecule) {
+            $molecule = $moleculeDetail['attributes'];
+            //foreach($molecul as $molecule) {
                 $l1id = $molecule['level1id'];
                 $l2id = $molecule['level2id'];
 
@@ -45,7 +45,7 @@ class MoleculeController extends Controller {
                 $test['mid'] = (string) $molecule['_id'];
                 $test['moleculeName'] = $molecule['Name'];
                 array_push($listDetails, $test);
-            }
+            //}
         }
         
         return view('molecule/index', array('level1' => $level1, 'details' => json_encode($listDetails)));        
