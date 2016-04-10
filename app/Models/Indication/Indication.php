@@ -186,4 +186,40 @@ class Indication extends Eloquent {
         }
     }
 
+    public function getIndicationName($iid) {
+        // echo "check indication exists";        
+        $this->indicationID = $iid;
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Indication'),
+                        array('$unwind' => '$Indication._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('Indication._id' => array('$in' => array($this->indicationID))),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Therapy' => 1,
+                                'Indication' => 1,
+                            )),
+            ));
+        });
+        $id = array();
+        $therapy = array();
+        foreach ($result as $query) {
+            // array_push($therapy, $query['Therapy']);
+            $testing['therapy'] = $query['Therapy'];
+            $testing['indication'] = $query['Indication']['Name'];
+            array_push($therapy, $testing);
+        }
+        return $therapy;
+    }
+    
+    public function getTherapyName($tid) {
+        $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
+        $res = Indication::find($tid);
+        
+    }
 }

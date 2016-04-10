@@ -75,12 +75,9 @@ class MoleculeController extends Controller {
         }
     }
 
-    public function moleculeExists($request) {
-             
+    public function moleculeExists($request) {             
         $obj = new Molecule();        
-        return $result = $obj->checkMoleculeExists($request);                
-        
-        
+        return $result = $obj->checkMoleculeExists($request);                                
     }
 
     public function load($mid, $index) {
@@ -96,6 +93,11 @@ class MoleculeController extends Controller {
                         'success' => true,
                         'message' => $result
                             ], 200);
+    }
+    
+    public function loadMolecules($l1id, $l2id) {
+        $ob = new Molecule();
+        return $ob->loadMolecules($l1id, $l2id);
     }
 
 }

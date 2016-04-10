@@ -174,4 +174,29 @@ class Molecule extends Eloquent {
         return $str;
     }
 
+    public function loadMolecules($l1id, $l2id) {
+        $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
+        $this->l2id = new \MongoDB\BSON\ObjectId($l2id);
+        $result = \Illuminate\Support\Facades\DB::collection('molecules')->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('level1id' => $this->l1id),
+                                    array('level2id' => $this->l2id),
+                                )
+                            )
+                        )
+            ));
+        });
+        $str = "";
+        foreach ($result as $query) {
+            $arr = $query;
+            $id = $arr['_id'];
+            $name = $arr['Name'];
+            $str.= "<option value='" . $id . "' data-name='" . $name . "'>" . $name . "</option>";
+        }
+        return $str;
+    }
+
 }

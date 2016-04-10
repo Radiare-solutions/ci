@@ -22,6 +22,8 @@ class Client extends Eloquent {
     protected $fillable = array('Name');
     public $clientName = "";
     public $clientID = "";
+    public $groupID = "";
+    public $groupName = "";
 
     public function clients() {
         // return $this->belongsTo('App\Models\Indication\Indications');
@@ -30,7 +32,7 @@ class Client extends Eloquent {
 
     public function add($request) {
 
-        $client = array('Name' => "$request->clientName", '_id' => new \MongoDB\BSON\ObjectId());
+        $client = array('Name' => "$request->clientName", '_id' => new \MongoDB\BSON\ObjectId(), 'BusinessGroup' => array());
 
         Client::insert($client);
 
@@ -91,33 +93,33 @@ class Client extends Eloquent {
         }
     }
 
-    public function loadIndicationDetails($tid, $iid) {
-        $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
-        $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
+    public function loadBGEntryValues($cid, $bgid) {
+        $this->clientID = new \MongoDB\BSON\ObjectId($cid);
+        $this->groupID = new \MongoDB\BSON\ObjectId($bgid);
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
-                        array('$unwind' => '$Indication'),
-                        array('$unwind' => '$Indication._id'),
+                        array('$unwind' => '$BusinessGroup'),
+                        array('$unwind' => '$BusinessGroup._id'),
                         array(
                             '$match' => array(
                                 '$and' => array(
-                                    array('_id' => $this->therapyID),
-                                    array('Indication._id' => array('$in' => array($this->indicationID))),
+                                    array('_id' => $this->clientID),
+                                    array('BusinessGroup._id' => array('$in' => array($this->groupID))),
                                 )
                             )
                         ),
                         array('$project' => array(
-                                'Therapy' => 1,
-                                'Indication' => 1,
+                                'Name' => 1,
+                                'BusinessGroup' => 1,
                             )),
             ));
         });
         $details = "";
         foreach ($result as $query) {
-            $details['therapyID'] = (string) $query['_id'];
-            $details['indicationID'] = (string) $query['Indication']['_id'];
-            $details['therapyName'] = $query['Therapy'];
-            $details['indicationName'] = $query['Indication']['Name'];
+            //$details['therapyID'] = (string) $query['_id'];
+            //$details['indicationID'] = (string) $query['Indication']['_id'];
+            $details['clientName'] = $query['Name'];
+            $details['groupName'] = $query['BusinessGroup']['Name'];
         }
         return $details;
     }
@@ -129,10 +131,37 @@ class Client extends Eloquent {
                 array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => new \MongoDB\BSON\ObjectId())))
         );
     }
+    
+    public function editBGEntry($request) {
+        $this->clientID = new \MongoDB\BSON\ObjectId($request->cid);
+        $this->groupID = new \MongoDB\BSON\ObjectId($request->bgid);
+                
+        \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
+                // array('_id' => $this->therapyID),           
+                array('$pull' => array('BusinessGroup' => array('_id' => $this->groupID)))
+        );
+        \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
+                array('Name' => $request->clientName),           
+                array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => $this->groupID)))
+        );
+//        foreach($result as $res) {
+//            echo '<pre>';
+//            echo array_search($this->groupID, (array) $res['BusinessGroup'])."<br>";
+//            echo "index : ".$this->getIndex($this->groupID, $res['BusinessGroup'])."<br>";
+//            print_r($res);
+//            exit;
+//        }
+    }
 
     public function checkGroupExists($request) {
-        $this->addGroup($request);
-        return "Added";
+        if(isset($request->cid)) {
+            $this->editBGEntry($request);
+            return "Updated";
+        }
+        else {
+            $this->addGroup($request);
+            return "Added";
+        }
     }
 
     public function checkClientExists($request) {

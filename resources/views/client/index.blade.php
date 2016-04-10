@@ -96,18 +96,20 @@ $level1 = json_decode($level1Details);
                             <tr> 
                                 <th BGCOLOR="#99CCFF" >{{ $detail->clientName }}</th>
 
-                                <td> bg1</td> 
+                                <td> {{ $detail->bgName }}</td> 
                                 <td>
                                     <b>Autoimmune</b>-  Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab <br/>
                                     <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
 
                                 </td> 
-                                <td>
-                                    <b>Autoimmune</b>-  Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab <br/>
-                                    <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-
-                                </td> 
-
+                                <?php
+                                $res = $detail->therapy;
+                                echo '<td>';
+                                foreach ($res as $key => $value) {
+                                    echo '<b>' . $key . '</b> - ' . implode(", ", $value) . "<br>";
+                                }
+                                echo '</td>';
+                                ?>                                
                                 <td class="text-center">
                                     <ul class="icons-list">
                                         <li class="dropdown">
@@ -119,11 +121,11 @@ $level1 = json_decode($level1Details);
 
                                             <ul class="dropdown-menu dropdown-menu-right">
                                                 <li class="dropdown-header">Options</li>
-                                                <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                                <li><a data-toggle="modal" data-target="#edit_bg_entry" onclick="edit_bg_entry('<?php echo $detail->cid;?>', '<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                 <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                                <li class="dropdown-header">Managemnt System</li>
-                                                <li><a data-toggle="modal" data-target="#modal_large"><i class="icon-pencil7" ></i>Molecule entry</a></li>
-                                                <li><a data-toggle="modal" data-target="#modal_large1"><i class="icon-pencil7"></i>Indication entry</a></li>													
+                                                <li class="dropdown-header">Management System</li>
+                                                <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
+                                                <li><a data-toggle="modal" data-target="#modal_large1" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_indication_entry');"><i class="icon-pencil7"></i>Indication entry</a></li>													
                                             </ul>
                                         </li>
                                     </ul>
@@ -156,7 +158,7 @@ $level1 = json_decode($level1Details);
 
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li class="dropdown-header">Options</li>
-                                            <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                            <li><a ><i class="icon-pencil7"></i>Edit entry</a></li>
                                             <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                             <li class="dropdown-header">Managemnt System</li>
                                             <li><a data-toggle="modal" data-target="#modal_large"><i class="icon-pencil7" ></i>Molecule entry</a></li>
@@ -252,7 +254,43 @@ $level1 = json_decode($level1Details);
                     </div>
                 </div>
 
+<div id="edit_bg_entry" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h5 class="modal-title">Edit Entry</h5>
+                            </div>
 
+                            <form action="edit_bg" method="post" name="edit_bg" id="edit_bg">
+                                <input type="hidden" name="cid" id="cid">
+                                <input type="hidden" name="bgid" id="bgid">
+                                <div id="errorResponse"></div>
+                                <div class="panel panel-flat">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>Client:</label>
+                                            <input type="text" class="form-control" name="clientName" id="clientName" placeholder="Enter the New Client">
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label>Business Group:</label>
+                                            <input type="text" class="form-control" name="groupName" id="groupName" placeholder="Enter the New Client">
+                                        </div>
+
+
+
+                                        <div class="text-right">
+                                            <button type="button" onclick="edit_bg_submit();" class="btn btn-primary">Update <i class="icon-arrow-right14 position-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="modal_large" class="modal fade">
                     <div class="modal-dialog modal-lg">
@@ -262,18 +300,20 @@ $level1 = json_decode($level1Details);
                                 <h5 class="modal-title">Molecule Management</h5>
                             </div>
 
-                            <form action="#" method="post" name="add_molecule" id="add_molecule">
+                            <form action="add_molecule" method="post" name="add_molecule" id="add_molecule">
+                                <input type="hidden" name="bgid" id="bgid">
+                                <div id="errorResponse"></div>
                                 <div class="panel panel-flat">
                                     <div class="panel-body">
 
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Level 1:</label>
-                                                <select class="select" name="level1Name" onchange="load_level2_data(this.value, 'add')" id="level1Name">
+                                                <select class="select" name="level1Name" id="level1Name" onchange="load_level2_data(this.value, 'add')" id="level1Name">
                                                     <option value=""></option>
                                                     <?php
                                                     foreach ($level1 as $level1Detail) {
-                                                        echo '<option value="' . $level1Detail->_id . '">' . $level1Detail->level1Name. '</option>';
+                                                        echo '<option value="' . $level1Detail->_id . '">' . $level1Detail->level1Name . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -283,11 +323,8 @@ $level1 = json_decode($level1Details);
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Level 2:</label>
-                                                <select class="select" name="level2Name" id="level2Name">
+                                                <select class="select" name="level2Name" id="level2Name" onchange="load_molecule_data(this.value);">
                                                     <option value=""></option>
-                                                    <option selected="true" value="3">Autoimmune</option>
-                                                    <option selected="true" value="8">Oncology</option>
-
                                                 </select>
                                             </div>
                                         </div>
@@ -295,38 +332,8 @@ $level1 = json_decode($level1Details);
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Molecule:</label>
-                                                <select multiple="multiple" data-placeholder="Enter tags" class="select-icons">
+                                                <select multiple="multiple" data-placeholder="Enter tags" class="select-icons" name="moleculeName" id="moleculeName">
                                                     <option value=""></option>
-                                                    <option value="174">Abo-incompatible Renal Transplant</option>
-                                                    <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                    <option value="36">Acute myeloid leukemia</option>
-                                                    <option value="212">Age-related macular degeneration</option>
-                                                    <option value="24">All Autoimmune Indications</option>
-                                                    <option value="111">Alzheimer Disease</option>
-                                                    <option value="26">ANCA-associated systemic vasculitis</option>
-                                                    <option value="92">ANCA-Associated Vasculitis</option>
-                                                    <option value="1">Ankylosing spondylitis</option>
-                                                    <option value="211">Anti-Synthetase Syndrome</option>
-                                                    <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                    <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                    <option value="93">Autoimmune Diseases</option>
-                                                    <option value="81">Autoimmune Thrombocytopenia</option>
-                                                    <option value="10">Axial Spondylarthritis</option>
-                                                    <option value="77">B Cell Indolent Lymphomas</option>
-                                                    <option value="169">B-cell Lymphoma</option>
-                                                    <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                    <option value="98">Behçet’s Syndrome</option>
-                                                    <option value="18">Behcet’s disease</option>
-                                                    <option value="128">Branch Retinal Vein Occlusion</option>
-                                                    <option value="38">Breast cancer</option>
-                                                    <option value="71">Burkitt Lymphoma</option>
-                                                    <option value="56">Cancer</option>
-                                                    <option value="160">Central Serous Chorioretinopathy</option>
-                                                    <option value="46">Cervical Cancer</option>
-                                                    <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                    <option value="134">Chorioretinopathy</option>
-                                                    <option value="41">Choroidal Neovascularization</option>
-                                                    <option value="67">Chronic Fatigue Syndrome</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -334,7 +341,7 @@ $level1 = json_decode($level1Details);
 
 
                                         <div class="text-right">
-                                            <button type="submit" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
+                                            <button type="button" onclick="add_molecule_entry_submit();" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -375,6 +382,7 @@ $level1 = json_decode($level1Details);
 
                             <form action="add_indication_entry" method="post" name="add_indication_entry" id="add_indication_entry">
                                 <div id="errorResponse"></div>
+                                <input type="hidden" name="bgid" id="bgid">
                                 <div class="panel panel-flat">
                                     <div class="panel-body">
 
@@ -395,7 +403,7 @@ $level1 = json_decode($level1Details);
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Indication:</label>
-                                                <select multiple="multiple" data-placeholder="Enter tags" class="select-icons" name="indicationName" id="indicationName">
+                                                <select multiple="multiple" data-placeholder="Enter tags" class="select-icons" name="indicationName[]" id="indicationName">
                                                     <option value=""></option>
                                                 </select>
                                             </div>
@@ -414,6 +422,32 @@ $level1 = json_decode($level1Details);
 
                             <div class="modal-body">
                                 <div class="row">
+
+                                    <?php
+                                    foreach ($details as $detail) {
+                                        $res = $detail->therapy;
+                                        foreach ($res as $key => $value) {
+                                            ?>                                            
+                                            <div class = "col-md-12">
+                                                <div class = "col-md-11">
+                                                    <h6 class = "text-semibold">{{ $detail->clientName }} - {{ $detail->bgName }}</h6>
+        <?php echo '<b>' . $key . '</b> - ' . implode(", ", $value) . "<br>"; ?>
+                                                </div>
+                                                <div class = "col-md-1"><button type = "button" class = "btn btn-link"><i class = "icon-trash"></i></button></div>
+                                            </div>
+
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                    <div class = "col-md-12">
+                                        <div class = "col-md-11">
+                                            <h6 class = "text-semibold">Merck- BG2- 1</h6>
+                                            <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
+                                        </div>
+                                        <div class = "col-md-1"><button type = "button" class = "btn btn-link"><i class = "icon-trash"></i></button></div>
+                                    </div>
+
                                     <div class="col-md-12">
                                         <div class="col-md-11">
                                             <h6 class="text-semibold">Merck- BG2- 1</h6>
