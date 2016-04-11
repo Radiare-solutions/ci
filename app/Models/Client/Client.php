@@ -123,6 +123,35 @@ class Client extends Eloquent {
         }
         return $details;
     }
+    
+        public function loadBGEntryListValues($bgid) {        
+        $this->groupID = new \MongoDB\BSON\ObjectId($bgid);
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$BusinessGroup'),
+                        array('$unwind' => '$BusinessGroup._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('BusinessGroup._id' => array('$in' => array($this->groupID))),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Name' => 1,
+                                'BusinessGroup' => 1,
+                            )),
+            ));
+        });
+        $details = "";
+        foreach ($result as $query) {
+            //$details['therapyID'] = (string) $query['_id'];
+            //$details['indicationID'] = (string) $query['Indication']['_id'];
+            $details['clientName'] = $query['Name'];
+            $details['groupName'] = $query['BusinessGroup']['Name'];
+        }
+        return $details;
+    }
 
     public function addGroup($request) {
         $cid = new \MongoDB\BSON\ObjectId($request->clientName);

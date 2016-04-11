@@ -92,6 +92,7 @@ $level1 = json_decode($level1Details);
                     <tbody>
                         <?php
                         foreach ($details as $detail) {
+                            $str = '';
                             ?>
                             <tr> 
                                 <th BGCOLOR="#99CCFF" >{{ $detail->clientName }}</th>
@@ -103,13 +104,21 @@ $level1 = json_decode($level1Details);
 
                                 </td> 
                                 <?php
+                                $str = '';
+                                if(isset($detail->therapy)) {
                                 $res = $detail->therapy;
-                                echo '<td>';
+                                $str.='<td>';
                                 foreach ($res as $key => $value) {
-                                    echo '<b>' . $key . '</b> - ' . implode(", ", $value) . "<br>";
+                                   $str.='<b>' . $key . '</b> - ' . implode(", ", $value) . "<br>";
                                 }
-                                echo '</td>';
-                                ?>                                
+                                $str.='</td>';
+                                            
+                                }
+                                else {
+                                $str.='<td></td>';
+                                }
+                                echo $str;
+                                ?>
                                 <td class="text-center">
                                     <ul class="icons-list">
                                         <li class="dropdown">
@@ -124,8 +133,8 @@ $level1 = json_decode($level1Details);
                                                 <li><a data-toggle="modal" data-target="#edit_bg_entry" onclick="edit_bg_entry('<?php echo $detail->cid;?>', '<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                 <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                                 <li class="dropdown-header">Management System</li>
-                                                <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
-                                                <li><a data-toggle="modal" data-target="#modal_large1" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_indication_entry');"><i class="icon-pencil7"></i>Indication entry</a></li>													
+                                                <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');load_indication_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
+                                                <li><a data-toggle="modal" data-target="#modal_large1" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_indication_entry');load_indication_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Indication entry</a></li>													
                                             </ul>
                                         </li>
                                     </ul>
@@ -162,7 +171,7 @@ $level1 = json_decode($level1Details);
                                             <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                             <li class="dropdown-header">Managemnt System</li>
                                             <li><a data-toggle="modal" data-target="#modal_large"><i class="icon-pencil7" ></i>Molecule entry</a></li>
-                                            <li><a data-toggle="modal" data-target="#modal_large1"><i class="icon-pencil7"></i>Indication entry</a></li>													
+                                            <li><a data-toggle="modal" data-target="#modal_large1" ><i class="icon-pencil7"></i>Indication entry</a></li>													
                                         </ul>
                                     </li>
                                 </ul>
@@ -420,11 +429,12 @@ $level1 = json_decode($level1Details);
 
 
 
-                            <div class="modal-body">
+                            <div class="modal-body" id='list_indication_entry'>
                                 <div class="row">
 
-                                    <?php
+                                    <?php                                    
                                     foreach ($details as $detail) {
+                                        if(isset($detail->therapy)) {
                                         $res = $detail->therapy;
                                         foreach ($res as $key => $value) {
                                             ?>                                            
@@ -439,30 +449,8 @@ $level1 = json_decode($level1Details);
                                             <?php
                                         }
                                     }
+                                    }
                                     ?>
-                                    <div class = "col-md-12">
-                                        <div class = "col-md-11">
-                                            <h6 class = "text-semibold">Merck- BG2- 1</h6>
-                                            <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-                                        </div>
-                                        <div class = "col-md-1"><button type = "button" class = "btn btn-link"><i class = "icon-trash"></i></button></div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="col-md-11">
-                                            <h6 class="text-semibold">Merck- BG2- 1</h6>
-                                            <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-                                        </div>
-                                        <div class="col-md-1"><button type="button" class="btn btn-link"><i class="icon-trash"></i></button></div>
-                                    </div>
-                                    <div class="col-md-12">				
-                                        <div class="col-md-11">	
-                                            <h6 class="text-semibold">Merck- BG2- 2</h6>
-                                            <b>Autoimmune</b>-  Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-
-                                        </div>
-                                        <div class="col-md-1"><button type="button" class="btn btn-link"><i class="icon-trash"></i></button></div>
-                                    </div>
 
                                 </div>
                             </div>

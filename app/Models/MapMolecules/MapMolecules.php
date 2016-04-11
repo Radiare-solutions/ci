@@ -30,6 +30,20 @@ class MapMolecules extends Eloquent {
 
         $arr = array();
         $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('indication')->get();
+        
+        foreach ($result as $res) {
+            $res = $res->attributes['indication'];
+            array_push($arr, $res);
+        }
+        return $arr;
+    }
+    
+    public function loadIndicationEntryList($bgid) {
+        $this->bgid = new \MongoDB\BSON\ObjectId($bgid);
+
+        $arr = array();
+        $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('indication')->get();
+        
         foreach ($result as $res) {
             $res = $res->attributes['indication'];
             array_push($arr, $res);

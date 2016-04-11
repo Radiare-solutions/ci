@@ -46,6 +46,7 @@ Route::post('load_indications/{id}', ['uses' =>'Client\ClientController@loadIndi
 Route::post('load_molecules/{id}/{id1}', ['uses' => 'Client\ClientController@loadMolecules']);
 
 Route::post('add_indication_entry', 'Client\ClientController@storeIndicationEntry');
+Route::post('load_indication_entry_list/{id}', ['uses' => 'Client\ClientController@load_indication_entry_list']);
 Route::post('add_molecule_entry', 'Client\ClientController@storeMoleculeEntry');
 
 Route::post('edit_bg_entry/{id}/{id1}', ['uses' => 'Client\ClientController@editBGEntry']);

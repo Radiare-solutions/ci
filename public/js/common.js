@@ -618,3 +618,34 @@ function add_molecule_entry_submit() {
         }
     });
 }
+
+function load_indication_entry_list(bgid) {
+    console.log("bgid : " + bgid);
+    var url = "load_indication_entry_list/" + bgid;
+    if (bgid != "") {
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);
+                $('div#list_indication_entry').html(data.message);
+            },
+            error: function (data) {
+                if (typeof data.responseJSON != "undefined")
+                {
+                    var errors = data.responseJSON.message;
+                    var errorsHtml = '';
+
+                    $.each(errors, function (key, value) {
+                        errorsHtml += '<li>' + value + '</li>';
+                    });
+                    console.log(errorsHtml);
+                    $('div#list_indication_entry #errorResponse').show().html(errorsHtml); //this is my div with messages
+                    $('div#list_indication_entry #errorResponse').addClass("alert alert-danger");
+                }
+            }
+        });
+    }
+}

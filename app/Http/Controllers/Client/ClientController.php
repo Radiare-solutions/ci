@@ -23,41 +23,42 @@ class ClientController extends Controller {
         foreach ($clients as $client) {
             $clientDetail = $client['attributes'];
             $test['cid'] = (string) $clientDetail['_id'];
-                $test['clientName'] = $clientDetail['Name'];
-                
-            foreach ($clientDetail['BusinessGroup'] as $group) {                
+            $test['clientName'] = $clientDetail['Name'];
+
+            foreach ($clientDetail['BusinessGroup'] as $group) {
                 $test['bgid'] = (string) $group['_id'];
                 $test['bgName'] = $group['Name'];
 
                 $ob = new MapMolecules();
 
-                //echo '<pre>';
                 $indications = ($ob->loadIndicationDetails($test['bgid']));
                 $indication = array();
-                foreach ($indications as $indicationDetails) {            
-                    $tempDetails = $indicationDetails;
-                    $indicationDetail = $this->getIndicationName($tempDetails);
-                    array_push($indication, $indicationDetail);
+                if (!empty($indications)) {
+                    foreach ($indications as $indicationDetails) {
+                        $tempDetails = $indicationDetails;
+                        $indicationDetail = $this->getIndicationName($tempDetails);
+                        array_push($indication, $indicationDetail);
+                    }
+                    //echo '<pre>';
+                    //print_r($indication);
+                    foreach ($indication as $key => $value) {
+                        $test['therapy'][$value[0]['therapy']][] = $value[0]['indication'];
+                    }
+                    // print_r($return);
+                    /* foreach ($return as $key => $value) {
+                      $indication[$key] = $value;
+                      $test['therapy'][$key] = $value;
+                      } */
+                    //print_r($return);
+                    //$test['therapy'] = $return;
                 }
-                
-                foreach ($indication as $key => $value) {
-                    $return[$value[0]['therapy']][] = $value[0]['indication'];
-                }
-
-                foreach ($return as $key => $value) {
-                    $indication[$key] = $value;
-                    $test['therapy'][$key] = $value;
-                    // echo implode(',', $value) . " " . $key;
-                }
-                
-                //$test['indication'] = $newarray;
-                //print_r($test);
-                //exit;
-
-                //array_push($listDetails, $test);
             }
             array_push($listDetails, $test);
+            $test = array();
         }
+//        echo '<pre>';
+//        print_r($listDetails);
+//        exit;
         $level1Details = $this->loadLevel1Details();
         $therapyDetails = $this->loadIndicationEntry();
         return view('client/index', array(
@@ -66,6 +67,56 @@ class ClientController extends Controller {
             'level1Details' => json_encode($level1Details)
         ));
         // return view('client/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
+    }
+
+    public function load_indication_entry_list($bgid) {
+        $clientObj = new Client();
+        $groups = $clientObj->loadBGEntryListValues($bgid);
+        $ob = new MapMolecules();
+        $indications = ($ob->loadIndicationDetails($bgid));
+        $indication = array();
+        $test = array();
+        $str = "abc";
+        if (!empty($indications)) {
+            foreach ($indications as $indicationDetails) {
+                $tempDetails = $indicationDetails;
+                $indicationDetail = $this->getIndicationName($tempDetails);
+                array_push($indication, $indicationDetail);
+            }
+            //echo '<pre>';
+            //print_r($indication);
+            $iName = array();
+            foreach ($indication as $key => $value) {
+                $test['clientName'] = $groups['clientName'];
+                $test['groupName'] = $groups['groupName'];
+                $test['therapy'][$value[0]['therapy']][] = $value[0]['indication']; 
+                array_push($iName, $value[0]['indication']);
+            }
+               // array_push($iName, $value[0]['indication']);
+            $iName = implode(",", $iName);
+               echo '<pre>';
+               print_r($test);
+               exit;
+                $str.='<div class="row">';
+                echo '
+                               <div class = "col-md-12"><div class = "col-md-11">
+                                    <h6 class = "text-semibold">{{ $detail->clientName }} - {{ $detail->bgName }}</h6>
+<b>'.$value[0]['therapy'].'</b> - '.$iName."<br></div><div class = 'col-md-1'><button type = 'button' class = 'btn btn-link'><i class = 'icon-trash'></i></button></div>
+                                            </div>
+                                </div>";                                
+            }
+            
+            
+            // print_r($return);
+            /* foreach ($return as $key => $value) {
+              $indication[$key] = $value;
+              $test['therapy'][$key] = $value;
+              } */
+            //print_r($return);
+            //$test['therapy'] = $return;
+        
+        return $str;
+        //return $test;
     }
 
     public function getIndicationName($iid) {
@@ -187,7 +238,7 @@ class ClientController extends Controller {
                             ], 200);
         }
     }
-    
+
     public function storeEditGroup(Request $request) {
         $validator = Validator::make($request->all(), [
                     'clientName' => 'required',
@@ -209,7 +260,7 @@ class ClientController extends Controller {
 //                        'message' => "Business Group " . $str . " Successfully"
 //                            ], 200);
         }
-    }    
+    }
 
     public function storeIndicationEntry(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -235,7 +286,7 @@ class ClientController extends Controller {
                             ], 200);
         }
     }
-    
+
     public function editBGEntry($cid, $bgid) {
         $ob = new Client();
         return $ob->loadBGEntryValues($cid, $bgid);
