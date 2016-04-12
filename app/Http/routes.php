@@ -34,11 +34,13 @@ Route::get('/therapeutic_mgmt', 'Therapeutic\TherapeuticController@index');
 Route::post('add_therapeutic', 'Therapeutic\TherapeuticController@store');
 Route::post('edit_therapeutic', 'Therapeutic\TherapeuticController@store');
 Route::post('load_therapeutic/{id}', ['uses' =>'Therapeutic\TherapeuticController@load']);
+Route::post('remove_therapeutic/{id}', ['uses' =>'Therapeutic\TherapeuticController@removeTherapeutic']);
 
 Route::get('/client_mgmt', 'Client\ClientController@index');
 Route::post('add_client', 'Client\ClientController@store');
 Route::post('edit_client', 'Client\ClientController@store');
 Route::post('load_client/{id}', ['uses' =>'Client\ClientController@load']);
+Route::post('remove_client/{id}', ['uses' =>'Client\ClientController@removeClient']);
 
 Route::post('add_group', 'Client\ClientController@storeGroup');
 
@@ -48,9 +50,12 @@ Route::post('load_molecules/{id}/{id1}', ['uses' => 'Client\ClientController@loa
 Route::post('add_indication_entry', 'Client\ClientController@storeIndicationEntry');
 Route::post('load_indication_entry_list/{id}', ['uses' => 'Client\ClientController@load_indication_entry_list']);
 Route::post('add_molecule_entry', 'Client\ClientController@storeMoleculeEntry');
+Route::post('load_molecule_entry_list/{id}', ['uses' => 'Client\ClientController@load_molecule_entry_list']);
 
 Route::post('edit_bg_entry/{id}/{id1}', ['uses' => 'Client\ClientController@editBGEntry']);
 Route::post('edit_bg_submit', 'Client\ClientController@storeEditGroup');
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

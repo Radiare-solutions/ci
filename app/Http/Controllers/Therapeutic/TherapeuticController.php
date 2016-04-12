@@ -56,4 +56,8 @@ class TherapeuticController extends Controller {
         return $obj->loadTherapeuticDetails($tid);        
     }
     
+    public function removeTherapeutic($tid) {
+        $obj = new Therapeutic();
+        return $obj->removeTherapeutic($tid);
+    }
 }

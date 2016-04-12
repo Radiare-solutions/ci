@@ -102,7 +102,7 @@
                                             <ul class="dropdown-menu dropdown-menu-right">
                                                 <li class="dropdown-header">Options</li>
                                                 <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_therapeutic_details('<?php echo $detail->tid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                                <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                                <li><a href="javascript:void(0);" onclick="delete_therapeutic('<?php echo $detail->tid;?>');"><i class="icon-bin"></i>Remove entry</a></li>
                                             </ul>
                                         </li>
                                     </ul>

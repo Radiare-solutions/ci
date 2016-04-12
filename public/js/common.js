@@ -630,7 +630,7 @@ function load_indication_entry_list(bgid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
-                $('div#list_indication_entry').html(data.message);
+                $('div#list_indication_entry').html(data);
             },
             error: function (data) {
                 if (typeof data.responseJSON != "undefined")
@@ -647,5 +647,80 @@ function load_indication_entry_list(bgid) {
                 }
             }
         });
+    }
+}
+
+function load_molecule_entry_list(bgid) {
+    console.log("bgid : " + bgid);
+    var url = "load_molecule_entry_list/" + bgid;
+    if (bgid != "") {
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);
+                $('div#list_molecule_entry').html(data);
+            },
+            error: function (data) {
+                if (typeof data.responseJSON != "undefined")
+                {
+                    var errors = data.responseJSON.message;
+                    var errorsHtml = '';
+
+                    $.each(errors, function (key, value) {
+                        errorsHtml += '<li>' + value + '</li>';
+                    });
+                    console.log(errorsHtml);
+                    $('div#list_molecule_entry #errorResponse').show().html(errorsHtml); //this is my div with messages
+                    $('div#list_molecule_entry #errorResponse').addClass("alert alert-danger");
+                }
+            }
+        });
+    }
+}
+
+function delete_therapeutic(tid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_therapeutic/"+tid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
+    }
+}
+
+function delete_client(cid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_client/"+cid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
     }
 }

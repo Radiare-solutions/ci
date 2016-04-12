@@ -15,7 +15,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
  */
 class Therapeutic extends Eloquent {
 
-    protected $collection = "therapy";
+    protected $collection = "tests";
 
     public function checkTherapeuticExists($request) {
         //echo "check molecule exists";
@@ -44,6 +44,11 @@ class Therapeutic extends Eloquent {
         $details['therapeuticName'] = $query['Name'];
         //}
         return $details;
+    }
+    
+    public function removeTherapeutic($tid) {
+        $tid = new \MongoDB\BSON\ObjectId($tid);
+        Therapeutic::where('_id', $tid)->update(array('isActive' => 0));
     }
 
 

@@ -170,7 +170,7 @@ class Client extends Eloquent {
                 array('$pull' => array('BusinessGroup' => array('_id' => $this->groupID)))
         );
         \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
-                array('Name' => $request->clientName),           
+                //array('Name' => $request->clientName),           
                 array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => $this->groupID)))
         );
 //        foreach($result as $res) {
@@ -229,6 +229,11 @@ class Client extends Eloquent {
           $this->edit($request);
           return "Modified";
           } */
+    }
+    
+    public function removeClient($cid) {
+        $cid = new \MongoDB\BSON\ObjectId($cid);
+        Client::where('_id', $cid)->update(array('isActive' => 0));
     }
 
 }

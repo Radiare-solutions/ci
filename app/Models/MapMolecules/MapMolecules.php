@@ -22,28 +22,36 @@ class MapMolecules extends Eloquent {
     public $bgid = "";
 
     public function loadMoleculeDetails($bgid) {
-        
+        $this->bgid = new \MongoDB\BSON\ObjectId($bgid);
+
+        $arr = array();
+        $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('molecules')->get();
+
+        foreach ($result as $res) {
+            $res = $res->attributes['molecules'];
+            array_push($arr, $res);
+        }       
+        return $arr;
     }
 
     public function loadIndicationDetails($bgid) {
         $this->bgid = new \MongoDB\BSON\ObjectId($bgid);
-
         $arr = array();
         $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('indication')->get();
-        
+
         foreach ($result as $res) {
             $res = $res->attributes['indication'];
             array_push($arr, $res);
-        }
+        }       
         return $arr;
     }
-    
+
     public function loadIndicationEntryList($bgid) {
         $this->bgid = new \MongoDB\BSON\ObjectId($bgid);
 
         $arr = array();
         $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('indication')->get();
-        
+
         foreach ($result as $res) {
             $res = $res->attributes['indication'];
             array_push($arr, $res);
@@ -57,17 +65,27 @@ class MapMolecules extends Eloquent {
 //            echo '<pre>';
 //            print_r($request->indicationName);
 //            exit;
-            foreach ($request->indicationName as $name) {
-                $ob = new MapMolecules();
-                $ob->BG_id = $bgid;
-                $ob->molecules = '';
-                $ob->indication = new \MongoDB\BSON\ObjectId($name);
-                $ob->save();
-            }
+        foreach ($request->indicationName as $name) {
+            $ob = new MapMolecules();
+            $ob->BG_id = $bgid;
+            $ob->molecules = '';
+            $ob->indication = new \MongoDB\BSON\ObjectId($name);
+            $ob->save();
+        }
     }
 
     public function saveMoleculeEntry($request) {
-        
+        $bgid = new \MongoDB\BSON\ObjectId($request->bgid);
+//            echo '<pre>';
+//            print_r($request->indicationName);
+//            exit;
+        foreach ($request->moleculeName as $name) {
+            $ob = new MapMolecules();
+            $ob->BG_id = $bgid;
+            $ob->molecules = new \MongoDB\BSON\ObjectId($name);
+            $ob->indication = '';
+            $ob->save();
+        }
     }
 
 }

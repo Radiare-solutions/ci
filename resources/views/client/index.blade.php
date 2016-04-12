@@ -99,9 +99,10 @@ $level1 = json_decode($level1Details);
 
                                 <td> {{ $detail->bgName }}</td> 
                                 <td>
-                                    <b>Autoimmune</b>-  Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab <br/>
-                                    <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-
+                                    <?php
+                                    if(isset($detail->Name))
+                                        echo $detail->Name;
+                                    ?>
                                 </td> 
                                 <?php
                                 $str = '';
@@ -133,7 +134,7 @@ $level1 = json_decode($level1Details);
                                                 <li><a data-toggle="modal" data-target="#edit_bg_entry" onclick="edit_bg_entry('<?php echo $detail->cid;?>', '<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                 <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
                                                 <li class="dropdown-header">Management System</li>
-                                                <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');load_indication_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
+                                                <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');load_molecule_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
                                                 <li><a data-toggle="modal" data-target="#modal_large1" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_indication_entry');load_indication_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Indication entry</a></li>													
                                             </ul>
                                         </li>
@@ -341,7 +342,7 @@ $level1 = json_decode($level1Details);
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Molecule:</label>
-                                                <select multiple="multiple" data-placeholder="Enter tags" class="select-icons" name="moleculeName" id="moleculeName">
+                                                <select multiple="multiple" data-placeholder="Enter tags" class="select-icons" name="moleculeName[]" id="moleculeName">
                                                     <option value=""></option>
                                                 </select>
                                             </div>
@@ -358,7 +359,7 @@ $level1 = json_decode($level1Details);
 
 
 
-                            <div class="modal-body">
+                            <div class="modal-body" id='list_molecule_entry'>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-11">
