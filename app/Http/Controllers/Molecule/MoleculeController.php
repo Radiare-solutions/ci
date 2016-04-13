@@ -15,7 +15,7 @@ class MoleculeController extends Controller {
 
     public function index() {
         $listDetails = array();
-        $level1Details = Level1::all();  
+        $level1Details = Level1::where('isActive', 1)->get();  
         $level1 = array();
         $level2 = array();
         $molecule = array();
@@ -33,7 +33,7 @@ class MoleculeController extends Controller {
             }
         }
         
-        $moleculeDetails = Molecule::all();
+        $moleculeDetails = Molecule::where('isActive', 1)->get();
         foreach($moleculeDetails as $moleculeDetail) {
             $molecule = $moleculeDetail['attributes'];
             //foreach($molecul as $molecule) {
@@ -41,7 +41,11 @@ class MoleculeController extends Controller {
                 $l2id = $molecule['level2id'];
 
                 $test['level1id'] = (string) $l1id;
+                $l1obj = Level1::where('_id', $l1id)->get();
+                $test['level1Name'] = $l1obj[0]['attributes']['Name'];
                 $test['level2id'] = (string) $l2id;
+                $l2obj = new Level2();
+                $test['level2Name'] = $l2obj->loadLevel2Name($l2id);
                 $test['mid'] = (string) $molecule['_id'];
                 $test['moleculeName'] = $molecule['Name'];
                 array_push($listDetails, $test);
@@ -98,6 +102,11 @@ class MoleculeController extends Controller {
     public function loadMolecules($l1id, $l2id) {
         $ob = new Molecule();
         return $ob->loadMolecules($l1id, $l2id);
+    }
+    
+    public function removeMolecule($mid) {
+        $ob = new Molecule();
+        return $ob->removeMolecule($mid);
     }
 
 }

@@ -15,7 +15,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
  */
 class Therapeutic extends Eloquent {
 
-    protected $collection = "tests";
+    protected $collection = "therapy";
 
     public function checkTherapeuticExists($request) {
         //echo "check molecule exists";
@@ -25,7 +25,8 @@ class Therapeutic extends Eloquent {
         } else {  // insert            
             $molecule = array(
                 '_id' => new \MongoDB\BSON\ObjectId(),
-                'Name' => $request->therapeuticName
+                'Name' => $request->therapeuticName,
+                'isActive' => 1,
             );
             Therapeutic::insert(array($molecule));
         }

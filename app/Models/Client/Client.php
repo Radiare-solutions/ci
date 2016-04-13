@@ -32,7 +32,7 @@ class Client extends Eloquent {
 
     public function add($request) {
 
-        $client = array('Name' => "$request->clientName", '_id' => new \MongoDB\BSON\ObjectId(), 'BusinessGroup' => array());
+        $client = array('Name' => "$request->clientName", '_id' => new \MongoDB\BSON\ObjectId(), 'isActive' => 1, 'BusinessGroup' => array());
 
         Client::insert($client);
 
@@ -234,6 +234,21 @@ class Client extends Eloquent {
     public function removeClient($cid) {
         $cid = new \MongoDB\BSON\ObjectId($cid);
         Client::where('_id', $cid)->update(array('isActive' => 0));
+    }
+    
+    public function removeGroup($cid, $bgid) {
+        $this->clientID = new \MongoDB\BSON\ObjectId($cid);
+        $this->groupID = new \MongoDB\BSON\ObjectId($bgid);                
+    }
+    
+    public function removeIndicationEntry($bgid, $iid) {
+        $iid = new \MongoDB\BSON\ObjectId($iid);
+        // Client::where('_id', $iid)->update(array('isActive' => 0));
+    }
+    
+    public function removeMoleculeEntry($bgid, $mid) {
+        $mid = new \MongoDB\BSON\ObjectId($mid);
+        //Client::where('_id', $mid)->update(array('isActive' => 0));
     }
 
 }

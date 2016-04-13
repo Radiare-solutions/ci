@@ -703,6 +703,50 @@ function delete_therapeutic(tid) {
     }
 }
 
+function delete_indication(iid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_indication/"+iid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
+    }
+}
+
+function delete_molecule(mid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_molecule/"+mid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
+    }
+}
+
 function delete_client(cid) {
     var r = confirm("Are you sure to delete this record?")
     if(r == true) {
@@ -724,3 +768,70 @@ function delete_client(cid) {
         console.log("you pressed cancel");
     }
 }
+
+function delete_group(cid, bgid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_group/"+cid+"/"+bgid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
+    }
+}
+
+function delete_indication_entry(bgid, iid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_indication_entry/"+bgid+"/"+iid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
+    }
+}
+
+function delete_molecule_entry(bgid, mid) {
+    var r = confirm("Are you sure to delete this record?")
+    if(r == true) {
+        console.log("you pressed ok");
+        var url = "remove_molecule_entry/"+bgid+"/"+mid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);                
+            },
+            error: function (data) {                
+            }
+        });
+    }
+    else {
+        console.log("you pressed cancel");
+    }
+}
+

@@ -92,8 +92,8 @@
                         <tr>
                                     <td><?php echo $i; ?></td>
                                     <td><?php echo $detail->moleculeName; ?></td>
-                                    <td><?php echo $detail->level2id; ?></td>
-                                    <td><?php echo $detail->level1id; ?></td>
+                                    <td><?php echo $detail->level2Name; ?></td>
+                                    <td><?php echo $detail->level1Name; ?></td>
                                     <td class="text-center">
                                         <ul class="icons-list">
                                             <li class="dropdown">
@@ -104,11 +104,8 @@
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li class="dropdown-header">Options</li>
                                                     <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_molecule_details('<?php echo $detail->mid;?>', '<?php echo $j;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                                    <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                                    <li class="dropdown-header">Export</li>
-                                                    <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                                    <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                                    <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
+                                                    <li><a href="javascript:void(0);" onclick="delete_molecule('<?php echo $detail->mid;?>');"><i class="icon-bin"></i>Remove entry</a></li>
+                                                    
                                                 </ul>
                                             </li>
                                         </ul>

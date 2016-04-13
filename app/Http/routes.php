@@ -23,12 +23,14 @@ Route::post('add_indication', 'Indication\IndicationController@store');
 Route::post('edit_indication', 'Indication\IndicationController@store');
 Route::post('load_indication/{id}/{id1}', ['uses' =>'Indication\IndicationController@load']);
 Route::get('/indication_mgmt', 'Indication\IndicationController@index');
+Route::post('remove_indication/{id}', ['uses' =>'Indication\IndicationController@removeIndication']);
 
 Route::get('/molecule_mgmt', 'Molecule\MoleculeController@index');
 Route::post('add_molecule', 'Molecule\MoleculeController@store');
 Route::post('edit_molecule', 'Molecule\MoleculeController@store');
 Route::post('load_molecule/{id}/{id1}', ['uses' =>'Molecule\MoleculeController@load']);
 Route::post('load_level2/{id}', ['uses' => 'Molecule\MoleculeController@loadLevel2Data']);
+Route::post('remove_molecule/{id}', ['uses' =>'Molecule\MoleculeController@removeMolecule']);
 
 Route::get('/therapeutic_mgmt', 'Therapeutic\TherapeuticController@index');
 Route::post('add_therapeutic', 'Therapeutic\TherapeuticController@store');
@@ -43,14 +45,18 @@ Route::post('load_client/{id}', ['uses' =>'Client\ClientController@load']);
 Route::post('remove_client/{id}', ['uses' =>'Client\ClientController@removeClient']);
 
 Route::post('add_group', 'Client\ClientController@storeGroup');
+Route::post('remove_group/{id}/{id1}', ['uses' =>'Client\ClientController@removeGroup']);
 
 Route::post('load_indications/{id}', ['uses' =>'Client\ClientController@loadIndications']);
 Route::post('load_molecules/{id}/{id1}', ['uses' => 'Client\ClientController@loadMolecules']);
 
 Route::post('add_indication_entry', 'Client\ClientController@storeIndicationEntry');
 Route::post('load_indication_entry_list/{id}', ['uses' => 'Client\ClientController@load_indication_entry_list']);
+Route::post('remove_indication_entry/{id}/{id1}', ['uses' => 'Client\ClientController@removeIndicationEntry']);
+
 Route::post('add_molecule_entry', 'Client\ClientController@storeMoleculeEntry');
 Route::post('load_molecule_entry_list/{id}', ['uses' => 'Client\ClientController@load_molecule_entry_list']);
+Route::post('remove_molecule_entry/{id}/{id1}', ['uses' => 'Client\ClientController@removeMoleculeEntry']);
 
 Route::post('edit_bg_entry/{id}/{id1}', ['uses' => 'Client\ClientController@editBGEntry']);
 Route::post('edit_bg_submit', 'Client\ClientController@storeEditGroup');

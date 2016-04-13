@@ -198,5 +198,10 @@ class Molecule extends Eloquent {
         }
         return $str;
     }
+    
+    public function removeMolecule($mid) {
+        $tid = new \MongoDB\BSON\ObjectId($mid);
+        Molecule::where('_id', $mid)->update(array('isActive' => 0));
+    }
 
 }

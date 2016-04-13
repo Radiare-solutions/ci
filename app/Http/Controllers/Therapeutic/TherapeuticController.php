@@ -14,7 +14,8 @@ class TherapeuticController extends Controller {
     public function index() {
         $listDetails = array();
                
-        $therapyDetails = Therapeutic::all();
+        $therapyDetails = Therapeutic::where('isActive', 1)->get();
+
         foreach($therapyDetails as $therapyDetail) {
             $therapy = $therapyDetail['attributes'];
             $test['tid'] = (string) $therapy['_id'];
@@ -39,10 +40,10 @@ class TherapeuticController extends Controller {
                             ], 422);
         } else {
             $str = $this->therapeuticExists($request);
-//            return response()->json([
-//                        'success' => true,
-//                        'message' => "Molecule ".$str." Successfully"
-//                            ], 200);
+            return response()->json([
+                        'success' => true,
+                        'message' => "Molecule ".$str." Successfully"
+                            ], 200);
         }
     }
 

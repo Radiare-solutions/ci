@@ -24,12 +24,16 @@ class ClientController extends Controller {
         $indic = array();
         $moleculeDetailArr = array();
         $listDetail = array();
+        // $clients = Client::where('isActive', 1)->get();
         $clients = Client::all();
         foreach ($clients as $client) {
             $clientDetail = $client['attributes'];
             $test['cid'] = (string) $clientDetail['_id'];
             $test['clientName'] = $clientDetail['Name'];
-
+            
+            if(count($clientDetail['BusinessGroup']) <= 0)
+                array_push($listDetails, $test);
+            else {
             foreach ($clientDetail['BusinessGroup'] as $group) {
                 $test['bgid'] = (string) $group['_id'];
                 $test['bgName'] = $group['Name'];
@@ -55,11 +59,11 @@ class ClientController extends Controller {
                 if (!empty($indication))
                     array_push($listDetails, $test);
                 else {
-                    $tester['cid'] = (string) $clientDetail['_id'];
-                    $tester['clientName'] = $clientDetail['Name'];
-                    $tester['bgid'] = (string) $group['_id'];
-                    $tester['bgName'] = $group['Name'];
-                    array_push($listDetails, $tester);
+//                    $tester['cid'] = (string) $clientDetail['_id'];
+//                    $tester['clientName'] = $clientDetail['Name'];
+//                    $tester['bgid'] = (string) $group['_id'];
+//                    $tester['bgName'] = $group['Name'];
+//                    array_push($listDetails, $tester);
                 }
 
 
@@ -74,6 +78,7 @@ class ClientController extends Controller {
                     $test['Name'] = $temp;
                     array_push($listDetails, $test);
                 }
+            }
             }
         }
 
@@ -389,7 +394,22 @@ class ClientController extends Controller {
     
     public function removeClient($cid) {
         $obj = new Client();
-        return $obj->removeClient($tid);
+        return $obj->removeClient($cid);
+    }
+    
+    public function removeGroup($cid, $bgid) {
+        $obj = new Client();
+        return $obj->removeGroup($cid, $bgid);
+    }
+    
+    public function removeIndicationEntry($bgid, $iid) {
+        $obj = new MapMolecules();
+        return $obj->removeIndicationEntry($bgid, $iid);
+    }
+    
+    public function removeMoleculeEntry($bgid, $mid) {
+        $obj = new MapMolecules();
+        return $obj->removeMoleculeEntry($bgid, $mid);        
     }
 
 }

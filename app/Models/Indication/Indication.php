@@ -222,4 +222,8 @@ class Indication extends Eloquent {
         $res = Indication::find($tid);
         
     }
+    
+    public function removeIndication($iid) {
+        $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+    }
 }

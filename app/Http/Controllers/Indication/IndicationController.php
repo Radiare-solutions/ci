@@ -69,5 +69,10 @@ class IndicationController extends Controller {
         $obj = new Indication();
         return $obj->loadIndicationDetails($tid, $iid);        
     }
+    
+    public function removeIndication($iid) {
+        $obj = new Indication();
+        return $obj->removeIndication($iid);
+    }
 
 }

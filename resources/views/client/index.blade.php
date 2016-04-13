@@ -132,7 +132,8 @@ $level1 = json_decode($level1Details);
                                             <ul class="dropdown-menu dropdown-menu-right">
                                                 <li class="dropdown-header">Options</li>
                                                 <li><a data-toggle="modal" data-target="#edit_bg_entry" onclick="edit_bg_entry('<?php echo $detail->cid;?>', '<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                                <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                            <li><a href="javascript:void(0);" onclick="delete_client('<?php echo $detail->cid;?>');"><i class="icon-bin"></i>Remove Client</a></li>
+                                            <li><a href="javascript:void(0);" onclick="delete_group('<?php echo $detail->cid;?>', '<?php echo $detail->bgid;?>');"><i class="icon-bin"></i>Remove Business Group</a></li>
                                                 <li class="dropdown-header">Management System</li>
                                                 <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');load_molecule_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
                                                 <li><a data-toggle="modal" data-target="#modal_large1" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_indication_entry');load_indication_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Indication entry</a></li>													
@@ -169,7 +170,8 @@ $level1 = json_decode($level1Details);
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li class="dropdown-header">Options</li>
                                             <li><a ><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                            <li><a href="#"><i class="icon-bin"></i>Remove Client</a></li>
+                                            <li><a href="#"><i class="icon-bin"></i>Remove Business Group</a></li>
                                             <li class="dropdown-header">Managemnt System</li>
                                             <li><a data-toggle="modal" data-target="#modal_large"><i class="icon-pencil7" ></i>Molecule entry</a></li>
                                             <li><a data-toggle="modal" data-target="#modal_large1" ><i class="icon-pencil7"></i>Indication entry</a></li>													
