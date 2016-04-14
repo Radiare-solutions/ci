@@ -10,7 +10,7 @@ use Jenssegers\Mongodb;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
-
+use App\Models\Indication\Indication;
 /**
  * Category Model
  *
@@ -86,6 +86,23 @@ class MapMolecules extends Eloquent {
             $ob->indication = '';
             $ob->save();
         }
+    }
+    
+    public function removeIndicationEntry($bgid, $iname) {
+        $bgid = new \MongoDB\BSON\ObjectId($bgid);
+        $iObj = Indication::where('Therapy', $iname)->get();
+        $attrs = $iObj[0]['attributes']['Indication'];
+        foreach($attrs as $attr) {
+            // $iid = new \MongoDB\BSON\ObjectId($attr['_id']);
+            $iid = $attr['_id'];
+            MapMolecules::where(array('BG_id' => $bgid, 'indication' => $iid))->update(array('isActive' => 0));
+            echo '<pre>';
+            print_r($attr);
+            exit;
+        }
+        echo '<pre>';
+        print_r($iObj);
+        exit;
     }
 
 }

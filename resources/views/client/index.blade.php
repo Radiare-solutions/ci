@@ -91,13 +91,14 @@ $level1 = json_decode($level1Details);
                     </thead>
                     <tbody>
                         <?php
+                        if(count($details) > 0) {
                         foreach ($details as $detail) {
                             $str = '';
                             ?>
                             <tr> 
                                 <th BGCOLOR="#99CCFF" >{{ $detail->clientName }}</th>
 
-                                <td> {{ $detail->bgName }}</td> 
+                                <td> <?php if(isset($detail->bgName)) echo $detail->bgName; ?></td> 
                                 <td>
                                     <?php
                                     if(isset($detail->Name))
@@ -127,7 +128,7 @@ $level1 = json_decode($level1Details);
                                                 <i class="icon-menu9"></i>
                                             </a>
 
-
+                                            <?php if(isset($detail->bgid)) { ?>
 
                                             <ul class="dropdown-menu dropdown-menu-right">
                                                 <li class="dropdown-header">Options</li>
@@ -138,62 +139,15 @@ $level1 = json_decode($level1Details);
                                                 <li><a data-toggle="modal" data-target="#modal_large" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_molecule');load_molecule_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7" ></i>Molecule entry</a></li>
                                                 <li><a data-toggle="modal" data-target="#modal_large1" onclick="setValues('<?php echo $detail->bgid; ?>', 'add_indication_entry');load_indication_entry_list('<?php echo $detail->bgid;?>');"><i class="icon-pencil7"></i>Indication entry</a></li>													
                                             </ul>
+                                            <?php }  else { } ?>
                                         </li>
                                     </ul>
                                 </td>
                             </tr>
-                        <?php } ?>
-                        <tr> 
-                            <th BGCOLOR="#99CCFF" >Merck</th>
-                            <td> bg2</td>
-                            <td>
-                                <b>Autoimmune</b>-  Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab <br/>
-                                <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-
-                            </td> 
-                            <td>
-                                <b>Autoimmune</b>-  Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab <br/>
-                                <b>Oncology</b> -Adalimumab, Filgrastim, Pegfilgrastim, Etanercept, Bevacizumab, Infliximab, Rituximab
-
-                            </td> 
-
-
-                            <td class="text-center">
-                                <ul class="icons-list">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-menu9"></i>
-                                        </a>
-
-
-
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li class="dropdown-header">Options</li>
-                                            <li><a ><i class="icon-pencil7"></i>Edit entry</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove Client</a></li>
-                                            <li><a href="#"><i class="icon-bin"></i>Remove Business Group</a></li>
-                                            <li class="dropdown-header">Managemnt System</li>
-                                            <li><a data-toggle="modal" data-target="#modal_large"><i class="icon-pencil7" ></i>Molecule entry</a></li>
-                                            <li><a data-toggle="modal" data-target="#modal_large1" ><i class="icon-pencil7"></i>Indication entry</a></li>													
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </td>
-
-                        </tr> 
-
-
-
-
+                        <?php } } ?>
                     </tbody>
-
-
                 </table>
-
-
-
-
-
+                
                 <div id="modal_form_vertical" class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
