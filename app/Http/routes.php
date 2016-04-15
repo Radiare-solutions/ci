@@ -15,6 +15,30 @@
     return view('welcome');
 });*/
 
+/* start of soumya codes */
+Route::get('/', function () {
+    return view('layouts/index');
+});
+Route::get('/home.html', function () {
+    return view('layouts/index');
+});
+/*Route::get('/roles.html', function () {
+    return view('layouts/roles');
+});*/
+Route::get('/roles.html', 'Role_Management_Controller@index');
+Route::get('/users.html', 'User_Management_Controller@index');
+
+Route::get('/molecules.html', function () {
+    return view('layouts/molecules');
+});
+
+Route::post('add_role', 'Role_Management_Controller@store');
+Route::post('edit_role_submit/{rid}', 'Role_Management_Controller@editrolesubmit');
+Route::post('add_user', 'User_Management_Controller@store');
+Route::post('edit_user_form/{id}', 'User_Management_Controller@edituserform');
+Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@editusersubmit']);
+/* end of soumya codes */
+
 Route::get('indication_mgmt', function() {
     return view('indication/index');
 });

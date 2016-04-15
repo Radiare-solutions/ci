@@ -24,6 +24,7 @@ class ClientController extends Controller {
         $indic = array();
         $moleculeDetailArr = array();
         $listDetail = array();
+        $temp = '';
         // $clients = Client::where('isActive', 1)->get();
         $clients = Client::all();
         foreach ($clients as $client) {
@@ -42,22 +43,33 @@ class ClientController extends Controller {
                     $ob = new MapMolecules();
 
                     $indications = ($ob->loadIndicationDetails($test['bgid']));
+                    $molecules1 = $ob->loadMoleculeDetails($test['bgid']);
                     $indications = array_filter($indications);
+                    if (!empty($indications)) {
+                        $indication = array();
+                        foreach ($indications as $indicationDetails) {
+                            $tempDetails = $indicationDetails;
+                            $indicationDetail = $this->getIndicationName($tempDetails);
+                            array_push($indication, $indicationDetail);
+                        }
+                        $indication = array_filter($indication);
 
-                    $indication = array();
-                    foreach ($indications as $indicationDetails) {
-                        $tempDetails = $indicationDetails;
-                        $indicationDetail = $this->getIndicationName($tempDetails);
-                        array_push($indication, $indicationDetail);
-                    }
-                    $indication = array_filter($indication);
-
-                    foreach ($indication as $key => $value) {
-                        $test['therapy'][$value[0]['therapy']][] = $value[0]['indication'];
-                    }
-                    if (!empty($indication))
+                        foreach ($indication as $key => $value) {
+                            $test['therapy'][$value[0]['therapy']][] = $value[0]['indication'];
+                        }
                         array_push($listDetails, $test);
-                    else {
+                        $test = array();
+                    } else if (!empty($molecules1)) {
+                        $molecules1 = array_filter($molecules1);
+                        foreach ($molecules1 as $molecules) {
+                            print_r($molecules);
+                            $moleculeDetail = $this->getMoleculeDetails($molecules);
+                            print_r($moleculeDetail);
+                            echo $temp = implode(" : ", $moleculeDetail) . "<br>";
+                            $test['Name'] = $temp;
+                            array_push($listDetails, $test);
+                        }
+                    } else {
                         $tester['cid'] = (string) $clientDetail['_id'];
                         $tester['clientName'] = $clientDetail['Name'];
                         $tester['bgid'] = (string) $group['_id'];
@@ -66,28 +78,9 @@ class ClientController extends Controller {
                         $group = array();
                         $tester = array();
                     }
-
-
-                    // echo "molecule : " . $test['bgid'] . "<br>";
-                    $molecules1 = $ob->loadMoleculeDetails($test['bgid']);
-                    $molecules1 = array_filter($molecules1);
-                    foreach ($molecules1 as $molecules) {
-                        print_r($molecules);
-                        $moleculeDetail = $this->getMoleculeDetails($molecules);
-                        print_r($moleculeDetail);
-                        echo $temp = implode(" : ", $moleculeDetail) . "<br>";
-                        $test['Name'] = $temp;
-                        array_push($listDetails, $test);
-                    }
-
-                    //array_push($listDetails, $test);
-                    $test = array();
                 }
-            } else {
-                array_push($listDetails, $test);
             }
         }
-
 //        echo '<pre>';
 //        print_r($listDetails);
 //        exit;
@@ -165,9 +158,7 @@ class ClientController extends Controller {
             $result = array_combine($therapy, $indication);
 
             return view('client\indicationPartial', array('result' => $result, 'bgid' => $bgid, "groups" => $groups));
-
         }
-
     }
 
     public function getIndicationName($iid) {

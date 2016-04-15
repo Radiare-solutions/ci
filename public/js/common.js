@@ -835,3 +835,137 @@ function delete_molecule_entry(bgid, mid) {
     }
 }
 
+function add_new_role() {
+//    alert("DFDSFGS");
+    console.log("submit role");
+    var url = "add_role";
+    var data = $('#add_role').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#add_role #errorResponse').removeClass("alert alert-danger");
+            $('form#add_role #errorResponse').show().html("Role Added successfully");            
+            $('form#add_role #errorResponse').addClass("alert alert-success");
+           // window.setTimeout(function(){location.reload()},3000)
+        },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_role #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_role #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+function new_user() {
+    console.log("submit user");
+    var url = "add_user";
+    var data = $('#add_user').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#add_user #errorResponse').removeClass("alert alert-danger");
+            $('form#add_user #errorResponse').show().html("Role Added successfully");            
+            $('form#add_user #errorResponse').addClass("alert alert-success");
+           // window.setTimeout(function(){location.reload()},3000)
+        },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_user #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_user #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+function edit_user_submit(uid) {
+    console.log("submit edit_user");
+    var url = "edit_user_submit/"+uid;
+    var data = $('#edit_user').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#edit_user #errorResponse').removeClass("alert alert-danger");
+            $('form#edit_user #errorResponse').show().html("Role Added successfully");            
+            $('form#edit_user #errorResponse').addClass("alert alert-success");
+           // window.setTimeout(function(){location.reload()},3000)
+        },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_user #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_user #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+function edit_user_form(id) {
+//    alert(id);
+    console.log("id : " + id);
+    var url = "edit_user_form/"+id;
+    $.ajax({
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            var details = (data);
+            console.log(details.User_Name);
+            $('#modal_form_edit form#edit_user #Edit_User_Name').val(details.User_Name);
+            $('#modal_form_edit form#edit_user #Edit_Email_Id').val(details.Email_Id);
+            $('#modal_form_edit form#edit_user #Edit_Password').val(details.Password);
+            $('#modal_form_edit form#edit_user #Edit_Role_Id').val(details.Role_Id);
+//            $("#myModal form#edit_user #select2-therapyName-container").html(details.therapyName);            
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_user #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_user #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
