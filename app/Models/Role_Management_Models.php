@@ -23,7 +23,7 @@ class Role_Management_Models extends Eloquent {
 
     public function add_role($request) {
 
-        $role = array('Role_Name' => "$request->RoleName", 'Role_Id' => new \MongoDB\BSON\ObjectId(), 'Created_Date' => "2013-10-02T01:11:18.965Z");
+        $role = array('Role_Name' => "$request->RoleName", 'Role_Id' => new \MongoDB\BSON\ObjectId());
         Role_Management_Models::insert(array($role));
         return redirect('/');
     }
@@ -31,9 +31,9 @@ class Role_Management_Models extends Eloquent {
     public function edit_role_submit($rid, $request) {
 
         $role = array('Role_Name' => "$request->RoleName", 'Created_Date' => "2013-10-02T01:11:18.965Z");
-        Role_Management_Models::table('CI_Role')
-                ->where('_id', '$rid')
-                ->update(array($role));
+        Role_Management_Models::where('CI_Role')
+                ->where('_id', $rid)
+                ->update(($role));
         return redirect('/');
     }
 

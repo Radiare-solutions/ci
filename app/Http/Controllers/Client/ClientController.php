@@ -60,6 +60,7 @@ class ClientController extends Controller {
                         array_push($listDetails, $test);
                         $test = array();
                     } else if (!empty($molecules1)) {
+                        $str = array();
                         $molecules1 = array_filter($molecules1);
                         foreach ($molecules1 as $molecules) {
                             print_r($molecules);
@@ -67,8 +68,11 @@ class ClientController extends Controller {
                             print_r($moleculeDetail);
                             echo $temp = implode(" : ", $moleculeDetail) . "<br>";
                             $test['Name'] = $temp;
-                            array_push($listDetails, $test);
+                            array_push($str, $temp);
                         }
+                        $test['Name'] = $str;
+                        array_push($listDetails, $test);
+                        $test = array();
                     } else {
                         $tester['cid'] = (string) $clientDetail['_id'];
                         $tester['clientName'] = $clientDetail['Name'];
@@ -79,6 +83,11 @@ class ClientController extends Controller {
                         $tester = array();
                     }
                 }
+            }
+            else {
+                $tester['cid'] = (string) $clientDetail['_id'];
+                $tester['clientName'] = $clientDetail['Name'];
+                array_push($listDetails, $tester);
             }
         }
 //        echo '<pre>';

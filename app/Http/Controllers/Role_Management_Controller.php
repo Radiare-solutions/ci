@@ -62,7 +62,7 @@ class Role_Management_Controller extends Controller {
                             ], 200);
         }
     }
-    public function edit_role_submit($rid, Request $request) {
+    public function editrolesubmit(Request $request) {
         $validator = Validator::make($request->all(), [
                     'RoleName' => 'required',                    
         ]);
@@ -77,7 +77,7 @@ class Role_Management_Controller extends Controller {
                             ], 422);
         } else {
             $roleObj = new Role_Management_Models();
-            $roleObj->edit_role_submit($rid,$request);
+            $roleObj->edit_role_submit($request->RoleID,$request);
 
             return response()->json([
                         'success' => true,
@@ -120,6 +120,15 @@ class Role_Management_Controller extends Controller {
         } else {
             return 0;
         }
+    }
+    
+    public function editroleform($id) {
+        $userdetails = Role_Management_Models::find($id);
+        if (!empty($userdetails)) {
+            $details['Role_Name'] = $userdetails['attributes']['Role_Name'];
+            $details['Role_Id'] = $id;
+            return $details;
+    }
     }
 
 }

@@ -30,13 +30,12 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <!--@foreach ($roles as $role)-->
+                    <?php if(count($roles) > 0) {
+ $i = 1; ?>
+                    @foreach ($roles as $role)
                     <tr>
-                        <td>1</td>
-                        <td>1</td>
-                        <!--<td>{{ $role->Role_Name }}</td>-->
-                        <!--<td>{{ $role->Role_Name }}</td>-->
+                        <td>{{ $i }}</td>
+                        <td>{{ $role->Role_Name }}</td>
 
                         <td class="text-center">
                             <ul class="icons-list">
@@ -47,19 +46,17 @@
 
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li class="dropdown-header">Options</li>
-                                        <li><a href="#"><i class="icon-pencil7"></i>Edit entry</a></li>
+                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="load_edit_role('<?php echo $role->_id;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                         <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                        <li class="dropdown-header">Export</li>
-                                        <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                        <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                        <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </td>
                     </tr>
-
-                    <!--@endforeach-->
+                    <?php $i++; 
+                    ?>
+                    @endforeach
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -101,18 +98,19 @@
                         <h5 class="modal-title">Edit Role</h5>
                     </div>
 
-                    <form method="post" id="add_role" name="add_role">
+                    <form method="post" id="edit_role" name="edit_role">
                         <div id="errorResponse"></div>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="panel panel-flat">
                             <div class="panel-body">
                                 <div class="form-group">
                                     <label>Role Name :</label>
+                                    <input type="hidden" name="RoleID" id="Edit_Role_Id">
                                     <input type="text" name="RoleName" id="Edit_Role_Name" class="form-control" placeholder="Edit Role Name">
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="button" onclick="edit_role_submit('<?php // echo $role->_id ?>');" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
+                                    <button type="button" onclick="edit_role_submit();" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
                                 </div>
                             </div>
                         </div>

@@ -33,7 +33,8 @@ Route::get('/molecules.html', function () {
 });
 
 Route::post('add_role', 'Role_Management_Controller@store');
-Route::post('edit_role_submit/{rid}', 'Role_Management_Controller@editrolesubmit');
+Route::post('edit_role_form/{id}', 'Role_Management_Controller@editroleform');
+Route::post('edit_role_submit', 'Role_Management_Controller@editrolesubmit');
 Route::post('add_user', 'User_Management_Controller@store');
 Route::post('edit_user_form/{id}', 'User_Management_Controller@edituserform');
 Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@editusersubmit']);

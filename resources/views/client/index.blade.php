@@ -102,7 +102,11 @@ $level1 = json_decode($level1Details);
                                 <td>
                                     <?php
                                     if(isset($detail->Name))
-                                        echo $detail->Name;
+                                    {
+                                        //foreach($detail->Name as $details)
+                                          echo implode(",", $detail->Name);
+                                    }
+                                        
                                     ?>
                                 </td> 
                                 <?php
