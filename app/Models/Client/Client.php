@@ -51,7 +51,7 @@ class Client extends Eloquent {
             if (is_array($value) && $value['_id'] == $name)
                 return $key;
         }
-        return null;
+        return 0;
     }
 
     public function edit($request) {
@@ -123,8 +123,8 @@ class Client extends Eloquent {
         }
         return $details;
     }
-    
-        public function loadBGEntryListValues($bgid) {        
+
+    public function loadBGEntryListValues($bgid) {
         $this->groupID = new \MongoDB\BSON\ObjectId($bgid);
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
@@ -160,11 +160,11 @@ class Client extends Eloquent {
                 array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => new \MongoDB\BSON\ObjectId())))
         );
     }
-    
+
     public function editBGEntry($request) {
         $this->clientID = new \MongoDB\BSON\ObjectId($request->cid);
         $this->groupID = new \MongoDB\BSON\ObjectId($request->bgid);
-                
+
         \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
                 // array('_id' => $this->therapyID),           
                 array('$pull' => array('BusinessGroup' => array('_id' => $this->groupID)))
@@ -172,6 +172,9 @@ class Client extends Eloquent {
         \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
                 //array('Name' => $request->clientName),           
                 array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => $this->groupID)))
+        );
+        \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
+                array('Name' => $request->clientName)                
         );
 //        foreach($result as $res) {
 //            echo '<pre>';
@@ -183,11 +186,10 @@ class Client extends Eloquent {
     }
 
     public function checkGroupExists($request) {
-        if(isset($request->cid)) {
+        if (isset($request->cid)) {
             $this->editBGEntry($request);
             return "Updated";
-        }
-        else {
+        } else {
             $this->addGroup($request);
             return "Added";
         }
@@ -230,22 +232,29 @@ class Client extends Eloquent {
           return "Modified";
           } */
     }
-    
+
     public function removeClient($cid) {
         $cid = new \MongoDB\BSON\ObjectId($cid);
         Client::where('_id', $cid)->update(array('isActive' => 0));
     }
-    
+
     public function removeGroup($cid, $bgid) {
         $this->clientID = new \MongoDB\BSON\ObjectId($cid);
-        $this->groupID = new \MongoDB\BSON\ObjectId($bgid);                
+        $this->groupID = new \MongoDB\BSON\ObjectId($bgid);
+
+        $result = Client::find($this->clientID);
+        $index = $this->getIndex($this->groupID, $result->attributes['BusinessGroup']);
+        \Illuminate\Support\Facades\DB::collection($this->collection)->
+                where('_id', $this->clientID)->
+                update(array('BusinessGroup.' . $index . '.isActive' => 0)
+        );
     }
-    
+
     public function removeIndicationEntry($bgid, $iid) {
         $iid = new \MongoDB\BSON\ObjectId($iid);
         // Client::where('_id', $iid)->update(array('isActive' => 0));
     }
-    
+
     public function removeMoleculeEntry($bgid, $mid) {
         $mid = new \MongoDB\BSON\ObjectId($mid);
         //Client::where('_id', $mid)->update(array('isActive' => 0));

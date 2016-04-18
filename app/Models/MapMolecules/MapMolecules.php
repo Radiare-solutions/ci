@@ -93,16 +93,9 @@ class MapMolecules extends Eloquent {
         $iObj = Indication::where('Therapy', $iname)->get();
         $attrs = $iObj[0]['attributes']['Indication'];
         foreach($attrs as $attr) {
-            // $iid = new \MongoDB\BSON\ObjectId($attr['_id']);
             $iid = $attr['_id'];
             MapMolecules::where(array('BG_id' => $bgid, 'indication' => $iid))->update(array('isActive' => 0));
-//            echo '<pre>';
-//            print_r($attr);
-//            exit;
         }
-        echo '<pre>';
-        print_r($iObj);
-        exit;
     }
 
 }
