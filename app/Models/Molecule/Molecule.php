@@ -104,10 +104,21 @@ class Molecule extends Eloquent {
         $details = "";
         //foreach ($result['attributes'] as $query) {
         $query = $result['attributes'];
+        $l1id = new \MongoDB\BSON\ObjectId($query['level1id']);
+        $l2id = new \MongoDB\BSON\ObjectId($query['level2id']);
+        $l1obj = Level1::find($l1id);
+        $l2obj = Level2::find($l1id);
+        $l2Name = '';
+        foreach($l2obj['attributes']['Level2'] as $detail) {
+            if( (string) $l2id  == (string) $detail['_id'])
+            {
+                $l2Name = $detail['Name'];
+            }
+        }
         $details['level1id'] = (string) $query['level1id'];
-        $details['level1name'] = (string) $query['level1id'];
+        $details['level1name'] = (string) $l1obj['attributes']['Name'];
         $details['level2id'] = (string) $query['level2id'];
-        $details['level2name'] = (string) $query['level2id'];
+        $details['level2name'] = (string) $l2Name;
         $details['moleculeID'] = (string) $query['_id'];
         $details['moleculeName'] = $query['Name'];
         $details['mIndex'] = $index;
@@ -128,7 +139,8 @@ class Molecule extends Eloquent {
                 '_id' => new \MongoDB\BSON\ObjectId($mid),
                 'Name' => $request->moleculeName,
                 'level1id' => $this->l1id,
-                'level2id' => $this->l2id
+                'level2id' => $this->l2id,
+                'isActive' => 1
             );
             Molecule::insert(array($molecule));
         } else {  // insert
@@ -139,7 +151,8 @@ class Molecule extends Eloquent {
                 '_id' => new \MongoDB\BSON\ObjectId(),
                 'Name' => $request->moleculeName,
                 'level1id' => $this->l1id,
-                'level2id' => $this->l2id
+                'level2id' => $this->l2id,
+                'isActive' => 1
             );
             Molecule::insert(array($molecule));
         }

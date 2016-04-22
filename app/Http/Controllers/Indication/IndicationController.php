@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Indication;
 
 use App\Http\Controllers\Controller;
 use App\Models\Indication\Indication;
+use App\Models\Therapeutic\Therapeutic;
 use Illuminate\Http\Request;
 use Validator;
 use MongoDB\Model;
@@ -13,9 +14,22 @@ class IndicationController extends Controller {
 
     public function index() {
         $listDetails = array();
-        $therapy = Indication::all();        
-        foreach ($therapy as $therapyDetail['attributes']) {
-            $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
+        $therapy = Indication::all();  
+        $therapeutic = Therapeutic::all();
+        foreach ($therapy as $therapyDetail) {
+            $ob = new \stdClass();
+            $therapyOb = Therapeutic::find($therapyDetail['attributes']['Therapy']);
+            $ob->therapyName = $therapyOb['attributes']['Name'];
+            $ob->_id = $therapyOb['attributes']['_id'];
+            $test = array();
+            foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
+               $testing['Name'] = $indicationDetail['Name'];
+               $testing['_id'] = (string) $indicationDetail['_id'];
+               array_push($test, $testing);
+            }
+            $ob->indicationName = $test;
+            array_push($listDetails, $ob);
+            /*$details['therapyName'] = $therapyDetail['attributes']['Therapy'];
             $details['_id'] = $therapyDetail['attributes']['_id'];
             $ob = new \stdClass();
             $test = array();
@@ -28,10 +42,13 @@ class IndicationController extends Controller {
             }
             $ob->indicationName = $test;
             array_push($listDetails, $ob);
-            //exit;
+            //exit; */
+            //$therapyObj = Therapeutic::find($therapyDetail['attributes']['Therapy']);
         }
-        
-        return view('indication/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
+//        echo '<pre>';
+//        print_r($listDetails);
+//        exit;
+        return view('indication/index', array('therapy' => $therapy, 'therapeutic' => $therapeutic, 'details' => json_encode($listDetails)));
     }
 
     public function store(Request $request) {
@@ -49,7 +66,9 @@ class IndicationController extends Controller {
                         'message' => $errors
                             ], 422);
         } else {
-            $str = $this->indicationExists($request);
+            $obj = new Indication();                
+            $str =  $this->indicationExists($request);              
+
             return response()->json([
                         'success' => true,
                         'message' => "Indication ".$str." Successfully"
@@ -57,12 +76,9 @@ class IndicationController extends Controller {
         }
     }
 
-    public function indicationExists($request) {
-             
-        $obj = new Indication();        
-        return $result = $obj->checkIndicationExists($request);                
-        
-        
+    public function indicationExists($request) {             
+        $obj = new Indication();                
+        return $obj->indicationExists($request);                        
     }
 
     public function load($tid, $iid) {

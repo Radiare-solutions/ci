@@ -25,22 +25,17 @@ class Indication extends Eloquent {
     public $therapyID = "";
     public $indicationID = "";
 
-    public function posts() {
-        // return $this->belongsTo('App\Models\Indication\Indications');
-        // return $this-> ('App\Models\Indication\Post');
-    }
-
     public function add($request) {
 
-        $indication = array('Name' => "$request->indicationName", '_id' => new \MongoDB\BSON\ObjectId());
-        $arr = array("Therapy" => "$request->therapyName");
-        $arr['Indication'] = array($indication);
+        $indication = array('Name' => "$request->indicationName", '_id' => new \MongoDB\BSON\ObjectId(), 'isActive' => 1);
+        //$arr = array("Therapy" => "$request->therapyName");
 
-        // Indication::create($arr);
+        $this->therapyName = new \MongoDB\BSON\ObjectId($request->therapyName);
+        //Indication::create($arr);
         //echo $test;
         //exit;
-        Indication::where('_id', '=', $request->therapyName)
-                ->push('Indication', array($indication));
+        Indication::where('Therapy', $this->therapyName)->push('Indication', ($indication));
+
         //$test = $test->pushAttributeValues("Indication", $indication);
 //        $ob->Therapy = $request->therapyName;
 //        $indication = array(array('Name' => $request->indicationName));
@@ -125,17 +120,14 @@ class Indication extends Eloquent {
         }
         return $details;
     }
-    
+
     public function loadIndications($tid) {
         $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array(
                             '$match' => array(
-                                
-                                    '_id' => $this->therapyID),
-                            
-                            
+                                '_id' => $this->therapyID),
                         ),
                         array('$project' => array(
                                 //'Therapy' => 1,
@@ -144,26 +136,26 @@ class Indication extends Eloquent {
             ));
         });
 
-        foreach ($result as $query) {  
-            return $query;   
+        foreach ($result as $query) {
+            return $query;
         }
-
     }
 
-    public function checkIndicationExists($request) {
-        // echo "check indication exists";
+    public function indicationExists($request) {
+        
         $this->therapyName = new \MongoDB\BSON\ObjectId($request->therapyName);
-        $this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
+        //$this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
         $this->indicationName = $request->indicationName;
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
+
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array('$unwind' => '$Indication'),
                         array('$unwind' => '$Indication._id'),
                         array(
                             '$match' => array(
                                 '$and' => array(
-                                    array('_id' => $this->therapyName),
-                                    array('Indication._id' => array('$in' => array($this->indicationID))),
+                                    array('Therapy' => $this->therapyName),
+                                    array('Indication.Name' => array('$in' => array($this->indicationName))),
                                 )
                             )
                         ),
@@ -175,7 +167,7 @@ class Indication extends Eloquent {
         });
         $id = "";
         foreach ($result as $query) {
-            $id = $query['Indication']['_id'];
+           $id = $query['Indication']['_id'];
         }
         if (empty($id)) {
             $this->add($request);
@@ -216,14 +208,14 @@ class Indication extends Eloquent {
         }
         return $therapy;
     }
-    
+
     public function getTherapyName($tid) {
         $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
         $res = Indication::find($tid);
-        
     }
-    
+
     public function removeIndication($iid) {
         $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
     }
+
 }

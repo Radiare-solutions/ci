@@ -6,6 +6,7 @@ use Jenssegers;
 use Jenssegers\Mongodb;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
+use App\Models\Indication\Indication;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 /**
@@ -23,12 +24,19 @@ class Therapeutic extends Eloquent {
         if (isset($request->tid)) { // edit
             Therapeutic::where('_id', $request->tid)->update(array('Name' => $request->therapeuticName));
         } else {  // insert            
+            $id = new \MongoDB\BSON\ObjectId();
             $molecule = array(
-                '_id' => new \MongoDB\BSON\ObjectId(),
+                '_id' => $id,
                 'Name' => $request->therapeuticName,
                 'isActive' => 1,
             );
             Therapeutic::insert(array($molecule));
+            
+            // put an entry in indication table during insertion
+            $ob = new Indication();
+            $ob->Therapy = $id;
+            $ob->Indication = array();
+            $ob->save();
         }
     }
     

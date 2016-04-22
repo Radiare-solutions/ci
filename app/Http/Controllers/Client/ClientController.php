@@ -116,22 +116,12 @@ class ClientController extends Controller {
             //print_r($molecules);
             $moleculeDetail = $this->getMoleculeDetails($molecules);
             // print_r($moleculeDetail);
-            echo $temp = implode(" : ", $moleculeDetail) . "<br>";
-            $test['Name'] = $temp;
+            $temp = implode(" : ", $moleculeDetail) . "<br>";
+            //$test['Name'] = $temp;
             array_push($result, $temp);
         }
 
-        $str.='<div class="row">';
-        foreach ($result as $key => $value) {
-            $str.='
-                               <div class = "col-md-12"><div class = "col-md-11">
-                                    <h6 class = "text-semibold">' . $groups["clientName"] . ' - ' . $groups["groupName"] . '</h6>
-' . $value . "<br></div><div class = 'col-md-1'><button type = 'button' class = 'btn btn-link'><i class = 'icon-trash'></i></button></div>
-                                            </div>";
-        }
-        $str.="               </div>";
-
-        return $str;
+        return view('client\moleculePartial', array('result' => $result, 'bgid' => $bgid, "groups" => $groups));
     }
 
     public function load_indication_entry_list($bgid) {
@@ -412,7 +402,7 @@ class ClientController extends Controller {
 
     public function removeMoleculeEntry($bgid, $mid) {
         $obj = new MapMolecules();
-        return $obj->removeMoleculeEntry($bgid, $mid);
+        return $obj->removeMoleculeEntry($bgid, trim($mid));
     }
 
 }

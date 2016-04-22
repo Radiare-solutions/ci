@@ -11,6 +11,8 @@ use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use App\Models\Indication\Indication;
+use App\Models\Molecule\Molecule;
+
 /**
  * Category Model
  *
@@ -96,6 +98,17 @@ class MapMolecules extends Eloquent {
             $iid = $attr['_id'];
             MapMolecules::where(array('BG_id' => $bgid, 'indication' => $iid))->update(array('isActive' => 0));
         }
+    }
+    
+    public function removeMoleculeEntry($bgid, $mname) {
+        $bgid = new \MongoDB\BSON\ObjectId($bgid);
+        $iObj = Molecule::where('Name', $mname)->get();
+        $attrs = $iObj[0]['attributes']['_id'];
+        $mid = new \MongoDB\BSON\ObjectId($attrs);
+        //foreach($attrs as $attr) {
+          //  $iid = $attr['_id'];
+            MapMolecules::where(array('BG_id' => $bgid, 'molecules' => $mid))->update(array('isActive' => 0));
+        // }
     }
 
 }

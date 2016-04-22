@@ -2,7 +2,8 @@ function add_indication_submit() {
     console.log("submit indication");
     var url = "add_indication";
     var data = $('#add_indication').serialize();
-    $.ajax({
+    
+$.ajax({
         type: 'post',
         url: url,
         data: data,
@@ -14,7 +15,7 @@ function add_indication_submit() {
             $('form#add_indication #errorResponse').addClass("alert alert-success");
             window.setTimeout(function () {
                 location.reload()
-            }, 3000)
+            }, 3000) 
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -31,6 +32,64 @@ function add_indication_submit() {
             }
         }
     });
+
+    /*.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#add_indication #errorResponse').removeClass("alert alert-danger");
+            $('form#add_indication #errorResponse').show().html("Indication Added successfully");
+            $('form#add_indication #errorResponse').addClass("alert alert-success");
+            /*window.setTimeout(function () {
+                location.reload()
+            }, 3000) 
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_indication #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });$.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#add_indication #errorResponse').removeClass("alert alert-danger");
+            $('form#add_indication #errorResponse').show().html("Indication Added successfully");
+            $('form#add_indication #errorResponse').addClass("alert alert-success");
+            /*window.setTimeout(function () {
+                location.reload()
+            }, 3000) 
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_indication #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    }); */
 }
 
 function load_indication_details(tid, iid) {

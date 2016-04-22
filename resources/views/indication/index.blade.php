@@ -86,11 +86,12 @@
                         $details = json_decode($details);
                         $i = 1;
                         foreach ($details as $detail) {
-                            foreach ($detail->indicationName as $indicationName) {                               
+                            foreach ($detail->indicationName as $indicationName) {  
+
                                 ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><?php echo $indicationName->Name; ?></td>
+                                    <td><?php if(isset($indicationName->Name)) echo $indicationName->Name; ?></td>
                                     <td><?php echo $detail->therapyName; ?></td>
                                     <td class="text-center">
                                         <ul class="icons-list">
@@ -103,10 +104,6 @@
                                                     <li class="dropdown-header">Options</li>
                                                     <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" onclick="load_indication_details('<?php echo $detail->_id;?>', '<?php echo $indicationName->_id;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
                                                     <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                                    <li class="dropdown-header">Export</li>
-                                                    <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                                    <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                                    <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -225,8 +222,8 @@
                                         <select class="select" name="therapyName">
                                             <option value=""></option>
                                             <?php
-                                            foreach ($therapy as $therapyDetail) {
-                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Therapy'] . '</option>';
+                                            foreach ($therapeutic as $therapyDetail) {
+                                                echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Name'] . '</option>';
                                             }
                                             ?>
                                             <!--                                            <option value=""></option>
