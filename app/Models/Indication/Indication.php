@@ -9,6 +9,7 @@ use Jenssegers;
 use Jenssegers\Mongodb;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
+use App\Models\Therapeutic\Therapeutic;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 /**
@@ -53,17 +54,19 @@ class Indication extends Eloquent {
 
     public function edit($request) {
         // theraptic area not changed
-        if ($this->therapyID == $request->therapyName) {
+        if ($request->therapyID == $request->therapyName) {
             $this->therapyID = new \MongoDB\BSON\ObjectId($request->therapyID);
             $this->indicationID = new \MongoDB\BSON\ObjectId($request->indicationID);
-            $ob = Indication::find($this->therapyID);
+            
+            $ob1 = Indication::where('Therapy',$this->therapyID)->get();
+            foreach($ob1 as $ob) { }
             $indications = $ob->attributes['Indication'];
             $index = $this->getIndex($this->indicationID, $indications);
 
             // $story = \Illuminate\Support\Facades\DB::collection('posts')->where('_id', $this->therapyID)->update(array('Indication.0.Name' => 'abc'));
-            \Illuminate\Support\Facades\DB::collection('posts')->
-                    where('_id', $this->therapyID)->
-                    update(array('Indication.' . $index . '.Name' => 'abc')
+            \Illuminate\Support\Facades\DB::collection($this->collection)->
+                    where('Therapy', $this->therapyID)->
+                    update(array('Indication.' . $index . '.Name' => $request->indicationName)
             );
         }
         // theraptic area changed
@@ -76,31 +79,35 @@ class Indication extends Eloquent {
             $indication = array('Name' => "test", '_id' => new \MongoDB\BSON\ObjectId());
             //\Illuminate\Support\Facades\DB::collection('posts')->find('_id', array($therapyName), array('$push' => array('Indication' => ($indication))));
 
-            \Illuminate\Support\Facades\DB::collection('posts')->where('_id', $this->therapyName)->update(
+            \Illuminate\Support\Facades\DB::collection($this->collection)->where('Therapy', $this->therapyName)->update(
                     // array('_id' => $this->therapyID),           
                     array('$push' => array('Indication' => array('Name' => $this->indicationName, '_id' => new \MongoDB\BSON\ObjectId(), 'isActive' => 1)))
             );
-            $ob = Indication::find($this->therapyID);
+            $ob1 = Indication::where('Therapy',$this->therapyID)->get();
+            foreach($ob1 as $ob) { }
+            // print_r($ob);
+            // exit;
             $indications = $ob->attributes['Indication'];
             $index = $this->getIndex($this->indicationID, $indications);
-            \Illuminate\Support\Facades\DB::collection('posts')->
-                    where('_id', $this->therapyID)->
+            \Illuminate\Support\Facades\DB::collection($this->collection)->
+                    where('Therapy', $this->therapyID)->
                     update(array('Indication.' . $index . '.isActive' => 0)
             );
+            
         }
     }
 
     public function loadIndicationDetails($tid, $iid) {
         $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
         $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
-        $result = \Illuminate\Support\Facades\DB::collection('posts')->raw(function($collection) {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array('$unwind' => '$Indication'),
                         array('$unwind' => '$Indication._id'),
                         array(
                             '$match' => array(
                                 '$and' => array(
-                                    array('_id' => $this->therapyID),
+                                    array('Therapy' => $this->therapyID),
                                     array('Indication._id' => array('$in' => array($this->indicationID))),
                                 )
                             )
@@ -113,9 +120,12 @@ class Indication extends Eloquent {
         });
         $details = "";
         foreach ($result as $query) {
-            $details['therapyID'] = (string) $query['_id'];
+            $details['therapyID'] = (string) $query['Therapy'];
             $details['indicationID'] = (string) $query['Indication']['_id'];
-            $details['therapyName'] = $query['Therapy'];
+            
+            $therapyObj = Therapeutic::find($this->therapyID);
+            
+            $details['therapyName'] = $therapyObj->attributes['Name'];
             $details['indicationName'] = $query['Indication']['Name'];
         }
         return $details;
@@ -169,7 +179,8 @@ class Indication extends Eloquent {
         foreach ($result as $query) {
            $id = $query['Indication']['_id'];
         }
-        if (empty($id)) {
+        // echo "id : ".$id."<br>";
+        if (empty($request->indicationID)) {
             $this->add($request);
             return "Added";
         } else {
@@ -214,8 +225,19 @@ class Indication extends Eloquent {
         $res = Indication::find($tid);
     }
 
-    public function removeIndication($iid) {
+    public function removeIndication($tid, $iid) {
+        $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
         $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+        $ob1 = Indication::where('Therapy',$this->therapyID)->get();
+            foreach($ob1 as $ob) { }
+            // print_r($ob);
+            // exit;
+            $indications = $ob->attributes['Indication'];
+            $index = $this->getIndex($this->indicationID, $indications);
+            \Illuminate\Support\Facades\DB::collection($this->collection)->
+                    where('Therapy', $this->therapyID)->
+                    update(array('Indication.' . $index . '.isActive' => 0)
+            );
     }
 
 }

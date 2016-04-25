@@ -140,9 +140,9 @@ function edit_indication_submit() {
             $('form#edit_indication #errorResponse').removeClass("alert alert-danger");
             $('form#edit_indication #errorResponse').show().html("Indication Updated successfully");
             $('form#edit_indication #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+//            window.setTimeout(function () {
+//                location.reload()
+//            }, 3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -762,11 +762,11 @@ function delete_therapeutic(tid) {
     }
 }
 
-function delete_indication(iid) {
+function delete_indication(tid, iid) {
     var r = confirm("Are you sure to delete this record?")
     if(r == true) {
         console.log("you pressed ok");
-        var url = "remove_indication/"+iid;
+        var url = "remove_indication/"+tid+"/"+iid;
         $.ajax({
             type: 'post',
             url: url,

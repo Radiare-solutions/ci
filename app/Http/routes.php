@@ -40,6 +40,11 @@ Route::post('edit_user_form/{id}', 'User_Management_Controller@edituserform');
 Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@editusersubmit']);
 /* end of soumya codes */
 
+/* start of mohana priya codes */
+Route::get('/clinical_trial', 'ClinicalController@Extract');
+Route::get('/conference_calendar', 'ConfCalendarController@Extract');
+/* end of mohana priya codes */
+
 Route::get('indication_mgmt', function() {
     return view('indication/index');
 });
@@ -48,7 +53,7 @@ Route::post('add_indication', 'Indication\IndicationController@store');
 Route::post('edit_indication', 'Indication\IndicationController@store');
 Route::post('load_indication/{id}/{id1}', ['uses' =>'Indication\IndicationController@load']);
 Route::get('/indication_mgmt', 'Indication\IndicationController@index');
-Route::post('remove_indication/{id}', ['uses' =>'Indication\IndicationController@removeIndication']);
+Route::post('remove_indication/{id}/{id1}', ['uses' =>'Indication\IndicationController@removeIndication']);
 
 Route::get('/molecule_mgmt', 'Molecule\MoleculeController@index');
 Route::post('add_molecule', 'Molecule\MoleculeController@store');

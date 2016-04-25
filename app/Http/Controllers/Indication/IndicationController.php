@@ -20,7 +20,7 @@ class IndicationController extends Controller {
             $ob = new \stdClass();
             $therapyOb = Therapeutic::find($therapyDetail['attributes']['Therapy']);
             $ob->therapyName = $therapyOb['attributes']['Name'];
-            $ob->_id = $therapyOb['attributes']['_id'];
+            $ob->_id = (string) $therapyDetail['attributes']['Therapy'];
             $test = array();
             foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
                $testing['Name'] = $indicationDetail['Name'];
@@ -69,10 +69,10 @@ class IndicationController extends Controller {
             $obj = new Indication();                
             $str =  $this->indicationExists($request);              
 
-            return response()->json([
-                        'success' => true,
-                        'message' => "Indication ".$str." Successfully"
-                            ], 200);
+//            return response()->json([
+//                        'success' => true,
+//                        'message' => "Indication ".$str." Successfully"
+//                            ], 200);
         }
     }
 
@@ -86,9 +86,9 @@ class IndicationController extends Controller {
         return $obj->loadIndicationDetails($tid, $iid);        
     }
     
-    public function removeIndication($iid) {
+    public function removeIndication($tid, $iid) {
         $obj = new Indication();
-        return $obj->removeIndication($iid);
+        return $obj->removeIndication($tid, $iid);
     }
 
 }
