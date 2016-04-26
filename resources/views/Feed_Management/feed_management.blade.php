@@ -89,8 +89,12 @@
                                         <div class="form-group">
                                             <label>Client:</label>
                                             <select class="select" name="client_details" id="client_details">
-                                                <option value="AK">Merck</option>
-                                                <option value="HI">Merck1</option>
+                                                <option value="">select</option>
+                                                <?php
+                                                foreach ($client_list as $therapyDetail) {
+                                                    echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Name'] . '</option>';
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -99,9 +103,7 @@
                                         <div class="form-group">
                                             <label>Business Group:</label>
                                             <select class="select" name="bg_details" id="bg_details">
-                                                <option value="CT">Bg1</option>
-                                                <option value="DE">Bg2</option>
-                                                <option value="FL">Bg3</option>
+                                                
                                             </select>
                                         </div>
                                     </div>

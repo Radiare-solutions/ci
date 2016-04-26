@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feed_Management_Models;
+use App\Models\Client\Client;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
@@ -16,9 +17,16 @@ class Feed_Management_Controller extends Controller {
 
         $listfeedObj = Feed_Management_Models::all();
         // $listroleObj->list_role();
+        $clientObj = Client::all();
         $feed_list = \App\Models\Feed_Management_Models::all();
 
-        return view('Feed_Management/feed_management', ['feeds' => $listfeedObj], ['feed_list' => $feed_list]);
+        return view('Feed_Management/feed_management', 
+                   array(     
+                       'feeds' => $listfeedObj, 
+                       'feed_list' => $feed_list,
+                       'client_list' => $clientObj
+                    )
+                );
     }
 
     public function list_feeds() {
@@ -26,8 +34,10 @@ class Feed_Management_Controller extends Controller {
         $listfeedObj = Feed_Management_Models::all();
         // $listroleObj->list_role();
         $feed_list = \App\Models\Feed_Management_Models::all();
-
-        return view('Feed_Management/feedlist', ['feeds' => $listfeedObj], ['feed_list' => $feed_list]);
+$clientObj = Client::all();
+        return view('Feed_Management/feedlist', ['feeds' => $listfeedObj], ['feed_list' => $feed_list],
+                array('client_list' => $clientObj)
+                );
     }
 
     public function add_feeds(Request $request) {
