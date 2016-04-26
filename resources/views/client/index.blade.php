@@ -14,7 +14,7 @@ $level1 = json_decode($level1Details);
     <div class="sidebar sidebar-main sidebar-default sidebar-fixed bg-blue-800">
         <div class="sidebar-content">
             <!-- Main navigation -->
-            @include('layouts/sidebar')
+            @include('layouts/sidebar', array('page' => 'client'))
             <!-- /main navigation -->
 
         </div>

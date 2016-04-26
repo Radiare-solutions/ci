@@ -137,7 +137,7 @@ class Indication extends Eloquent {
             return $collection->aggregate(array(
                         array(
                             '$match' => array(
-                                '_id' => $this->therapyID),
+                                'Therapy' => $this->therapyID),
                         ),
                         array('$project' => array(
                                 //'Therapy' => 1,
@@ -213,7 +213,10 @@ class Indication extends Eloquent {
         $therapy = array();
         foreach ($result as $query) {
             // array_push($therapy, $query['Therapy']);
-            $testing['therapy'] = $query['Therapy'];
+            $ob = Therapeutic::find($query['Therapy']);
+            
+            $testing['therapy'] = $ob->attributes['Name'];
+            
             $testing['indication'] = $query['Indication']['Name'];
             array_push($therapy, $testing);
         }

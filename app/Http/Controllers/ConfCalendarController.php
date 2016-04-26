@@ -7,9 +7,6 @@ use App\Http\Requests;
 
 use App\Models\rssModel as rssModel;
 
-//use HtmlDOM;
-use HtmlDOM\simple_html_dom;
-
 class ConfCalendarController extends Controller
 {
     public function Extract(){
@@ -59,8 +56,8 @@ for($i=0;$i< $spans->length;$i++){
         
         $conference_url="http://www.conference-service.com/conferences/$href";
         echo "<a href='".$conference_url."'>".$specialty."</a><br/>";
-        
-        $conference_content_extraction = simple_html_dom::file_get_html($conference_url);
+        $ob = new \simple_html_dom();
+        $conference_content_extraction = file_get_html($conference_url);
 
 //        $g=0;
 //        foreach($conference_content_extraction->find('div[class=panel panel-primary]') as $conference_html){

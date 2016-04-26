@@ -38,6 +38,12 @@ Route::post('edit_role_submit', 'Role_Management_Controller@editrolesubmit');
 Route::post('add_user', 'User_Management_Controller@store');
 Route::post('edit_user_form/{id}', 'User_Management_Controller@edituserform');
 Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@editusersubmit']);
+
+//Feed Management Section
+Route::get('/feeds.html', 'Feed_Management_Controller@index');
+Route::get('/list_feeds', 'Feed_Management_Controller@list_feeds');
+Route::post('add_feed', 'Feed_Management_Controller@add_feeds');
+Route::post('delete_feed_details/{dfid}', 'Feed_Management_Controller@deletefeeddetails');
 /* end of soumya codes */
 
 /* start of mohana priya codes */

@@ -1094,3 +1094,98 @@ function edit_role_submit() {
         }
     });
 }
+
+//Feed Management
+
+function displayFeedSection(id) {
+    if(id == 'indication') {
+        $('#indication').removeClass("hide");
+        $('#molecule').addClass("hide");
+    }
+    if(id == 'molecule') {
+        $('#molecule').removeClass("hide");
+        $('#indication').addClass("hide");
+    }
+}
+
+function add_new_feed() {
+    console.log("submit feed");
+    var url = "add_feed";
+    var data = $('#add_feed').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+         beforeSend: function(){
+             $('#add_feed_details').attr("disabled",true);
+           },
+        success: function (data) {
+            // success logic
+            $.modal.close();
+//            $('#modal_form_add').hide();
+            $( ".navbar-top" ).load( "roles.html" );
+            $('form#add_user #errorResponse').removeClass("alert alert-danger");
+            $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");            
+            $('form#add_user #errorResponse').addClass("alert alert-success");
+           // window.setTimeout(function(){location.reload()},3000)
+        },complete: function() {
+           $('#add_feed_details').attr("disabled", false);
+         },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_feed #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_feed #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function delete_feed_details(fid) {
+    confirm('Do you want to Delete RSS feed details?'); 
+//    alert(id);
+    console.log("id : " + fid);
+    var url = "delete_feed_details/"+fid;
+    $.ajax({
+        type: 'post',
+        url: url,
+        
+       success: function (data) {
+            // success logic
+            
+          $( ".navbar-top" ).load( "feeds.html" );
+            $('#message_section').show();
+                            $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
+                            $('#message_section').html('<div style="border: 1px solid rgba(0,166,90,0.7); padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i> RSS Feed deleted successfully</div>');
+                         $('#message_section').fadeOut(5000);
+
+        },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+               $('#message_section').show();
+                            $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
+                            $('#message_section').html('<div style="border: 1px solid red; padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i>Opps!! Try after sometime</div>');
+                         $('#message_section').fadeOut(5000);
+
+            }
+        }
+    });
+}

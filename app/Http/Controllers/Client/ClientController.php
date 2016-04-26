@@ -9,6 +9,7 @@ use App\Models\Molecule\Molecule;
 use App\Models\MapMolecules\MapMolecules;
 use App\Models\Molecule\Level1;
 use App\Models\Molecule\Level2;
+use App\Models\Therapeutic\Therapeutic;
 use Illuminate\Http\Request;
 use Validator;
 use MongoDB\Model;
@@ -17,6 +18,7 @@ use MongoDB\BSON\ObjectID;
 class ClientController extends Controller {
 
     public $mid = "";
+    public $therapyID = "";
 
     public function index() {
         $listDetails = array();
@@ -25,6 +27,7 @@ class ClientController extends Controller {
         $moleculeDetailArr = array();
         $listDetail = array();
         $temp = '';
+        // $therapeutic = Therapeutic::all();
         // $clients = Client::where('isActive', 1)->get();
         $clients = Client::all();
         foreach ($clients as $client) {
@@ -53,10 +56,22 @@ class ClientController extends Controller {
                             array_push($indication, $indicationDetail);
                         }
                         $indication = array_filter($indication);
-
-                        foreach ($indication as $key => $value) {
-                            $test['therapy'][$value[0]['therapy']][] = $value[0]['indication'];
+//echo '<pre>';
+//print_r($indication);
+//exit;
+                        foreach ($indication as $value) {
+//                            print_r($value);
+//                            echo "<br>";
+//                            print_r($value[0]['therapy']);
+                            //exit;
+                            $oid = (string) $value[0]['therapy'];
+                            if (isset($value[0]['therapy']) && (isset($value[0]['indication']))) {
+                                $test['therapy'][$oid][] = $value[0]['indication'];
+                            }
                         }
+//                        echo "<br>";
+//                        print_r($test);
+//                        exit;
                         array_push($listDetails, $test);
                         $test = array();
                     } else if (!empty($molecules1)) {
@@ -66,7 +81,7 @@ class ClientController extends Controller {
                             print_r($molecules);
                             $moleculeDetail = $this->getMoleculeDetails($molecules);
                             print_r($moleculeDetail);
-                            echo $temp = implode(" : ", $moleculeDetail) . "<br>";
+                            $temp = implode(" : ", $moleculeDetail) . "<br>";
                             $test['Name'] = $temp;
                             array_push($str, $temp);
                         }
@@ -99,6 +114,7 @@ class ClientController extends Controller {
             'details' => json_encode($listDetails),
             'therapyDetails' => json_encode($therapyDetails),
             'level1Details' => json_encode($level1Details)
+            // 'therapeutic' => $therapeutic
         ));
         // return view('client/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
     }
@@ -209,8 +225,12 @@ class ClientController extends Controller {
         $listDetails = array();
         $therapy = Indication::all();
         foreach ($therapy as $therapyDetail['attributes']) {
-            $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
-            $details['tid'] = (string) $therapyDetail['attributes']['_id'];
+            $this->therapyID = new \MongoDB\BSON\ObjectId($therapyDetail['attributes']['Therapy']);
+            $therapyObj = Therapeutic::find($this->therapyID);            
+            
+            $details['therapyName'] = $therapyObj['attributes']['Name'];
+            // $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
+            $details['tid'] = (string) $therapyDetail['attributes']['Therapy'];
 
             array_push($listDetails, $details);
             //exit;
