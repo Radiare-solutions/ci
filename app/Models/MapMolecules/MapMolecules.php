@@ -35,6 +35,23 @@ class MapMolecules extends Eloquent {
         }       
         return $arr;
     }
+    
+    public function loadFeedTherapeuticDetails($bgid) {
+        $this->bgid = new \MongoDB\BSON\ObjectId($bgid);
+        $arr = array();
+        $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('indication')->get();
+        $ob = new Indication();
+        foreach ($result as $res) {
+            $res = $res->attributes['indication'];
+            $str = $ob->getTherapeutic($res);
+            foreach($str as $detail) {                
+                $tempArr['_id'] = (string) $detail['_id'];
+                $tempArr['therapy'] = $detail['therapy'];
+                array_push($arr, $tempArr);
+            }
+        }       
+        return $arr;
+    }
 
     public function loadIndicationDetails($bgid) {
         $this->bgid = new \MongoDB\BSON\ObjectId($bgid);

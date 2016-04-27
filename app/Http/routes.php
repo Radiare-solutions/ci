@@ -44,6 +44,11 @@ Route::get('/feeds.html', 'Feed_Management_Controller@index');
 Route::get('/list_feeds', 'Feed_Management_Controller@list_feeds');
 Route::post('add_feed', 'Feed_Management_Controller@add_feeds');
 Route::post('delete_feed_details/{dfid}', 'Feed_Management_Controller@deletefeeddetails');
+
+Route::post('load_bg/{id}', 'Feed_Management_Controller@loadBG');
+Route::post('load_therapeutic_detail/{id}', 'Feed_Management_Controller@loadTherapeutic');
+Route::post('load_indication/{id}', 'Feed_Management_Controller@loadIndication');
+Route::post('load_molecule/{id}', 'Feed_Management_Controller@loadMolecule');
 /* end of soumya codes */
 
 /* start of mohana priya codes */

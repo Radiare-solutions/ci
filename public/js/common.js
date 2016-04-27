@@ -1098,14 +1098,83 @@ function edit_role_submit() {
 //Feed Management
 
 function displayFeedSection(id) {
+    var bg = $('#bg_details').val();
+    console.log("bg : " + bg);
     if(id == 'indication') {
         $('#indication').removeClass("hide");
         $('#molecule').addClass("hide");
+        loadTherapeutic(bg);
     }
     if(id == 'molecule') {
         $('#molecule').removeClass("hide");
         $('#indication').addClass("hide");
+        loadLevels(bg);
     }
+}
+
+function loadTherapeutic(bg) {
+    var url = "load_therapeutic_detail/"+bg;
+    $.ajax({
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            $('form #thera_details').html(data.message);
+        },
+        error: function (data) {
+
+        }
+    });
+}
+
+function loadIndications(tid) {
+       var url = "load_indication/"+tid;
+    $.ajax({
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            $('form #indication_details').html(data.message);
+        },
+        error: function (data) {
+
+        }
+    });
+}
+
+function loadLevels(bg) {
+    
+}
+
+function loadBG(cid) {
+    console.log("cid : " + cid);
+    var url = "load_bg/"+cid;    
+    $.ajax({
+        type: 'post',
+        url: url,        
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+           // $("form # option[value='" + val + "']").prop('selected', true);
+            $("form #bg_details").html(data.message);
+           // window.setTimeout(function(){location.reload()},3000)
+        },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_role #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_role #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
 }
 
 function add_new_feed() {

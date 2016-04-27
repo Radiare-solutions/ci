@@ -45,6 +45,12 @@ class Client extends Eloquent {
 //        $ob->Indication = ($indication);
 //        $ob->save();
     }
+    
+    public function loadBG($cid) {
+        //$this->clientID = new \MongoDB\BSON\ObjectId($cid);
+        $ob = Client::find($cid);
+        return $ob->attributes['BusinessGroup'];
+    }
 
     public function getIndex($name, $array) {
         foreach ($array as $key => $value) {

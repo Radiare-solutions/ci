@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Feed_Management_Models;
 use App\Models\Client\Client;
+use App\Models\MapMolecules\MapMolecules;
+use App\Models\Indication\Indication;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
@@ -20,13 +22,12 @@ class Feed_Management_Controller extends Controller {
         $clientObj = Client::all();
         $feed_list = \App\Models\Feed_Management_Models::all();
 
-        return view('Feed_Management/feed_management', 
-                   array(     
-                       'feeds' => $listfeedObj, 
-                       'feed_list' => $feed_list,
-                       'client_list' => $clientObj
-                    )
-                );
+        return view('Feed_Management/feed_management', array(
+            'feeds' => $listfeedObj,
+            'feed_list' => $feed_list,
+            'client_list' => $clientObj
+                )
+        );
     }
 
     public function list_feeds() {
@@ -34,10 +35,22 @@ class Feed_Management_Controller extends Controller {
         $listfeedObj = Feed_Management_Models::all();
         // $listroleObj->list_role();
         $feed_list = \App\Models\Feed_Management_Models::all();
-$clientObj = Client::all();
-        return view('Feed_Management/feedlist', ['feeds' => $listfeedObj], ['feed_list' => $feed_list],
-                array('client_list' => $clientObj)
-                );
+        $clientObj = Client::all();
+        return view('Feed_Management/feedlist', ['feeds' => $listfeedObj], ['feed_list' => $feed_list], array('client_list' => $clientObj)
+        );
+    }
+
+    public function loadBG($cid) {
+        $clientObj = new Client();
+        $ob = $clientObj->loadBG($cid);
+        $str = '';
+        foreach ($ob as $data) {
+            $str.='<option value="' . $data['_id'] . '">' . $data['Name'] . '</option>';
+        }
+        return response()->json([
+                    'success' => true,
+                    'message' => $str
+                        ], 200);
     }
 
     public function add_feeds(Request $request) {
@@ -65,6 +78,38 @@ $clientObj = Client::all();
                         'message' => "Feed Added Successfully"
                             ], 200);
         }
+    }
+
+    public function loadTherapeutic($bgid) {
+        $ob = new MapMolecules();
+        $therapy = $ob->loadFeedTherapeuticDetails($bgid);
+        $str = '';
+        foreach ($therapy as $data) {
+            $str.='<option value="' . $data['_id'] . '">' . $data['therapy'] . '</option>';
+        }
+        return response()->json([
+                    'success' => true,
+                    'message' => $str
+                        ], 200);
+    }
+    
+    public function loadIndication($tid) {
+        $ob = new Indication();
+        $indications = $ob->loadIndications($tid);
+        $str = '';
+        foreach ($indications as $data) {
+//            print_r($data);
+//            exit;
+            $str.='<option value="' . $data['_id'] . '">' . $data['name'] . '</option>';
+        }
+        return response()->json([
+                    'success' => true,
+                    'message' => $str
+                        ], 200);
+    }
+
+    public function loadMolecule($bgid) {
+        
     }
 
     public function editusersubmit($id, Request $request) {

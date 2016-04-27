@@ -132,12 +132,19 @@ class Indication extends Eloquent {
     }
 
     public function loadIndications($tid) {
+        $arr = array();
         $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
+                        array('$unwind' => '$Indication'),
+                        array('$unwind' => '$Indication._id'),
                         array(
                             '$match' => array(
-                                'Therapy' => $this->therapyID),
+                                '$and' => array(
+                                    array('Therapy' => $this->therapyID),
+                                    // array('Indication.isActive' => array('$in' => array(0))),
+                                )
+                            )
                         ),
                         array('$project' => array(
                                 //'Therapy' => 1,
@@ -146,9 +153,20 @@ class Indication extends Eloquent {
             ));
         });
 
-        foreach ($result as $query) {
-            return $query;
+        foreach ($result as $query) { 
+            //foreach($queries as $query) {
+//                print_r($query);
+//                exit;
+            $id = (string) $query['Indication']['_id'];
+            $name = $query['Indication']['Name'];
+            $tempArr['_id'] = $id;
+            $tempArr['name'] = $name;
+            array_push($arr, $tempArr);
+            //}
         }
+//        print_r($arr);
+//        exit;
+        return $arr;
     }
 
     public function indicationExists($request) {
@@ -216,8 +234,42 @@ class Indication extends Eloquent {
             $ob = Therapeutic::find($query['Therapy']);
             
             $testing['therapy'] = $ob->attributes['Name'];
-            
+            $testing['_id'] = (string) $query['Indication']['_id'];
             $testing['indication'] = $query['Indication']['Name'];
+            array_push($therapy, $testing);
+        }
+        return $therapy;
+    }
+    
+    public function getTherapeutic($iid) {
+        $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Indication'),
+                        array('$unwind' => '$Indication._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('Indication._id' => array('$in' => array($this->indicationID))),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Therapy' => 1,
+                                'Indication' => 1,
+                            )),
+            ));
+        });
+        $id = array();
+        $therapy = array();
+        foreach ($result as $query) {
+            // array_push($therapy, $query['Therapy']);
+            $tid = $query['Therapy'];
+            $this->therapyID = new \MongoDB\BSON\ObjectId($tid);
+            $ob = Therapeutic::find($this->therapyID);
+            
+            $testing['therapy'] = $ob->attributes['Name'];
+            $testing['_id'] = $tid;            
             array_push($therapy, $testing);
         }
         return $therapy;

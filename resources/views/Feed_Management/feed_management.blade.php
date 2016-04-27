@@ -88,7 +88,7 @@
                                     <div class="col-md-6">	
                                         <div class="form-group">
                                             <label>Client:</label>
-                                            <select class="select" name="client_details" id="client_details">
+                                            <select class="select" name="client_details" id="client_details" onchange="loadBG(this.value)">
                                                 <option value="">select</option>
                                                 <?php
                                                 foreach ($client_list as $therapyDetail) {
@@ -111,7 +111,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Select: </label>
-                                            <input type="radio" name="type" id="type" onclick="displayFeedSection(this.value);" value="indication">&nbsp; Indication
+                                            <input type="radio" name="type" id="type" onclick="displayFeedSection(this.value);" value="indication">&nbsp; Indication&nbsp;&nbsp;
                                             <input type="radio" name="type" id="type" onclick="displayFeedSection(this.value);" value="molecule">&nbsp; Molecule
                                         </div>
                                     </div>
@@ -181,9 +181,8 @@
                                     <div class="col-md-6">	
                                         <div class="form-group">
                                             <label>Therapeutic Area:</label>
-                                            <select class="select" name="thera_details">
-                                                <option value="1">Autoimmune</option>
-                                                <option value="2">Oncology</option>
+                                            <select class="select" name="thera_details" id="thera_details" onchange="loadIndications(this.value)">
+
                                             </select>
                                         </div>
                                     </div>
@@ -194,37 +193,7 @@
                                         <div class="form-group">
                                             <label>Indication:</label>
                                             <select class="select" name="indication_details" id="indication_details">
-                                                <option value=""></option>
-                                                <option value="174">Abo-incompatible Renal Transplant</option>
-                                                <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                <option value="36">Acute myeloid leukemia</option>
-                                                <option value="212">Age-related macular degeneration</option>
-                                                <option value="24">All Autoimmune Indications</option>
-                                                <option value="111">Alzheimer Disease</option>
-                                                <option value="26">ANCA-associated systemic vasculitis</option>
-                                                <option value="92">ANCA-Associated Vasculitis</option>
-                                                <option value="1">Ankylosing spondylitis</option>
-                                                <option value="211">Anti-Synthetase Syndrome</option>
-                                                <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                <option value="93">Autoimmune Diseases</option>
-                                                <option value="81">Autoimmune Thrombocytopenia</option>
-                                                <option value="10">Axial Spondylarthritis</option>
-                                                <option value="77">B Cell Indolent Lymphomas</option>
-                                                <option value="169">B-cell Lymphoma</option>
-                                                <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                <option value="98">Behçet’s Syndrome</option>
-                                                <option value="18">Behcet’s disease</option>
-                                                <option value="128">Branch Retinal Vein Occlusion</option>
-                                                <option value="38">Breast cancer</option>
-                                                <option value="71">Burkitt Lymphoma</option>
-                                                <option value="56">Cancer</option>
-                                                <option value="160">Central Serous Chorioretinopathy</option>
-                                                <option value="46">Cervical Cancer</option>
-                                                <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                <option value="134">Chorioretinopathy</option>
-                                                <option value="41">Choroidal Neovascularization</option>
-                                                <option value="67">Chronic Fatigue Syndrome</option>
+                                               
                                             </select>
                                         </div>
                                     </div>
