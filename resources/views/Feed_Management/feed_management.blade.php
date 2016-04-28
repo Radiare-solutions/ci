@@ -37,14 +37,15 @@
                     </tr>
                 </thead>
                 <tbody >
+                    <?php $i = 1; ?>
                     @foreach($feeds as $feed) <tr>
-                        <td>1</td>
+                        <td>{{ $i }}</td>
 
-                        <td>{{$feed->client_id}}</td>
-                        <td>{{$feed->bg_id}}</td>
-                        <td>{{$feed->molecule_id}}</td>
-                        <td>{{$feed->indication_id}}</td>
-                        <td>{{$feed->rss_feed_link}}</td>
+                        <td>{{$feed['clientName']}}</td>
+                        <td>{{$feed['bgName']}}</td>
+                        <td>{{$feed['indication']}}</td>
+                        <td>{{$feed['molecule']}}</td>
+                        <td>{{$feed['rssLink']}}</td>
                         <td class="text-center">
                             <ul class="icons-list">
                                 <li class="dropdown">
@@ -54,8 +55,8 @@
 
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li class="dropdown-header">Options</li>
-                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="edit_feed_form('<?php echo $feed->_id; ?>');" ><i class="icon-pencil7"></i>Edit entry</a></li>
-                                        <li><a href="javascript:void(0);" onclick="delete_feed_details('<?php echo $feed->_id; ?>');"><i class="icon-bin"></i>Remove entry</a></li>
+                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="load_edit_feed('<?php echo $feed['_id']; ?>');" ><i class="icon-pencil7"></i>Edit entry</a></li>
+                                        <li><a href="javascript:void(0);" onclick="delete_feed_details('<?php echo $feed['_id']; ?>');"><i class="icon-bin"></i>Remove entry</a></li>
 
                                     </ul>
                                 </li>
@@ -63,6 +64,7 @@
                         </td>
 
                     </tr>
+                    <?php $i++; ?>
                     @endforeach
                 </tbody>
             </table>
@@ -120,9 +122,8 @@
                                     <div class="col-md-3">	
                                         <div class="form-group">
                                             <label>level 1:</label>
-                                            <select class="select" name="level1_details" id="level1_details">
-                                                <option value="1">Autoimmune</option>
-                                                <option value="2">Oncology</option>
+                                            <select class="select" name="level1_details" id="level1_details" onchange="loadFeedLevel2(this.value)">
+                                               
                                             </select>
                                         </div>
                                     </div>
@@ -130,9 +131,8 @@
                                     <div class="col-md-3">	
                                         <div class="form-group">
                                             <label>Level 2:</label>
-                                            <select class="select" name="level2_details" id="level2_details">
-                                                <option value="1">Autoimmune</option>
-                                                <option value="2">Oncology</option>
+                                            <select class="select" name="level2_details" id="level2_details" onchange="loadFeedMolecule()">
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -141,37 +141,7 @@
                                         <div class="form-group">
                                             <label>Molecule:</label>
                                             <select class="select" name="molecule_details" id="molecule_details">
-                                                <option value=""></option>
-                                                <option value="174">Abo-incompatible Renal Transplant</option>
-                                                <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                <option value="36">Acute myeloid leukemia</option>
-                                                <option value="212">Age-related macular degeneration</option>
-                                                <option value="24">All Autoimmune Indications</option>
-                                                <option value="111">Alzheimer Disease</option>
-                                                <option value="26">ANCA-associated systemic vasculitis</option>
-                                                <option value="92">ANCA-Associated Vasculitis</option>
-                                                <option value="1">Ankylosing spondylitis</option>
-                                                <option value="211">Anti-Synthetase Syndrome</option>
-                                                <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                <option value="93">Autoimmune Diseases</option>
-                                                <option value="81">Autoimmune Thrombocytopenia</option>
-                                                <option value="10">Axial Spondylarthritis</option>
-                                                <option value="77">B Cell Indolent Lymphomas</option>
-                                                <option value="169">B-cell Lymphoma</option>
-                                                <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                <option value="98">Behçet’s Syndrome</option>
-                                                <option value="18">Behcet’s disease</option>
-                                                <option value="128">Branch Retinal Vein Occlusion</option>
-                                                <option value="38">Breast cancer</option>
-                                                <option value="71">Burkitt Lymphoma</option>
-                                                <option value="56">Cancer</option>
-                                                <option value="160">Central Serous Chorioretinopathy</option>
-                                                <option value="46">Cervical Cancer</option>
-                                                <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                <option value="134">Chorioretinopathy</option>
-                                                <option value="41">Choroidal Neovascularization</option>
-                                                <option value="67">Chronic Fatigue Syndrome</option>
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -197,6 +167,18 @@
                                             </select>
                                         </div>
                                     </div>
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Link Type</label>
+                                            <select name="link_type" id="link_type">
+                                                <option value="1">Clinical Trial</option>
+                                                <option value="2">News</option>
+                                                <option value="3">Patents</option>
+                                                <option value="4">Publications</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -235,9 +217,13 @@
                                     <div class="col-md-6">	
                                         <div class="form-group">
                                             <label>Client:</label>
-                                            <select class="select" name="client_details_edit" id="client_details_edit">
-                                                <option value="AK">Merck</option>
-                                                <option value="HI">Merck1</option>
+                                            <select class="select" name="client_details_edit" id="client_details_edit" onchange="loadEditBG(this.value)">
+                                                <option value="">select</option>
+                                                <?php
+                                                foreach ($client_list as $therapyDetail) {
+                                                    echo '<option value="' . $therapyDetail['attributes']['_id'] . '">' . $therapyDetail['attributes']['Name'] . '</option>';
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -246,20 +232,25 @@
                                         <div class="form-group">
                                             <label>Business Group:</label>
                                             <select class="select" name="bg_details_edit" id="bg_details_edit">
-                                                <option value="CT">Bg1</option>
-                                                <option value="DE">Bg2</option>
-                                                <option value="FL">Bg3</option>
+
                                             </select>
                                         </div>
                                     </div>
 
-
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Select: </label>
+                                            <input type="radio" name="type_edit" id="type_edit" onclick="displayEditFeedSection(this.value, '', 'click');" value="indication">&nbsp; Indication&nbsp;&nbsp;
+                                            <input type="radio" name="type_edit" id="type_edit" onclick="displayEditFeedSection(this.value, '', 'click');" value="molecule">&nbsp; Molecule
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="molecule" class="hide">
                                     <div class="col-md-3">	
                                         <div class="form-group">
                                             <label>level 1:</label>
                                             <select class="select" name="level1_details_edit" id="level1_details_edit">
-                                                <option value="1">Autoimmune</option>
-                                                <option value="2">Oncology</option>
+                                               
                                             </select>
                                         </div>
                                     </div>
@@ -268,8 +259,7 @@
                                         <div class="form-group">
                                             <label>Level 2:</label>
                                             <select class="select" name="level2_details_edit" id="level2_details_edit">
-                                                <option value="1">Autoimmune</option>
-                                                <option value="2">Oncology</option>
+                                               
                                             </select>
                                         </div>
                                     </div>
@@ -279,48 +269,18 @@
                                             <label>Molecule:</label>
                                             <select class="select" name="molecule_details_edit" id="molecule_details_edit">
                                                 <option value=""></option>
-                                                <option value="174">Abo-incompatible Renal Transplant</option>
-                                                <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                <option value="36">Acute myeloid leukemia</option>
-                                                <option value="212">Age-related macular degeneration</option>
-                                                <option value="24">All Autoimmune Indications</option>
-                                                <option value="111">Alzheimer Disease</option>
-                                                <option value="26">ANCA-associated systemic vasculitis</option>
-                                                <option value="92">ANCA-Associated Vasculitis</option>
-                                                <option value="1">Ankylosing spondylitis</option>
-                                                <option value="211">Anti-Synthetase Syndrome</option>
-                                                <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                <option value="93">Autoimmune Diseases</option>
-                                                <option value="81">Autoimmune Thrombocytopenia</option>
-                                                <option value="10">Axial Spondylarthritis</option>
-                                                <option value="77">B Cell Indolent Lymphomas</option>
-                                                <option value="169">B-cell Lymphoma</option>
-                                                <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                <option value="98">Behçet’s Syndrome</option>
-                                                <option value="18">Behcet’s disease</option>
-                                                <option value="128">Branch Retinal Vein Occlusion</option>
-                                                <option value="38">Breast cancer</option>
-                                                <option value="71">Burkitt Lymphoma</option>
-                                                <option value="56">Cancer</option>
-                                                <option value="160">Central Serous Chorioretinopathy</option>
-                                                <option value="46">Cervical Cancer</option>
-                                                <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                <option value="134">Chorioretinopathy</option>
-                                                <option value="41">Choroidal Neovascularization</option>
-                                                <option value="67">Chronic Fatigue Syndrome</option>
+                                               
                                             </select>
                                         </div>
                                     </div>
+                                    </div>
 
-
-
+                                    <div id="indication" class="hide">
                                     <div class="col-md-6">	
                                         <div class="form-group">
                                             <label>Therapeutic Area:</label>
                                             <select class="select" name="thera_details_edit">
-                                                <option value="1">Autoimmune</option>
-                                                <option value="2">Oncology</option>
+          
                                             </select>
                                         </div>
                                     </div>
@@ -332,40 +292,23 @@
                                             <label>Indication:</label>
                                             <select class="select" name="indication_details_edit" id="indication_details_edit">
                                                 <option value=""></option>
-                                                <option value="174">Abo-incompatible Renal Transplant</option>
-                                                <option value="189">Acute Graft-Versus-Host Disease</option>
-                                                <option value="36">Acute myeloid leukemia</option>
-                                                <option value="212">Age-related macular degeneration</option>
-                                                <option value="24">All Autoimmune Indications</option>
-                                                <option value="111">Alzheimer Disease</option>
-                                                <option value="26">ANCA-associated systemic vasculitis</option>
-                                                <option value="92">ANCA-Associated Vasculitis</option>
-                                                <option value="1">Ankylosing spondylitis</option>
-                                                <option value="211">Anti-Synthetase Syndrome</option>
-                                                <option value="179">Antineutrophil Cytoplasmic Antibody Associated Vasculitis</option>
-                                                <option value="162">Appendiceal Epithelial Neoplasms</option>
-                                                <option value="93">Autoimmune Diseases</option>
-                                                <option value="81">Autoimmune Thrombocytopenia</option>
-                                                <option value="10">Axial Spondylarthritis</option>
-                                                <option value="77">B Cell Indolent Lymphomas</option>
-                                                <option value="169">B-cell Lymphoma</option>
-                                                <option value="202">B-cell non-Hodgkin lymphoma</option>
-                                                <option value="98">Behçet’s Syndrome</option>
-                                                <option value="18">Behcet’s disease</option>
-                                                <option value="128">Branch Retinal Vein Occlusion</option>
-                                                <option value="38">Breast cancer</option>
-                                                <option value="71">Burkitt Lymphoma</option>
-                                                <option value="56">Cancer</option>
-                                                <option value="160">Central Serous Chorioretinopathy</option>
-                                                <option value="46">Cervical Cancer</option>
-                                                <option value="181">Childhood-Onset Systemic Lupus Erythematosus</option>
-                                                <option value="134">Chorioretinopathy</option>
-                                                <option value="41">Choroidal Neovascularization</option>
-                                                <option value="67">Chronic Fatigue Syndrome</option>
                                             </select>
                                         </div>
                                     </div>
-
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Link Type</label>
+                                            <select name="link_type" id="link_type">
+                                                <option value="1">Clinical Trial</option>
+                                                <option value="2">News</option>
+                                                <option value="3">Patents</option>
+                                                <option value="4">Publications</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
 
 

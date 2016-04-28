@@ -12,6 +12,7 @@ use MongoDB\BSON\ObjectID;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use App\Models\Indication\Indication;
 use App\Models\Molecule\Molecule;
+use App\Models\Molecule\Level1;
 
 /**
  * Category Model
@@ -52,6 +53,24 @@ class MapMolecules extends Eloquent {
         }       
         return $arr;
     }
+    
+    public function loadFeedLevel1Details($bgid) {
+        $this->bgid = new \MongoDB\BSON\ObjectId($bgid);
+        $arr = array();
+        $result = MapMolecules::where('BG_id', 'all', array($this->bgid))->groupBy('molecules')->get();
+        foreach ($result as $res) {
+            $res = $res->attributes['molecules'];
+            $ob = Molecule::find($res);
+            if(isset($ob->attributes['level1id'])) {
+                $l1id = new \MongoDB\BSON\ObjectId($ob->attributes['level1id']);
+            $l1ob = Level1::find($l1id);
+            $tempArr['_id'] = (string) $l1ob->attributes['_id'];
+            $tempArr['level1name'] = $l1ob->attributes['Name'];
+            array_push($arr, $tempArr); 
+            }
+        }       
+        return $arr;
+    }    
 
     public function loadIndicationDetails($bgid) {
         $this->bgid = new \MongoDB\BSON\ObjectId($bgid);

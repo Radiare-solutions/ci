@@ -53,7 +53,7 @@ class Level1 extends Eloquent {
                             )),
             ));
         });
-        $str = "";
+        $str = "<option value=''>Select</option>";
         foreach ($result as $query) {
             $arr = $query['Level1']['Level2'];
             $id = $arr['_id'];

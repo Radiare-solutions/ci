@@ -82,7 +82,7 @@ class Level2 extends Eloquent {
                             )),
             ));
         });
-        $str = "";
+        $str = '<option value="">select</option>';
         foreach ($result as $query) {
             $arra = $query['Level2'];
             foreach($arra as $arr) {

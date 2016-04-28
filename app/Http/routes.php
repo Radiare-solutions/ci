@@ -43,12 +43,15 @@ Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@edi
 Route::get('/feeds.html', 'Feed_Management_Controller@index');
 Route::get('/list_feeds', 'Feed_Management_Controller@list_feeds');
 Route::post('add_feed', 'Feed_Management_Controller@add_feeds');
+Route::post('load_feed/{id}', 'Feed_Management_Controller@loadFeed');
 Route::post('delete_feed_details/{dfid}', 'Feed_Management_Controller@deletefeeddetails');
 
 Route::post('load_bg/{id}', 'Feed_Management_Controller@loadBG');
 Route::post('load_therapeutic_detail/{id}', 'Feed_Management_Controller@loadTherapeutic');
 Route::post('load_indication/{id}', 'Feed_Management_Controller@loadIndication');
-Route::post('load_molecule/{id}', 'Feed_Management_Controller@loadMolecule');
+Route::post('load_level1_detail/{id}', 'Feed_Management_Controller@loadLevel1');
+Route::post('load_level2_detail/{id}', 'Feed_Management_Controller@loadLevel2');
+Route::post('load_molecule_detail/{id}', 'Feed_Management_Controller@loadMoleculues');
 /* end of soumya codes */
 
 /* start of mohana priya codes */
@@ -70,6 +73,7 @@ Route::get('/molecule_mgmt', 'Molecule\MoleculeController@index');
 Route::post('add_molecule', 'Molecule\MoleculeController@store');
 Route::post('edit_molecule', 'Molecule\MoleculeController@store');
 Route::post('load_molecule/{id}/{id1}', ['uses' =>'Molecule\MoleculeController@load']);
+Route::post('load_feed_molecules/{id}/{id1}', ['uses' => 'Molecule\MoleculeController@loadMolecules']);
 Route::post('load_level2/{id}', ['uses' => 'Molecule\MoleculeController@loadLevel2Data']);
 Route::post('remove_molecule/{id}', ['uses' =>'Molecule\MoleculeController@removeMolecule']);
 

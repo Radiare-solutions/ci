@@ -25,9 +25,21 @@ class Feed_Management_Models extends Eloquent {
 
     public function add_feeds($request) {
         $this->ldate = Carbon::now('Asia/Kolkata');
-        $insert_details = array('_id' => new \MongoDB\BSON\ObjectId(),'client_id' => "$request->client_details",'bg_id' => "$request->bg_details",  'level1_id' => "$request->level1_details",  'level2_id' => "$request->level2_details",  'molecule_id' => "$request->molecule_details",  'therapeutic_id' => "$request->thera_details",  'indication_id' => "$request->indication_details",  'rss_feed_link' => "$request->rss_feed", 'Created_Date' => "$this->ldate");
-        Feed_Management_Models::insert(array($insert_details));
-        return redirect('/');
+        $insert_details = array(
+            '_id' => new \MongoDB\BSON\ObjectId(),
+            'client_id' => "$request->client_details",
+            'bg_id' => "$request->bg_details",  
+            'type' => "$request->type",
+            'level1_id' => "$request->level1_details",  
+            'level2_id' => "$request->level2_details",  
+            'molecule_id' => "$request->molecule_details",  
+            'therapeutic_id' => "$request->thera_details",  
+            'indication_id' => "$request->indication_details",  
+            'link_type' => "$request->link_type",
+            'rss_feed_link' => "$request->rss_feed", 
+            'Created_Date' => "$this->ldate"
+                );
+        Feed_Management_Models::insert(array($insert_details));        
     }
     public function edit_user_submit($id,$request) {
 
@@ -40,8 +52,8 @@ class Feed_Management_Models extends Eloquent {
     
        public function delete_feed_details($id) {
 
-       Feed_Management_Models::where('_id', '=', $id)->delete();
-               return "/";
+      // Feed_Management_Models::where('_id', '=', $id)->delete();
+        //       return "/";
     }
 
 }

@@ -101,7 +101,11 @@ class MoleculeController extends Controller {
     
     public function loadMolecules($l1id, $l2id) {
         $ob = new Molecule();
-        return $ob->loadMolecules($l1id, $l2id);
+        $result = $ob->loadMolecules($l1id, $l2id);
+        return response()->json([
+                        'success' => true,
+                        'message' => $result
+                            ], 200);
     }
     
     public function removeMolecule($mid) {

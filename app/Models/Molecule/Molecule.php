@@ -177,7 +177,7 @@ class Molecule extends Eloquent {
                             )),
             ));
         });
-        $str = "";
+       $str = '<option value="">select</option>';
         foreach ($result as $query) {
             $arr = $query['Level1']['Level2'];
             $id = $arr['_id'];
@@ -190,7 +190,7 @@ class Molecule extends Eloquent {
     public function loadMolecules($l1id, $l2id) {
         $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
         $this->l2id = new \MongoDB\BSON\ObjectId($l2id);
-        $result = \Illuminate\Support\Facades\DB::collection('molecules')->raw(function($collection) {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array(
                             '$match' => array(
@@ -202,7 +202,7 @@ class Molecule extends Eloquent {
                         )
             ));
         });
-        $str = "";
+        $str = "<option value=''>Select</option>";
         foreach ($result as $query) {
             $arr = $query;
             $id = $arr['_id'];
