@@ -10,6 +10,7 @@ use App\Models\MapMolecules\MapMolecules;
 use App\Models\Indication\Indication;
 use App\Models\Molecule\Level1;
 use App\Models\Molecule\Level2;
+use App\Models\ModelHelper;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
@@ -24,18 +25,18 @@ class Feed_Management_Controller extends Controller {
         $clientObj = Client::all();
         $feeds = array();
         $clientOb = new Client();
-        foreach($listfeedObj as $feed) {
+        foreach ($listfeedObj as $feed) {
             $feedAttr = $feed['attributes'];
             $names = $clientOb->getBGName($feedAttr['client_id'], $feedAttr['bg_id']);
             $tempArr['indication'] = '';
             $tempArr['molecule'] = '';
-            if($feedAttr['type'] == 'indication') {
+            if ($feedAttr['type'] == 'indication') {
                 $indicationObj = new Indication();
                 $iNames = $indicationObj->getIndicationName(new \MongoDB\BSON\ObjectId($feedAttr['indication_id']));
                 $tempArr['indication'] = $iNames[0]['indication'];
             }
-            
-            if($feedAttr['type'] == 'molecule') {
+
+            if ($feedAttr['type'] == 'molecule') {
                 $moleculeObj = Molecule::find($feedAttr['molecule_id']);
                 $tempArr['molecule'] = $moleculeObj['attributes']['Name'];
             }
@@ -45,9 +46,9 @@ class Feed_Management_Controller extends Controller {
             $tempArr['rssLink'] = $feedAttr['rss_feed_link'];
             array_push($feeds, $tempArr);
         }
-        
+
         return view('Feed_Management/feed_management', array(
-            'feeds' => $feeds,            
+            'feeds' => $feeds,
             'client_list' => $clientObj
                 )
         );
@@ -55,7 +56,7 @@ class Feed_Management_Controller extends Controller {
 
     public function list_feeds() {
         $listfeedObj = Feed_Management_Models::all();
-        foreach($listfeedObj as $feeds) {
+        foreach ($listfeedObj as $feeds) {
             echo '<pre>';
             print_r($feeds);
             exit;
@@ -63,12 +64,15 @@ class Feed_Management_Controller extends Controller {
         return view('Feed_Management/feedlist', ['feeds' => $listfeedObj]);
     }
 
-    public function loadBG($cid) {
+    public function loadBG($cid, $value = "") {
         $clientObj = new Client();
         $ob = $clientObj->loadBG($cid);
         $str = '<option value="">select</option>';
         foreach ($ob as $data) {
-            $str.='<option value="' . $data['_id'] . '">' . $data['Name'] . '</option>';
+            $clas = '';
+            if ($value == $data['_id'])
+                $clas = "selected=selected";
+            $str.='<option value="' . $data['_id'] . '" ' . $clas . '>' . $data['Name'] . '</option>';
         }
         return response()->json([
                     'success' => true,
@@ -115,7 +119,7 @@ class Feed_Management_Controller extends Controller {
                     'message' => $str
                         ], 200);
     }
-    
+
     public function loadIndication($tid) {
         $ob = new Indication();
         $indications = $ob->loadIndications($tid);
@@ -129,19 +133,56 @@ class Feed_Management_Controller extends Controller {
                         ], 200);
     }
 
-    public function loadLevel1($bgid) {
+    public function loadLevel1($bgid, $l1id = "") {
         $ob = new MapMolecules();
         $level1 = $ob->loadFeedLevel1Details($bgid);
         $str = '<option value="">select</option>';
         foreach ($level1 as $data) {
-            $str.='<option value="' . $data['_id'] . '">' . $data['level1name'] . '</option>';
+            $clas = '';
+            if ($l1id == $data['_id'])
+                $clas = "selected=selected";
+            $str.='<option value="' . $data['_id'] . '" ' . $clas . '>' . $data['level1name'] . '</option>';
         }
         return response()->json([
                     'success' => true,
                     'message' => $str
                         ], 200);
     }
-    
+
+    public function loadLevel2($l1id, $l2id = "") {
+        $ob = new MapMolecules();
+        $level1 = $ob->loadFeedLevel1Details($bgid);
+        $str = '<option value="">select</option>';
+        foreach ($level1 as $data) {
+            $clas = '';
+            if ($lid == $data['_id'])
+                $clas = "selected=selected";
+            $str.='<option value="' . $data['_id'] . '" ' . $clas . '>' . $data['level1name'] . '</option>';
+        }
+        return response()->json([
+                    'success' => true,
+                    'message' => $str
+                        ], 200);
+    }
+
+    public function loadFeedLevels2($l1id, $l2id) {
+        $ob = new ModelHelper();
+        $str = $ob->loadLevel2DataByLevel1ID($l1id, $l2id);
+        return response()->json([
+                    'success' => true,
+                    'message' => $str
+                        ], 200);
+    }
+
+    public function loadFeedMoleculesByLevelID($l1id, $l2id, $mid) {
+        $ob = new ModelHelper();
+        $str = $ob->loadMoleculeDataByLevelID($l1id, $l2id, $mid);
+        return response()->json([
+                    'success' => true,
+                    'message' => $str
+                        ], 200);
+    }
+
     public function editusersubmit($id, Request $request) {
         $validator = Validator::make($request->all(), [
 //                    'User_Name' => 'required',                    
@@ -179,10 +220,10 @@ class Feed_Management_Controller extends Controller {
             return $details;
         }
     }
-    
+
     public function loadFeed($id) {
         $feeddetails = Feed_Management_Models::find($id);
-        
+
         if (!empty($feeddetails)) {
             $clientObj = new Client();
             $feedAttr = $feeddetails['attributes'];
@@ -190,10 +231,11 @@ class Feed_Management_Controller extends Controller {
             $names = $cliObj->getBGName($feedAttr['client_id'], $feedAttr['bg_id']);
             $l1Obj = Level1::find($feedAttr['level1_id']);
             $l2Obj = new Level2();
+            $moleObj = Molecule::find($feedAttr['molecule_id']);
             $l2Name = $l2Obj->loadLevel2Name($feedAttr['level2_id']);
             $details['clientID'] = $feedAttr['client_id'];
             $details['clientName'] = $names['clientName'];
-            $details['groupID'] = $feedAttr['bg_id'];
+            $details['groupID'] = (string) $feedAttr['bg_id'];
             $details['groupName'] = $names['groupName'];
             $details['type'] = $feedAttr['type'];
             $details['level1ID'] = $feedAttr['level1_id'];
@@ -201,6 +243,7 @@ class Feed_Management_Controller extends Controller {
             $details['level2ID'] = $feedAttr['level2_id'];
             $details['level2Name'] = $l2Name;
             $details['moleculeID'] = $feedAttr['molecule_id'];
+            $details['moleculeName'] = $moleObj['attributes']['Name'];
             $details['feedLink'] = $feedAttr['rss_feed_link'];
             return $details;
         }

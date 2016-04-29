@@ -249,7 +249,7 @@
                                     <div class="col-md-3">	
                                         <div class="form-group">
                                             <label>level 1:</label>
-                                            <select class="select" name="level1_details_edit" id="level1_details_edit">
+                                            <select class="select" name="level1_details_edit" id="level1_details_edit" onchange="loadEditFeedLevel2('', this.value)">
                                                
                                             </select>
                                         </div>
@@ -258,7 +258,7 @@
                                     <div class="col-md-3">	
                                         <div class="form-group">
                                             <label>Level 2:</label>
-                                            <select class="select" name="level2_details_edit" id="level2_details_edit">
+                                            <select class="select" name="level2_details_edit" id="level2_details_edit" onchange="loadEditFeedMolecule('', this.value, '');">
                                                
                                             </select>
                                         </div>
@@ -314,11 +314,11 @@
 
                                 <div class="form-group">
                                     <label>Add RSS Link:</label>
-                                    <textarea rows="2" cols="5" class="form-control" placeholder="Enter RSS Link here" name='rss_feed_edit'></textarea>
+                                    <textarea rows="2" cols="5" class="form-control" placeholder="Enter RSS Link here" name='rss_feed_edit' id="rss_feed_edit"></textarea>
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="button" class="btn btn-primary" onclick="edit_feed();">Submit<i class="icon-arrow-right14 position-right"></i></button>
+                                    <button type="button" class="btn btn-primary" onclick="edit_feed();">Update<i class="icon-arrow-right14 position-right"></i></button>
                                 </div>
                             </div>
                         </div>

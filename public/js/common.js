@@ -2,8 +2,8 @@ function add_indication_submit() {
     console.log("submit indication");
     var url = "add_indication";
     var data = $('#add_indication').serialize();
-    
-$.ajax({
+
+    $.ajax({
         type: 'post',
         url: url,
         data: data,
@@ -15,7 +15,7 @@ $.ajax({
             $('form#add_indication #errorResponse').addClass("alert alert-success");
             window.setTimeout(function () {
                 location.reload()
-            }, 3000) 
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -34,62 +34,62 @@ $.ajax({
     });
 
     /*.ajax({
-        type: 'post',
-        url: url,
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            // success logic
-            $('form#add_indication #errorResponse').removeClass("alert alert-danger");
-            $('form#add_indication #errorResponse').show().html("Indication Added successfully");
-            $('form#add_indication #errorResponse').addClass("alert alert-success");
-            /*window.setTimeout(function () {
-                location.reload()
-            }, 3000) 
-        },
-        error: function (data) {
-            if (typeof data.responseJSON != "undefined")
-            {
-                var errors = data.responseJSON.message;
-                var errorsHtml = '';
-
-                $.each(errors, function (key, value) {
-                    errorsHtml += '<li>' + value + '</li>';
-                });
-                console.log(errorsHtml);
-                $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
-                $('form#add_indication #errorResponse').addClass("alert alert-danger");
-            }
-        }
-    });$.ajax({
-        type: 'post',
-        url: url,
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            // success logic
-            $('form#add_indication #errorResponse').removeClass("alert alert-danger");
-            $('form#add_indication #errorResponse').show().html("Indication Added successfully");
-            $('form#add_indication #errorResponse').addClass("alert alert-success");
-            /*window.setTimeout(function () {
-                location.reload()
-            }, 3000) 
-        },
-        error: function (data) {
-            if (typeof data.responseJSON != "undefined")
-            {
-                var errors = data.responseJSON.message;
-                var errorsHtml = '';
-
-                $.each(errors, function (key, value) {
-                    errorsHtml += '<li>' + value + '</li>';
-                });
-                console.log(errorsHtml);
-                $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
-                $('form#add_indication #errorResponse').addClass("alert alert-danger");
-            }
-        }
-    }); */
+     type: 'post',
+     url: url,
+     data: data,
+     dataType: 'json',
+     success: function (data) {
+     // success logic
+     $('form#add_indication #errorResponse').removeClass("alert alert-danger");
+     $('form#add_indication #errorResponse').show().html("Indication Added successfully");
+     $('form#add_indication #errorResponse').addClass("alert alert-success");
+     /*window.setTimeout(function () {
+     location.reload()
+     }, 3000) 
+     },
+     error: function (data) {
+     if (typeof data.responseJSON != "undefined")
+     {
+     var errors = data.responseJSON.message;
+     var errorsHtml = '';
+     
+     $.each(errors, function (key, value) {
+     errorsHtml += '<li>' + value + '</li>';
+     });
+     console.log(errorsHtml);
+     $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
+     $('form#add_indication #errorResponse').addClass("alert alert-danger");
+     }
+     }
+     });$.ajax({
+     type: 'post',
+     url: url,
+     data: data,
+     dataType: 'json',
+     success: function (data) {
+     // success logic
+     $('form#add_indication #errorResponse').removeClass("alert alert-danger");
+     $('form#add_indication #errorResponse').show().html("Indication Added successfully");
+     $('form#add_indication #errorResponse').addClass("alert alert-success");
+     /*window.setTimeout(function () {
+     location.reload()
+     }, 3000) 
+     },
+     error: function (data) {
+     if (typeof data.responseJSON != "undefined")
+     {
+     var errors = data.responseJSON.message;
+     var errorsHtml = '';
+     
+     $.each(errors, function (key, value) {
+     errorsHtml += '<li>' + value + '</li>';
+     });
+     console.log(errorsHtml);
+     $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
+     $('form#add_indication #errorResponse').addClass("alert alert-danger");
+     }
+     }
+     }); */
 }
 
 function load_indication_details(tid, iid) {
@@ -506,7 +506,7 @@ function load_indication_data(tid) {
 }
 
 function setValues(bgid, form_name) {
-    $('form#'+form_name+' #bgid').val(bgid);
+    $('form#' + form_name + ' #bgid').val(bgid);
 }
 
 function edit_bg_submit() {
@@ -548,32 +548,32 @@ function edit_bg_entry(cid, bgid) {
     console.log("edit bg entry : " + cid + " - " + bgid);
     $('form#edit_bg #cid').val(cid);
     $('form#edit_bg #bgid').val(bgid);
-    var url = "edit_bg_entry/"+cid+"/"+bgid;
+    var url = "edit_bg_entry/" + cid + "/" + bgid;
     $.ajax({
-            type: 'post',
-            url: url,
-            dataType: 'json',
-            success: function (data) {
-                var details = (data);
-                console.log(details);
-                $('form#edit_bg #clientName').val(data.clientName);
-                $('form#edit_bg #groupName').val(data.groupName);
-            },
-            error: function (data) {
-                if (typeof data.responseJSON != "undefined")
-                {
-                    var errors = data.responseJSON.message;
-                    var errorsHtml = '';
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            var details = (data);
+            console.log(details);
+            $('form#edit_bg #clientName').val(data.clientName);
+            $('form#edit_bg #groupName').val(data.groupName);
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
 
-                    $.each(errors, function (key, value) {
-                        errorsHtml += '<li>' + value + '</li>';
-                    });
-                    console.log(errorsHtml);
-                    $('form#edit_bg #errorResponse').show().html(errorsHtml); //this is my div with messages
-                    $('form#edit_bg #errorResponse').addClass("alert alert-danger");
-                }
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_bg #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_bg #errorResponse').addClass("alert alert-danger");
             }
-        });
+        }
+    });
 }
 
 function add_indication_entry_submit() {
@@ -742,154 +742,147 @@ function load_molecule_entry_list(bgid) {
 
 function delete_therapeutic(tid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_therapeutic/"+tid;
+        var url = "remove_therapeutic/" + tid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
 
 function delete_indication(tid, iid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_indication/"+tid+"/"+iid;
+        var url = "remove_indication/" + tid + "/" + iid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
 
 function delete_molecule(mid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_molecule/"+mid;
+        var url = "remove_molecule/" + mid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
 
 function delete_client(cid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_client/"+cid;
+        var url = "remove_client/" + cid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
 
 function delete_group(cid, bgid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_group/"+cid+"/"+bgid;
+        var url = "remove_group/" + cid + "/" + bgid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
 
 function delete_indication_entry(bgid, iid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_indication_entry/"+bgid+"/"+iid;
+        var url = "remove_indication_entry/" + bgid + "/" + iid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
 
 function delete_molecule_entry(bgid, mid) {
     var r = confirm("Are you sure to delete this record?")
-    if(r == true) {
+    if (r == true) {
         console.log("you pressed ok");
-        var url = "remove_molecule_entry/"+bgid+"/"+mid;
+        var url = "remove_molecule_entry/" + bgid + "/" + mid;
         $.ajax({
             type: 'post',
             url: url,
             //dataType: 'json',
             success: function (data) {
                 var details = (data);
-                console.log(details);                
+                console.log(details);
             },
-            error: function (data) {                
+            error: function (data) {
             }
         });
-    }
-    else {
+    } else {
         console.log("you pressed cancel");
     }
 }
@@ -907,9 +900,9 @@ function add_new_role() {
         success: function (data) {
             // success logic
             $('form#add_role #errorResponse').removeClass("alert alert-danger");
-            $('form#add_role #errorResponse').show().html("Role Added successfully");            
+            $('form#add_role #errorResponse').show().html("Role Added successfully");
             $('form#add_role #errorResponse').addClass("alert alert-success");
-           // window.setTimeout(function(){location.reload()},3000)
+            // window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -940,9 +933,9 @@ function new_user() {
         success: function (data) {
             // success logic
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
-            $('form#add_user #errorResponse').show().html("Role Added successfully");            
+            $('form#add_user #errorResponse').show().html("Role Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-           // window.setTimeout(function(){location.reload()},3000)
+            // window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -963,7 +956,7 @@ function new_user() {
 }
 function edit_user_submit(uid) {
     console.log("submit edit_user");
-    var url = "edit_user_submit/"+uid;
+    var url = "edit_user_submit/" + uid;
     var data = $('#edit_user').serialize();
     $.ajax({
         type: 'post',
@@ -973,9 +966,9 @@ function edit_user_submit(uid) {
         success: function (data) {
             // success logic
             $('form#edit_user #errorResponse').removeClass("alert alert-danger");
-            $('form#edit_user #errorResponse').show().html("Role Added successfully");            
+            $('form#edit_user #errorResponse').show().html("Role Added successfully");
             $('form#edit_user #errorResponse').addClass("alert alert-success");
-           // window.setTimeout(function(){location.reload()},3000)
+            // window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -998,7 +991,7 @@ function edit_user_submit(uid) {
 function edit_user_form(id) {
 //    alert(id);
     console.log("id : " + id);
-    var url = "edit_user_form/"+id;
+    var url = "edit_user_form/" + id;
     $.ajax({
         type: 'post',
         url: url,
@@ -1032,7 +1025,7 @@ function edit_user_form(id) {
 function load_edit_role(id) {
 //    alert(id);
     console.log("id : " + id);
-    var url = "edit_role_form/"+id;
+    var url = "edit_role_form/" + id;
     $.ajax({
         type: 'post',
         url: url,
@@ -1073,9 +1066,9 @@ function edit_role_submit() {
         success: function (data) {
             // success logic
             $('form#edit_role #errorResponse').removeClass("alert alert-danger");
-            $('form#edit_role #errorResponse').show().html("Role Updated successfully");            
+            $('form#edit_role #errorResponse').show().html("Role Updated successfully");
             $('form#edit_role #errorResponse').addClass("alert alert-success");
-           // window.setTimeout(function(){location.reload()},3000)
+            // window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -1100,37 +1093,40 @@ function edit_role_submit() {
 function displayFeedSection(id) {
     var bg = $('#bg_details').val();
     console.log("bg : " + bg);
-    if(id == 'indication') {
+    if (id == 'indication') {
         $('#indication').removeClass("hide");
         $('#molecule').addClass("hide");
         loadTherapeutic(bg);
     }
-    if(id == 'molecule') {
+    if (id == 'molecule') {
         $('#molecule').removeClass("hide");
         $('#indication').addClass("hide");
         loadLevels(bg);
     }
 }
 
-function displayEditFeedSection(id, bg, callMethod) {
+function displayEditFeedSection(id, bg, callMethod, l1id, l2id) {
     var bg = bg;
-    if(callMethod == 'click')
-        bg = $('#bg_details_edit').attr('selected');
+    var l1id = l1id;
+    if (callMethod == 'click') {
+        bg = $('form#edit_feed #bg_details_edit').val();
+        l1id = $('form#edit_feed #level1_details_edit').val();
+    }
     console.log("edit bg : " + bg);
-    if(id == 'indication') {
+    if (id == 'indication') {
         $('form#edit_feed #indication').removeClass("hide");
         $('form#edit_feed #molecule').addClass("hide");
         loadEditTherapeutic(bg);
     }
-    if(id == 'molecule') {
+    if (id == 'molecule') {
         $('form#edit_feed #molecule').removeClass("hide");
         $('form#edit_feed #indication').addClass("hide");
-        loadEditLevels(bg);
+        loadEditLevels(bg, l1id);
     }
 }
 
 function loadTherapeutic(bg) {
-    var url = "load_therapeutic_detail/"+bg;
+    var url = "load_therapeutic_detail/" + bg;
     $.ajax({
         type: 'post',
         url: url,
@@ -1145,7 +1141,7 @@ function loadTherapeutic(bg) {
 }
 
 function loadIndications(tid) {
-       var url = "load_indication/"+tid;
+    var url = "load_indication/" + tid;
     $.ajax({
         type: 'post',
         url: url,
@@ -1160,7 +1156,7 @@ function loadIndications(tid) {
 }
 
 function loadLevels(bg) {
-    var url = "load_level1_detail/"+bg;
+    var url = "load_level1_detail/" + bg;
     $.ajax({
         type: 'post',
         url: url,
@@ -1171,11 +1167,11 @@ function loadLevels(bg) {
         error: function (data) {
 
         }
-    });    
+    });
 }
 
-function loadEditLevels(bg) {
-    var url = "load_level1_detail/"+bg;
+function loadEditLevels(bg, l1id) {
+    var url = "load_level1_detail/" + bg + "/" + l1id;
     $.ajax({
         type: 'post',
         url: url,
@@ -1186,11 +1182,11 @@ function loadEditLevels(bg) {
         error: function (data) {
 
         }
-    });    
+    });
 }
 
-function loadFeedLevel2(l1id) {    
-    var url = "load_level2/"+l1id;
+function loadFeedLevel2(l1id) {
+    var url = "load_level2/" + l1id;
     $.ajax({
         type: 'post',
         url: url,
@@ -1201,28 +1197,37 @@ function loadFeedLevel2(l1id) {
         error: function (data) {
 
         }
-    });    
+    });
 }
 
-function loadEditFeedLevel2(l1id) {    
-    var url = "load_level2/"+l1id;
-    $.ajax({
-        type: 'post',
-        url: url,
-        dataType: 'json',
-        success: function (data) {
-            $('form#edit_feed #level2_details_edit').html(data.message);
-        },
-        error: function (data) {
+function loadEditFeedLevel2(l1id, l2id) {
+    console.log(l1id + " - " + l2id);
+    if (l1id == "")
+        l1id = $('form#edit_feed #level1_details_edit').val();
+    var url = "load_level2_detail/" + l1id + "/" + l2id;
+    if (l1id != "") {
+        $.ajax({
+            type: 'post',
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                $('form#edit_feed #level2_details_edit').html(data.message);
+            },
+            error: function (data) {
 
-        }
-    });    
+            }
+        });
+    } else
+    {
+        $('form#edit_feed #select2-level2_details_edit-container').html("");
+    }
+
 }
 
 function loadFeedMolecule() {
     var l1id = $('form #level1_details').val();
     var l2id = $('form #level2_details').val();
-    var url = "load_feed_molecules/"+l1id+"/"+l2id;
+    var url = "load_feed_molecules/" + l1id + "/" + l2id;
     $.ajax({
         type: 'post',
         url: url,
@@ -1233,32 +1238,44 @@ function loadFeedMolecule() {
         error: function (data) {
 
         }
-    });    
+    });
 }
 
-function loadEditFeedMolecule() {
-    var l1id = $('form#edit_feed #level1_details_edit').val();
-    var l2id = $('form#edit_feed #level2_details_edit').val();
-    var url = "load_feed_molecules/"+l1id+"/"+l2id;
-    $.ajax({
-        type: 'post',
-        url: url,
-        dataType: 'json',
-        success: function (data) {
-            $('form#edit_feed #molecule_details_edit').html(data.message);
-        },
-        error: function (data) {
+function loadEditFeedMolecule(l1id, l2id, mid) {
+    // var l1id = $('form#edit_feed #level1_details_edit').val();
+    // var l2id = $('form#edit_feed #level2_details_edit').val();
+    if (l1id == "")
+        l1id = $('form#edit_feed #level1_details_edit').val();
+    if (l2id == "")
+        l2id = $('form#edit_feed #level2_details_edit').val();
+    if (mid == "")
+        mid = $('form#edit_feed #molecule_details_edit').val();
+    if ((l1id != "") && (l2id != ""))
+    {
+        var url = "load_molecule_detail/" + l1id + "/" + l2id + "/" + mid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                $('form#edit_feed #molecule_details_edit').html(data.message);
+            },
+            error: function (data) {
 
-        }
-    });    
+            }
+        });
+    } else
+    {
+        $('form#edit_feed #select2-molecule_details_edit-container').html("");
+    }
 }
 
 function loadBG(cid) {
     console.log("cid : " + cid);
-    var url = "load_bg/"+cid;    
+    var url = "load_bg/" + cid + "/" + "";
     $.ajax({
         type: 'post',
-        url: url,        
+        url: url,
         dataType: 'json',
         success: function (data) {
             $("form #bg_details").html(data.message);
@@ -1281,15 +1298,17 @@ function loadBG(cid) {
     });
 }
 
-function loadEditBG(cid) {
+function loadEditBG(cid, bgid) {
     console.log("cid : " + cid);
-    var url = "load_bg/"+cid;    
+    var url = "load_bg/" + cid + "/" + bgid;
     $.ajax({
         type: 'post',
-        url: url,        
+        url: url,
         dataType: 'json',
         success: function (data) {
             $("form #bg_details_edit").html(data.message);
+            if (($("form#edit_feed #bg_details_edit").val()) == "")
+                $("form#edit_feed #select2-bg_details_edit-container").html("");
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -1312,27 +1331,31 @@ function loadEditBG(cid) {
 function load_edit_feed(id) {
 //   alert(id);
     console.log("id : " + id);
-    var url = "load_feed/"+id;
+    var url = "load_feed/" + id;
     $.ajax({
         type: 'post',
         url: url,
         dataType: 'json',
         success: function (data) {
             var details = (data);
-            console.log(details);            
+            console.log(details);
             $("form#edit_feed #client_details_edit option[value='" + details.clientID + "']").prop('selected', true);
             $("form#edit_feed #select2-client_details_edit-container").html(details.clientName);
-            loadEditBG(details.clientID);
-            $("form#edit_feed #bg_details_edit option[value='" + details.groupID + "']").attr('selected', true);
+            loadEditBG(details.clientID, details.groupID);
+            //$("form#edit_feed #bg_details_edit option[value='"+details.groupID+"']").attr("selected","selected");
+            // $("form#edit_feed #bg_details_edit ").val(details.groupID).attr("selected");
+            // $("form#edit_feed #bg_details_edit option[value=" + details.groupID + "]").attr('selected', 'selected');
             $("form#edit_feed #select2-bg_details_edit-container").html(details.groupName);
-            $("form#edit_feed #type_edit").attr('checked', details.type);            
-            displayEditFeedSection(details.type, details.groupID, 'pgm');
-            $("form#edit_feed #level1_details_edit option[value='" + details.level1ID + "']").prop('selected', true);
+            $("form#edit_feed #type_edit").attr('checked', details.type);
+            displayEditFeedSection(details.type, details.groupID, 'pgm', details.level1ID, details.level2ID);
+            // $("form#edit_feed #level1_details_edit option[value='" + details.level1ID + "']").prop('selected', true);
             $("form#edit_feed #select2-level1_details_edit-container").html(details.level1Name);
-            loadEditFeedLevel2(details.level1ID);
-            $("form#edit_feed #level2_details_edit option[value='" + details.level2ID + "']").prop('selected', true);
+            loadEditFeedLevel2(details.level1ID, details.level2ID);
+            // $("form#edit_feed #level2_details_edit option[value='" + details.level2ID + "']").prop('selected', true);
             $("form#edit_feed #select2-level2_details_edit-container").html(details.level2Name);
-            loadEditFeedMolecule();
+            loadEditFeedMolecule(details.level1ID, details.level2ID, details.moleculeID);
+            $("form#edit_feed #select2-molecule_details_edit-container").html(details.moleculeName);
+            $("form#edit_feed #rss_feed_edit").val(details.feedLink);
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -1360,21 +1383,21 @@ function add_new_feed() {
         url: url,
         data: data,
         dataType: 'json',
-         beforeSend: function(){
-             $('#add_feed_details').attr("disabled",true);
-           },
+        beforeSend: function () {
+            $('#add_feed_details').attr("disabled", true);
+        },
         success: function (data) {
             // success logic
             $.modal.close();
 //            $('#modal_form_add').hide();
-            $( ".navbar-top" ).load( "roles.html" );
+            $(".navbar-top").load("roles.html");
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
-            $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");            
+            $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-           // window.setTimeout(function(){location.reload()},3000)
-        },complete: function() {
-           $('#add_feed_details').attr("disabled", false);
-         },
+            // window.setTimeout(function(){location.reload()},3000)
+        }, complete: function () {
+            $('#add_feed_details').attr("disabled", false);
+        },
         error: function (data) {
             alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
@@ -1394,22 +1417,21 @@ function add_new_feed() {
 }
 
 function delete_feed_details(fid) {
-    confirm('Do you want to Delete RSS feed details?'); 
+    confirm('Do you want to Delete RSS feed details?');
 //    alert(id);
     console.log("id : " + fid);
-    var url = "delete_feed_details/"+fid;
+    var url = "delete_feed_details/" + fid;
     $.ajax({
         type: 'post',
         url: url,
-        
-       success: function (data) {
+        success: function (data) {
             // success logic
-            
-          $( ".navbar-top" ).load( "feeds.html" );
+
+            $(".navbar-top").load("feeds.html");
             $('#message_section').show();
-                            $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
-                            $('#message_section').html('<div style="border: 1px solid rgba(0,166,90,0.7); padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i> RSS Feed deleted successfully</div>');
-                         $('#message_section').fadeOut(5000);
+            $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
+            $('#message_section').html('<div style="border: 1px solid rgba(0,166,90,0.7); padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i> RSS Feed deleted successfully</div>');
+            $('#message_section').fadeOut(5000);
 
         },
         error: function (data) {
@@ -1423,10 +1445,10 @@ function delete_feed_details(fid) {
                     errorsHtml += '<li>' + value + '</li>';
                 });
                 console.log(errorsHtml);
-               $('#message_section').show();
-                            $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
-                            $('#message_section').html('<div style="border: 1px solid red; padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i>Opps!! Try after sometime</div>');
-                         $('#message_section').fadeOut(5000);
+                $('#message_section').show();
+                $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
+                $('#message_section').html('<div style="border: 1px solid red; padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i>Opps!! Try after sometime</div>');
+                $('#message_section').fadeOut(5000);
 
             }
         }
