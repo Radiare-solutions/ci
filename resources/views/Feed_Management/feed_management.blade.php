@@ -151,7 +151,7 @@
                                     <div class="col-md-6">	
                                         <div class="form-group">
                                             <label>Therapeutic Area:</label>
-                                            <select class="select" name="thera_details" id="thera_details" onchange="loadIndications(this.value)">
+                                            <select class="select" name="thera_details" id="thera_details" onchange="loadIndications(this.value, '')">
 
                                             </select>
                                         </div>
@@ -279,7 +279,7 @@
                                     <div class="col-md-6">	
                                         <div class="form-group">
                                             <label>Therapeutic Area:</label>
-                                            <select class="select" name="thera_details_edit">
+                                            <select class="select" name="thera_details_edit" id="thera_details_edit" onchange="loadEditIndications(this.value, '')">
           
                                             </select>
                                         </div>

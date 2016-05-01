@@ -1116,7 +1116,8 @@ function displayEditFeedSection(id, bg, callMethod, l1id, l2id) {
     if (id == 'indication') {
         $('form#edit_feed #indication').removeClass("hide");
         $('form#edit_feed #molecule').addClass("hide");
-        loadEditTherapeutic(bg);
+        var tid = l1id;
+        loadEditTherapeutic(bg, tid);
     }
     if (id == 'molecule') {
         $('form#edit_feed #molecule').removeClass("hide");
@@ -1126,7 +1127,7 @@ function displayEditFeedSection(id, bg, callMethod, l1id, l2id) {
 }
 
 function loadTherapeutic(bg) {
-    var url = "load_therapeutic_detail/" + bg;
+    var url = "load_therapeutic_detail/" + bg + "/"+null;
     $.ajax({
         type: 'post',
         url: url,
@@ -1140,8 +1141,23 @@ function loadTherapeutic(bg) {
     });
 }
 
-function loadIndications(tid) {
-    var url = "load_indication/" + tid;
+function loadEditTherapeutic(bg, tid) {
+    var url = "load_therapeutic_detail/" + bg + "/" + tid;
+    $.ajax({
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            $('form#edit_feed #thera_details_edit').html(data.message);
+        },
+        error: function (data) {
+
+        }
+    });
+}
+
+function loadIndications(tid, iid) {
+    var url = "load_indication_detail/" + tid + "/" + null;
     $.ajax({
         type: 'post',
         url: url,
@@ -1155,8 +1171,32 @@ function loadIndications(tid) {
     });
 }
 
+function loadEditIndications(tid, iid) {
+    if(tid!="") {
+        if(iid == "")
+            iid = null;
+    var url = "load_indication_detail/" + tid + "/" + iid;
+    $.ajax({
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            $('form#edit_feed #indication_details_edit').html(data.message);
+        },
+        error: function (data) {
+
+        }
+    });
+}
+else
+{
+    $('form#edit_feed #indication_details_edit').html("");
+    $('form#edit_feed #select2-indication_details_edit-container').html("");
+}
+}
+
 function loadLevels(bg) {
-    var url = "load_level1_detail/" + bg;
+    var url = "load_level1_detail/" + bg + "/" + null;
     $.ajax({
         type: 'post',
         url: url,
@@ -1171,18 +1211,26 @@ function loadLevels(bg) {
 }
 
 function loadEditLevels(bg, l1id) {
-    var url = "load_level1_detail/" + bg + "/" + l1id;
-    $.ajax({
-        type: 'post',
-        url: url,
-        dataType: 'json',
-        success: function (data) {
-            $('form #level1_details_edit').html(data.message);
-        },
-        error: function (data) {
+    if (l1id == "")
+        l1id = $('form#edit_feed #level1_details_edit').val();
+    if (l1id != "") {
+        var url = "load_level1_detail/" + bg + "/" + l1id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                $('form#edit_feed #level1_details_edit').html(data.message);
+                $('form#edit_feed #level2_details_edit').html("");                          
+            },
+            error: function (data) {
 
-        }
-    });
+            }
+        });
+    } else
+    {
+        $('form#edit_feed #select2-level1_details_edit-container').html("");
+    }
 }
 
 function loadFeedLevel2(l1id) {
@@ -1212,6 +1260,7 @@ function loadEditFeedLevel2(l1id, l2id) {
             dataType: 'json',
             success: function (data) {
                 $('form#edit_feed #level2_details_edit').html(data.message);
+                $('form#edit_feed #molecule_details_edit').html("");
             },
             error: function (data) {
 
@@ -1248,10 +1297,12 @@ function loadEditFeedMolecule(l1id, l2id, mid) {
         l1id = $('form#edit_feed #level1_details_edit').val();
     if (l2id == "")
         l2id = $('form#edit_feed #level2_details_edit').val();
-    if (mid == "")
-        mid = $('form#edit_feed #molecule_details_edit').val();
+    //if (mid == "") 
+      //  mid = $('form#edit_feed #molecule_details_edit').val();
     if ((l1id != "") && (l2id != ""))
     {
+        if(mid == "")
+            mid = null;
         var url = "load_molecule_detail/" + l1id + "/" + l2id + "/" + mid;
         $.ajax({
             type: 'post',
@@ -1264,7 +1315,8 @@ function loadEditFeedMolecule(l1id, l2id, mid) {
 
             }
         });
-    } else
+    } 
+    else
     {
         $('form#edit_feed #select2-molecule_details_edit-container').html("");
     }
@@ -1272,7 +1324,7 @@ function loadEditFeedMolecule(l1id, l2id, mid) {
 
 function loadBG(cid) {
     console.log("cid : " + cid);
-    var url = "load_bg/" + cid + "/" + "";
+    var url = "load_bg/" + cid + "/" + null;
     $.ajax({
         type: 'post',
         url: url,
@@ -1347,14 +1399,22 @@ function load_edit_feed(id) {
             // $("form#edit_feed #bg_details_edit option[value=" + details.groupID + "]").attr('selected', 'selected');
             $("form#edit_feed #select2-bg_details_edit-container").html(details.groupName);
             $("form#edit_feed #type_edit").attr('checked', details.type);
-            displayEditFeedSection(details.type, details.groupID, 'pgm', details.level1ID, details.level2ID);
-            // $("form#edit_feed #level1_details_edit option[value='" + details.level1ID + "']").prop('selected', true);
-            $("form#edit_feed #select2-level1_details_edit-container").html(details.level1Name);
-            loadEditFeedLevel2(details.level1ID, details.level2ID);
-            // $("form#edit_feed #level2_details_edit option[value='" + details.level2ID + "']").prop('selected', true);
-            $("form#edit_feed #select2-level2_details_edit-container").html(details.level2Name);
-            loadEditFeedMolecule(details.level1ID, details.level2ID, details.moleculeID);
-            $("form#edit_feed #select2-molecule_details_edit-container").html(details.moleculeName);
+            if(details.type == "molecule") {
+                displayEditFeedSection(details.type, details.groupID, 'pgm', details.level1ID, details.level2ID);
+                // $("form#edit_feed #level1_details_edit option[value='" + details.level1ID + "']").prop('selected', true);
+                $("form#edit_feed #select2-level1_details_edit-container").html(details.level1Name);
+                loadEditFeedLevel2(details.level1ID, details.level2ID);
+                // $("form#edit_feed #level2_details_edit option[value='" + details.level2ID + "']").prop('selected', true);
+                $("form#edit_feed #select2-level2_details_edit-container").html(details.level2Name);            
+                loadEditFeedMolecule(details.level1ID, details.level2ID, details.moleculeID);
+                $("form#edit_feed #select2-molecule_details_edit-container").html(details.moleculeName);
+            }
+            if(details.type == "indication") {
+                displayEditFeedSection(details.type, details.groupID, 'pgm', details.therapeuticID, details.indicationID);
+                $("form#edit_feed #select2-thera_details_edit-container").html(details.therapeuticName);
+                loadEditIndications(details.therapeuticID, details.indicationID);
+                $("form#edit_feed #select2-indication_details_edit-container").html(details.indicationName);
+            }
             $("form#edit_feed #rss_feed_edit").val(details.feedLink);
         },
         error: function (data) {
@@ -1414,6 +1474,10 @@ function add_new_feed() {
             }
         }
     });
+}
+
+function edit_feed() {
+    
 }
 
 function delete_feed_details(fid) {

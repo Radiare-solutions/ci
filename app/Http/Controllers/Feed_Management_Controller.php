@@ -107,12 +107,15 @@ class Feed_Management_Controller extends Controller {
         }
     }
 
-    public function loadTherapeutic($bgid) {
+    public function loadTherapeutic($bgid, $tid) {
         $ob = new MapMolecules();
         $therapy = $ob->loadFeedTherapeuticDetails($bgid);
         $str = '<option value="">select</option>';
         foreach ($therapy as $data) {
-            $str.='<option value="' . $data['_id'] . '">' . $data['therapy'] . '</option>';
+            $clas = "";
+            if($tid == (string) $data['_id'])
+                $clas = "selected=selected";            
+            $str.='<option value="' . $data['_id'] . '" '.$clas.'>' . $data['therapy'] . '</option>';
         }
         return response()->json([
                     'success' => true,
@@ -120,13 +123,9 @@ class Feed_Management_Controller extends Controller {
                         ], 200);
     }
 
-    public function loadIndication($tid) {
-        $ob = new Indication();
-        $indications = $ob->loadIndications($tid);
-        $str = '<option value="">select</option>';
-        foreach ($indications as $data) {
-            $str.='<option value="' . $data['_id'] . '">' . $data['name'] . '</option>';
-        }
+    public function loadIndicationDetail($tid) {
+        $ob = new ModelHelper();
+        $str = $ob->loadIndicationsDataByTherapeuticID($tid);
         return response()->json([
                     'success' => true,
                     'message' => $str
@@ -229,21 +228,31 @@ class Feed_Management_Controller extends Controller {
             $feedAttr = $feeddetails['attributes'];
             $cliObj = Client::find($feedAttr['client_id']);
             $names = $cliObj->getBGName($feedAttr['client_id'], $feedAttr['bg_id']);
-            $l1Obj = Level1::find($feedAttr['level1_id']);
-            $l2Obj = new Level2();
-            $moleObj = Molecule::find($feedAttr['molecule_id']);
-            $l2Name = $l2Obj->loadLevel2Name($feedAttr['level2_id']);
+            if($feedAttr['type'] == 'molecule') {
+                $l1Obj = Level1::find($feedAttr['level1_id']);
+                $l2Obj = new Level2();
+                $moleObj = Molecule::find($feedAttr['molecule_id']);
+                $l2Name = $l2Obj->loadLevel2Name($feedAttr['level2_id']);
+                $details['level1ID'] = $feedAttr['level1_id'];
+                $details['level1Name'] = $l1Obj['attributes']['Name'];
+                $details['level2ID'] = $feedAttr['level2_id'];
+                $details['level2Name'] = $l2Name;
+                $details['moleculeID'] = $feedAttr['molecule_id'];
+                $details['moleculeName'] = $moleObj['attributes']['Name'];            
+            }
+            if($feedAttr['type'] == 'indication') {
+                $ob = new ModelHelper();
+                $iNames = $ob->getIndicationName($feedAttr['indication_id']);
+                $details['therapeuticID'] = $feedAttr['therapeutic_id'];
+                $details['therapeuticName'] = $iNames[0]['therapy'];
+                $details['indicationID'] = $feedAttr['indication_id'];
+                $details['indicationName'] = $iNames[0]['indication'];                
+            }
             $details['clientID'] = $feedAttr['client_id'];
             $details['clientName'] = $names['clientName'];
             $details['groupID'] = (string) $feedAttr['bg_id'];
             $details['groupName'] = $names['groupName'];
             $details['type'] = $feedAttr['type'];
-            $details['level1ID'] = $feedAttr['level1_id'];
-            $details['level1Name'] = $l1Obj['attributes']['Name'];
-            $details['level2ID'] = $feedAttr['level2_id'];
-            $details['level2Name'] = $l2Name;
-            $details['moleculeID'] = $feedAttr['molecule_id'];
-            $details['moleculeName'] = $moleObj['attributes']['Name'];
             $details['feedLink'] = $feedAttr['rss_feed_link'];
             return $details;
         }

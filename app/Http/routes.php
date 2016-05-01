@@ -47,8 +47,8 @@ Route::post('load_feed/{id}', 'Feed_Management_Controller@loadFeed');
 Route::post('delete_feed_details/{dfid}', 'Feed_Management_Controller@deletefeeddetails');
 
 Route::post('load_bg/{id}/{id1}', 'Feed_Management_Controller@loadBG');
-Route::post('load_therapeutic_detail/{id}', 'Feed_Management_Controller@loadTherapeutic');
-Route::post('load_indication/{id}', 'Feed_Management_Controller@loadIndication');
+Route::post('load_therapeutic_detail/{id}/{id1}', 'Feed_Management_Controller@loadTherapeutic');
+Route::post('load_indication_detail/{id}/{id1}', 'Feed_Management_Controller@loadIndicationDetail');
 Route::post('load_level1_detail/{id}/{id1}', 'Feed_Management_Controller@loadLevel1');
 Route::post('load_level2_detail/{id}/{id1}', 'Feed_Management_Controller@loadFeedLevels2');
 Route::post('load_molecule_detail/{id}/{id1}/{id2}', 'Feed_Management_Controller@loadFeedMoleculesByLevelID');
