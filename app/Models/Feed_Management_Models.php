@@ -50,6 +50,24 @@ class Feed_Management_Models extends Eloquent {
         return redirect('/');
     }
     
+    public function updateFeed($request) {
+        $update_details = array(
+            'client_id' => "$request->client_details_edit",
+            'bg_id' => "$request->bg_details_edit",  
+            'type' => "$request->type_edit",
+            'level1_id' => "$request->level1_details_edit",  
+            'level2_id' => "$request->level2_details_edit",  
+            'molecule_id' => "$request->molecule_details_edit",  
+            'therapeutic_id' => "$request->thera_details_edit",  
+            'indication_id' => "$request->indication_details_edit",  
+            'link_type' => "$request->link_type",
+            'rss_feed_link' => "$request->rss_feed_edit", 
+        );
+        \Illuminate\Support\Facades\DB::collection($this->collection)
+            ->where('_id',  new \MongoDB\BSON\ObjectId($request->fid))
+            ->update(($update_details)) ;        
+    }
+    
        public function delete_feed_details($id) {
 
       // Feed_Management_Models::where('_id', '=', $id)->delete();

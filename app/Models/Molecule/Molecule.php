@@ -25,6 +25,7 @@ class Molecule extends Eloquent {
     public $therapyName = "";
     public $moleculeName = "";
     public $mIndex = "";
+    protected $primaryKey = '_id';
     public $moleculeID = "";
 
     public function posts() {

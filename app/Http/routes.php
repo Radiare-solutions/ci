@@ -43,6 +43,7 @@ Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@edi
 Route::get('/feeds.html', 'Feed_Management_Controller@index');
 Route::get('/list_feeds', 'Feed_Management_Controller@list_feeds');
 Route::post('add_feed', 'Feed_Management_Controller@add_feeds');
+Route::post('edit_feed', 'Feed_Management_Controller@edit_feeds');
 Route::post('load_feed/{id}', 'Feed_Management_Controller@loadFeed');
 Route::post('delete_feed_details/{dfid}', 'Feed_Management_Controller@deletefeeddetails');
 
@@ -106,6 +107,10 @@ Route::post('remove_molecule_entry/{id}/{id1}', ['uses' => 'Client\ClientControl
 Route::post('edit_bg_entry/{id}/{id1}', ['uses' => 'Client\ClientController@editBGEntry']);
 Route::post('edit_bg_submit', 'Client\ClientController@storeEditGroup');
 
+
+/* start of clinical trial codes */
+Route::get('study_summary', 'ClinicalTrials\StudySummaryController@loadStudySummary');
+/* end of clinical trial codes */
 
 /*
 |--------------------------------------------------------------------------

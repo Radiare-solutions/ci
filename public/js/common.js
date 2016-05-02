@@ -1391,6 +1391,7 @@ function load_edit_feed(id) {
         success: function (data) {
             var details = (data);
             console.log(details);
+            $('form#edit_feed #fid').val(id);
             $("form#edit_feed #client_details_edit option[value='" + details.clientID + "']").prop('selected', true);
             $("form#edit_feed #select2-client_details_edit-container").html(details.clientName);
             loadEditBG(details.clientID, details.groupID);
@@ -1415,6 +1416,7 @@ function load_edit_feed(id) {
                 loadEditIndications(details.therapeuticID, details.indicationID);
                 $("form#edit_feed #select2-indication_details_edit-container").html(details.indicationName);
             }
+            $("form#edit_feed #link_type").val(details.linkType);
             $("form#edit_feed #rss_feed_edit").val(details.feedLink);
         },
         error: function (data) {
@@ -1476,8 +1478,46 @@ function add_new_feed() {
     });
 }
 
-function edit_feed() {
-    
+function update_feed() {
+    console.log("submit feed");    
+    var url = "edit_feed";
+    var data = $('#edit_feed').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        beforeSend: function () {
+            // $('#add_feed_details').attr("disabled", true);
+        },
+        success: function (data) {
+            // success logic
+            $.modal.close();
+//            $('#modal_form_add').hide();
+            $(".navbar-top").load("roles.html");
+            $('form#add_user #errorResponse').removeClass("alert alert-danger");
+            $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
+            $('form#add_user #errorResponse').addClass("alert alert-success");
+            // window.setTimeout(function(){location.reload()},3000)
+        }, complete: function () {
+            $('#add_feed_details').attr("disabled", false);
+        },
+        error: function (data) {
+            alert(JSON.stringify(data));
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_feed #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_feed #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
 }
 
 function delete_feed_details(fid) {

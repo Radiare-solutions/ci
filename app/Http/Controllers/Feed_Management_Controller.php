@@ -253,9 +253,16 @@ class Feed_Management_Controller extends Controller {
             $details['groupID'] = (string) $feedAttr['bg_id'];
             $details['groupName'] = $names['groupName'];
             $details['type'] = $feedAttr['type'];
+            $details['linkType'] = $feedAttr['link_type'];
+            $details['fid'] = $feedAttr['_id'];
             $details['feedLink'] = $feedAttr['rss_feed_link'];
             return $details;
         }
+    }
+    
+    public function edit_feeds(Request $request) {
+        $ob = new Feed_Management_Models();
+        $ob->updateFeed($request);
     }
 
     public function deletefeeddetails($id) {

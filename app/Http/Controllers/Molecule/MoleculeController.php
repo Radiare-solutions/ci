@@ -59,7 +59,7 @@ class MoleculeController extends Controller {
         $validator = Validator::make($request->all(), [
                     'level1Name' => 'required',
                     'level2Name' => 'required',
-                    'moleculeName' => 'required',
+                    'moleculeName' => 'required|unique:molecules,Name, '.$request->moleculeName.',_id',
         ]);
 
         if ($validator->fails()) {

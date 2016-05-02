@@ -208,6 +208,7 @@
 
                     <form name="edit_feed" id="edit_feed" method="post">
                         <div class="panel panel-flat">
+                            <input type="hidden" name="fid" id="fid">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="panel-body">
 
@@ -318,7 +319,7 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="button" class="btn btn-primary" onclick="edit_feed();">Update<i class="icon-arrow-right14 position-right"></i></button>
+                                    <button type="button" class="btn btn-primary" onclick="update_feed()">Update<i class="icon-arrow-right14 position-right"></i></button>
                                 </div>
                             </div>
                         </div>
