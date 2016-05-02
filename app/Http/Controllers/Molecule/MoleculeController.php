@@ -56,12 +56,20 @@ class MoleculeController extends Controller {
     }
 
     public function store(Request $request) {
-        $validator = Validator::make($request->all(), [
+        if(!empty($request->mid)) {
+            $validator = Validator::make($request->all(), [
                     'level1Name' => 'required',
                     'level2Name' => 'required',
-                    'moleculeName' => 'required|unique:molecules,Name, '.$request->moleculeName.',_id',
-        ]);
-
+                    'moleculeName' => 'required',
+            ]);
+        }
+        else {
+            $validator = Validator::make($request->all(), [
+                    'level1Name' => 'required',
+                    'level2Name' => 'required',
+                    'moleculeName' => 'required|unique:molecules,Name, '.$request->mid.',_id',
+            ]);
+        }
         if ($validator->fails()) {
             $errors = $validator->errors();
             $errors = json_decode($errors);
