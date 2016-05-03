@@ -10,6 +10,7 @@ use App\Models\MapMolecules\MapMolecules;
 use App\Models\Indication\Indication;
 use App\Models\Molecule\Level1;
 use App\Models\Molecule\Level2;
+use App\Models\DataTypes\DataTypes;
 use App\Models\ModelHelper;
 use Illuminate\Http\Request;
 use Validator;
@@ -23,11 +24,13 @@ class Feed_Management_Controller extends Controller {
 
         $listfeedObj = Feed_Management_Models::all();
         $clientObj = Client::all();
+        $dataTypeObj = DataTypes::where('isActive', 1)->get();
         $feeds = array();
         $clientOb = new Client();
         foreach ($listfeedObj as $feed) {
             $feedAttr = $feed['attributes'];
             $names = $clientOb->getBGName($feedAttr['client_id'], $feedAttr['bg_id']);
+            $dataObj = DataTypes::find($feedAttr['link_type']);
             $tempArr['indication'] = '';
             $tempArr['molecule'] = '';
             if ($feedAttr['type'] == 'indication') {
@@ -43,13 +46,14 @@ class Feed_Management_Controller extends Controller {
             $tempArr['_id'] = $feedAttr['_id'];
             $tempArr['clientName'] = $names['clientName'];
             $tempArr['bgName'] = $names['groupName'];
+            $tempArr['data_type'] = $dataObj['typeName'];
             $tempArr['rssLink'] = $feedAttr['rss_feed_link'];
             array_push($feeds, $tempArr);
         }
-
         return view('Feed_Management/feed_management', array(
             'feeds' => $feeds,
-            'client_list' => $clientObj
+            'client_list' => $clientObj,
+            'data_types' => $dataTypeObj
                 )
         );
     }

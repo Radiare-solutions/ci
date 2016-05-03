@@ -30,7 +30,8 @@
                         <th>Client Details</th>
                         <th>BG Details</th>
                         <th>Indication</th>
-                        <th>Molecule</th>                      
+                        <th>Molecule</th>            
+                        <th>Data Type</th>
                         <th>RSS Link</th>                      
 
                         <th class="text-center">Actions</th>
@@ -45,6 +46,7 @@
                         <td>{{$feed['bgName']}}</td>
                         <td>{{$feed['indication']}}</td>
                         <td>{{$feed['molecule']}}</td>
+                        <td>{{$feed['data_type']}}</td>
                         <td>{{$feed['rssLink']}}</td>
                         <td class="text-center">
                             <ul class="icons-list">
@@ -171,12 +173,14 @@
                                     
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Link Type</label>
+                                            <label>Data Type</label>
                                             <select name="link_type" id="link_type">
-                                                <option value="1">Clinical Trial</option>
-                                                <option value="2">News</option>
-                                                <option value="3">Patents</option>
-                                                <option value="4">Publications</option>
+                                                <option value="">select</option>
+                                                <?php
+                                                foreach($data_types as $dataType) {
+                                                    echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -302,10 +306,12 @@
                                         <div class="form-group">
                                             <label>Link Type</label>
                                             <select name="link_type" id="link_type">
-                                                <option value="1">Clinical Trial</option>
-                                                <option value="2">News</option>
-                                                <option value="3">Patents</option>
-                                                <option value="4">Publications</option>
+                                                <option value="">select</option>
+                                                <?php
+                                                foreach($data_types as $dataType) {
+                                                    echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>

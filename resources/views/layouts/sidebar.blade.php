@@ -19,7 +19,7 @@
             <li>
                 <a href="#"><i class="icon-database-arrow"></i> <span>Verify</span></a>
                 <ul>
-                    <li><a href="product.html">Product</a></li>
+                    <li><a href="product.html">Drug</a></li>
                     <li><a href="condition.html">Condition</a></li>
                     <li><a href="sponsor.html">Sponsor</a></li>
                 </ul>
