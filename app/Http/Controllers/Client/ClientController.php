@@ -28,8 +28,8 @@ class ClientController extends Controller {
         $listDetail = array();
         $temp = '';
         // $therapeutic = Therapeutic::all();
-        // $clients = Client::where('isActive', 1)->get();
-        $clients = Client::all();
+        $clients = Client::where('isActive', 1)->get();
+        // $clients = Client::all();
         foreach ($clients as $client) {
             $clientDetail = $client['attributes'];
             $test['cid'] = (string) $clientDetail['_id'];
@@ -38,72 +38,76 @@ class ClientController extends Controller {
             if (count($clientDetail['BusinessGroup']) > 0) { // no bg for client
                 foreach ($clientDetail['BusinessGroup'] as $group) {
 
-                    $test['bgid'] = (string) $group['_id'];
-                    $test['bgName'] = $group['Name'];
+                    if ($group['isActive'] > 0) {
 
-                    $bgid = new \MongoDB\BSON\ObjectId($group['_id']);
-                    // echo '<pre>';
-                    $ob = new MapMolecules();
+                        $test['bgid'] = (string) $group['_id'];
+                        $test['bgName'] = $group['Name'];
 
-                    $indications = ($ob->loadIndicationDetails($test['bgid']));
-                    $molecules1 = $ob->loadMoleculeDetails($test['bgid']);
-                    $indications = array_filter($indications);
-                    if (!empty($indications)) {
-                        $indication = array();
-                        foreach ($indications as $indicationDetails) {
-                            $tempDetails = $indicationDetails;
-                            $indicationDetail = $this->getIndicationName($tempDetails);
-                            array_push($indication, $indicationDetail);
-                        }
-                        $indication = array_filter($indication);
+                        $bgid = new \MongoDB\BSON\ObjectId($group['_id']);
+                        // echo '<pre>';
+                        $ob = new MapMolecules();
+
+                        $indications = ($ob->loadIndicationDetails($test['bgid']));
+                        $molecules1 = $ob->loadMoleculeDetails($test['bgid']);
+                        $indications = array_filter($indications);
+                        if (!empty($indications)) {
+                            $indication = array();
+                            foreach ($indications as $indicationDetails) {
+                                $tempDetails = $indicationDetails;
+                                $indicationDetail = $this->getIndicationName($tempDetails);
+                                array_push($indication, $indicationDetail);
+                            }
+                            $indication = array_filter($indication);
 //echo '<pre>';
 //print_r($indication);
 //exit;
-                        foreach ($indication as $value) {
+                            foreach ($indication as $value) {
 //                            print_r($value);
 //                            echo "<br>";
 //                            print_r($value[0]['therapy']);
-                            //exit;
-                            $oid = (string) $value[0]['therapy'];
-                            if (isset($value[0]['therapy']) && (isset($value[0]['indication']))) {
-                                $test['therapy'][$oid][] = $value[0]['indication'];
+                                //exit;
+                                $oid = (string) $value[0]['therapy'];
+                                if (isset($value[0]['therapy']) && (isset($value[0]['indication']))) {
+                                    $test['therapy'][$oid][] = $value[0]['indication'];
+                                }
                             }
-                        }
 //                        echo "<br>";
 //                        print_r($test);
 //                        exit;
-                        array_push($listDetails, $test);
-                        $test = array();
-                    } else if (!empty($molecules1)) {
-                        $str = array();
-                        $molecules1 = array_filter($molecules1);
-                        foreach ($molecules1 as $molecules) {
-                            print_r($molecules);
-                            $moleculeDetail = $this->getMoleculeDetails($molecules);
-                            print_r($moleculeDetail);
-                            $temp = implode(" : ", $moleculeDetail) . "<br>";
-                            $test['Name'] = $temp;
-                            array_push($str, $temp);
+                            array_push($listDetails, $test);
+                            $test = array();
+                        } else if (!empty($molecules1)) {
+                            $str = array();
+                            $molecules1 = array_filter($molecules1);
+                            foreach ($molecules1 as $molecules) {
+                                print_r($molecules);
+                                $moleculeDetail = $this->getMoleculeDetails($molecules);
+                                print_r($moleculeDetail);
+                                $temp = implode(" : ", $moleculeDetail) . "<br>";
+                                $test['Name'] = $temp;
+                                array_push($str, $temp);
+                            }
+                            $test['Name'] = $str;
+                            array_push($listDetails, $test);
+                            $test = array();
+                        } else {
+                            $tester['cid'] = (string) $clientDetail['_id'];
+                            $tester['clientName'] = $clientDetail['Name'];
+                            $tester['bgid'] = (string) $group['_id'];
+                            $tester['bgName'] = $group['Name'];
+                            array_push($listDetails, $tester);
+                            $group = array();
+                            $tester = array();
                         }
-                        $test['Name'] = $str;
-                        array_push($listDetails, $test);
-                        $test = array();
-                    } else {
-                        $tester['cid'] = (string) $clientDetail['_id'];
-                        $tester['clientName'] = $clientDetail['Name'];
-                        $tester['bgid'] = (string) $group['_id'];
-                        $tester['bgName'] = $group['Name'];
-                        array_push($listDetails, $tester);
-                        $group = array();
-                        $tester = array();
                     }
-                }
-            }
-            else {
+                    else {
                 $tester['cid'] = (string) $clientDetail['_id'];
                 $tester['clientName'] = $clientDetail['Name'];
-                array_push($listDetails, $tester);
+                if(!in_array($tester['cid'], $listDetails))
+                    array_push($listDetails, $tester);
             }
+                }
+            } 
         }
 //        echo '<pre>';
 //        print_r($listDetails);
@@ -114,7 +118,7 @@ class ClientController extends Controller {
             'details' => json_encode($listDetails),
             'therapyDetails' => json_encode($therapyDetails),
             'level1Details' => json_encode($level1Details)
-            // 'therapeutic' => $therapeutic
+                // 'therapeutic' => $therapeutic
         ));
         // return view('client/index', array('therapy' => $therapy, 'details' => json_encode($listDetails)));
     }
@@ -226,8 +230,8 @@ class ClientController extends Controller {
         $therapy = Indication::all();
         foreach ($therapy as $therapyDetail['attributes']) {
             $this->therapyID = new \MongoDB\BSON\ObjectId($therapyDetail['attributes']['Therapy']);
-            $therapyObj = Therapeutic::find($this->therapyID);            
-            
+            $therapyObj = Therapeutic::find($this->therapyID);
+
             $details['therapyName'] = $therapyObj['attributes']['Name'];
             // $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
             $details['tid'] = (string) $therapyDetail['attributes']['Therapy'];

@@ -146,6 +146,6 @@ class ModelHelper extends Eloquent {
             $str.= "<option value='" . $id . "' data-name='" . $name . "' ".$clas.">" . $name . "</option>";
         }
         return $str;
-    }
+    }        
     
 }

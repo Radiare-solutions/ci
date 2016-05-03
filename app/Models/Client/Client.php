@@ -163,7 +163,7 @@ class Client extends Eloquent {
         $cid = new \MongoDB\BSON\ObjectId($request->clientName);
         \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $cid)->update(
                 // array('_id' => $this->therapyID),           
-                array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => new \MongoDB\BSON\ObjectId())))
+                array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, 'isActive' => 1, '_id' => new \MongoDB\BSON\ObjectId())))
         );
     }
 
@@ -289,12 +289,12 @@ class Client extends Eloquent {
 
     public function removeIndicationEntry($bgid, $iid) {
         $iid = new \MongoDB\BSON\ObjectId($iid);
-        // Client::where('_id', $iid)->update(array('isActive' => 0));
+        Client::where('_id', $iid)->update(array('isActive' => 0));
     }
 
     public function removeMoleculeEntry($bgid, $mid) {
         $mid = new \MongoDB\BSON\ObjectId($mid);
-        //Client::where('_id', $mid)->update(array('isActive' => 0));
+        Client::where('_id', $mid)->update(array('isActive' => 0));
     }
 
 }

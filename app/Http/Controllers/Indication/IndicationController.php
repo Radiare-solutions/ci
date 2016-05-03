@@ -14,19 +14,27 @@ class IndicationController extends Controller {
 
     public function index() {
         $listDetails = array();
-        $therapy = Indication::all();  
-        $therapeutic = Therapeutic::all();
+        // $therapy = Indication::where('isActive', 1)->get();  
+        $indicationObj = new Indication();
+        $therapy = $indicationObj->loadActiveIndications();
+//echo '<pre>';
+//               print_r($therapy);
+//               exit;
+        $therapeutic = Therapeutic::where('isActive', 1)->get();
         foreach ($therapy as $therapyDetail) {
             $ob = new \stdClass();
-            $therapyOb = Therapeutic::find($therapyDetail['attributes']['Therapy']);
+            $therapyOb = Therapeutic::find($therapyDetail['therapy']);
             $ob->therapyName = $therapyOb['attributes']['Name'];
-            $ob->_id = (string) $therapyDetail['attributes']['Therapy'];
+            $ob->_id = (string) $therapyDetail['therapy'];
             $test = array();
-            foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
-               $testing['Name'] = $indicationDetail['Name'];
-               $testing['_id'] = (string) $indicationDetail['_id'];
+            //foreach ($therapyDetail['indication'] as $indicationDetail) {
+//               echo '<pre>';
+//               print_r($indicationDetail);
+//               exit;
+               $testing['Name'] = $therapyDetail['indication']['indication'];
+               $testing['_id'] = (string) $therapyDetail['indication']['_id'];
                array_push($test, $testing);
-            }
+            //}
             $ob->indicationName = $test;
             array_push($listDetails, $ob);
             /*$details['therapyName'] = $therapyDetail['attributes']['Therapy'];
@@ -69,10 +77,10 @@ class IndicationController extends Controller {
             $obj = new Indication();                
             $str =  $this->indicationExists($request);              
 
-//            return response()->json([
-//                        'success' => true,
-//                        'message' => "Indication ".$str." Successfully"
-//                            ], 200);
+            return response()->json([
+                        'success' => true,
+                        'message' => "Indication ".$str." Successfully"
+                            ], 200);
         }
     }
 

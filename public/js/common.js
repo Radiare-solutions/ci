@@ -752,6 +752,7 @@ function delete_therapeutic(tid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }
@@ -773,6 +774,7 @@ function delete_indication(tid, iid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }
@@ -815,6 +817,7 @@ function delete_client(cid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }
@@ -836,6 +839,7 @@ function delete_group(cid, bgid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }
@@ -902,10 +906,9 @@ function add_new_role() {
             $('form#add_role #errorResponse').removeClass("alert alert-danger");
             $('form#add_role #errorResponse').show().html("Role Added successfully");
             $('form#add_role #errorResponse').addClass("alert alert-success");
-            // window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
-            alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
                 var errors = data.responseJSON.message;
@@ -938,7 +941,6 @@ function new_user() {
             // window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
-            alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
                 var errors = data.responseJSON.message;
@@ -1068,10 +1070,9 @@ function edit_role_submit() {
             $('form#edit_role #errorResponse').removeClass("alert alert-danger");
             $('form#edit_role #errorResponse').show().html("Role Updated successfully");
             $('form#edit_role #errorResponse').addClass("alert alert-success");
-            // window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
-            alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
                 var errors = data.responseJSON.message;

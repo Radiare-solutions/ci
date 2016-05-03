@@ -52,7 +52,7 @@ $.ajaxSetup({
 
             <div class="navbar-header bg-white">
                 <a class="navbar-brand" href="index.html">
-                    <img src="assets/images/logo1.png" alt=""></a>
+                    <img src="{{ URL::asset("images/logo1.png") }}" alt=""></a>
 
                 <ul class="nav navbar-nav visible-xs-block">
                     <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
@@ -69,7 +69,7 @@ $.ajaxSetup({
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown dropdown-user pt-10">
                         <a class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="assets/images/logo1.png" alt="">
+                            <img src="{{ URL::asset("images/logo1.png") }}" alt="">
                             <span>Victoria</span>
                             <i class="caret"></i>
                         </a>

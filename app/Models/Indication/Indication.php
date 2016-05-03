@@ -294,5 +294,40 @@ class Indication extends Eloquent {
                     update(array('Indication.' . $index . '.isActive' => 0)
             );
     }
+    
+    public function loadActiveIndications() {    
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Indication'),
+                        array('$unwind' => '$Indication.isActive'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('Indication.isActive' => 1),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Therapy' => 1,
+                                'Indication' => 1,
+                            )),
+            ));
+        });
+        $id = array();
+        $therapy = array();
+        //return $result;
+         foreach ($result as $query) {
+            // array_push($therapy, $query['Therapy']);
+            $ob = Therapeutic::find($query['Therapy']);
+            $testing['_id'] = $query['Therapy'];
+            $testing['therapy'] = $query['Therapy'];
+            $test['_id'] = (string) $query['Indication']['_id'];
+            $test['indication'] = $query['Indication']['Name'];
+            $testing['indication'] = $test;
+            // array_push($testing['indication'], $test);
+            array_push($therapy, $testing);
+        }
+        return $therapy;
+    }
 
 }
