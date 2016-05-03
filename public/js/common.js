@@ -162,10 +162,14 @@ function edit_indication_submit() {
     });
 }
 
-function load_level2_data(l1id, form_action) {
+function load_level2_data(l1id, form_action, l2id = '') {
     console.log("level 1 : " + l1id);
     if (l1id != "") {
-        var url = "load_level2/" + l1id;
+        if(form_action == 'edit')
+            l2id = l2id;
+        else
+            l2id = null;
+        var url = "load_level2/" + l1id + "/" + l2id;
         $.ajax({
             type: 'post',
             url: url,
@@ -241,7 +245,7 @@ function load_molecule_details(mid, index) {
             $('#myModal form#edit_molecule #mIndex').val(details.mIndex);
             $("#myModal form#edit_molecule #level1Name option[value='" + details.level1id + "']").prop('selected', true);
             $("#myModal form#edit_molecule #select2-level1Name-container").html(details.level1name);
-            load_level2_data(details.level1id, 'edit');
+            load_level2_data(details.level1id, 'edit', details.level2id);
             $("#myModal form#edit_molecule #level2Name option[value='" + details.level2id + "']").prop('selected', true);
             $("#myModal form#edit_molecule #select2-level2Name-container").html(details.level2name);
             $('#myModal form#edit_molecule #moleculeID').val(details.moleculeID);
@@ -284,7 +288,7 @@ function edit_molecule_submit() {
             }, 3000)
         },
         error: function (data) {
-            alert(JSON.stringify(data));
+            //alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
                 var errors = data.responseJSON.message;
@@ -796,6 +800,7 @@ function delete_molecule(mid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }
@@ -861,6 +866,7 @@ function delete_indication_entry(bgid, iid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }
@@ -882,6 +888,7 @@ function delete_molecule_entry(bgid, mid) {
             success: function (data) {
                 var details = (data);
                 console.log(details);
+                window.location.reload();
             },
             error: function (data) {
             }

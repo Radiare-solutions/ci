@@ -75,7 +75,7 @@ Route::post('add_molecule', 'Molecule\MoleculeController@store');
 Route::post('edit_molecule', 'Molecule\MoleculeController@store');
 Route::post('load_molecule/{id}/{id1}', ['uses' =>'Molecule\MoleculeController@load']);
 Route::post('load_feed_molecules/{id}/{id1}', ['uses' => 'Molecule\MoleculeController@loadMolecules']);
-Route::post('load_level2/{id}', ['uses' => 'Molecule\MoleculeController@loadLevel2Data']);
+Route::post('load_level2/{id}/{id1}', ['uses' => 'Molecule\MoleculeController@loadLevel2Data']);
 Route::post('remove_molecule/{id}', ['uses' =>'Molecule\MoleculeController@removeMolecule']);
 
 Route::get('/therapeutic_mgmt', 'Therapeutic\TherapeuticController@index');

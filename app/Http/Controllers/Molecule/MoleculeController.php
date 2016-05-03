@@ -80,10 +80,10 @@ class MoleculeController extends Controller {
                             ], 422);
         } else {
             $str = $this->moleculeExists($request);
-//            return response()->json([
-//                        'success' => true,
-//                        'message' => "Molecule ".$str." Successfully"
-//                            ], 200);
+            return response()->json([
+                        'success' => true,
+                        'message' => "Molecule ".$str." Successfully"
+                            ], 200);
         }
     }
 
@@ -97,10 +97,10 @@ class MoleculeController extends Controller {
         return $obj->loadMoleculeDetails($mid, $index);        
     }
     
-    public function loadLevel2Data($l1id) {
+    public function loadLevel2Data($l1id, $l2id) {
         // echo "l1id : ".$l1id."<br>";
         $obj = new Level2();
-        $result = $obj->loadLevel2Data($l1id);
+        $result = $obj->loadLevel2Data($l1id, $l2id);
         return response()->json([
                         'success' => true,
                         'message' => $result

@@ -65,7 +65,7 @@ class Level2 extends Eloquent {
         }
     }
 
-    public function loadLevel2Data($l1id) {
+    public function loadLevel2Data($l1id, $l2id) {
         $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
@@ -86,9 +86,12 @@ class Level2 extends Eloquent {
         foreach ($result as $query) {
             $arra = $query['Level2'];
             foreach($arra as $arr) {
+                $clas = "";
                 $id = $arr['_id'];
+                if($id == $l2id)
+                    $clas = "selected=selected";
                 $name = $arr['Name'];
-                $str.= "<option value='".$id."' data-name='".$name."'>".$name."</option>";
+                $str.= "<option value='".$id."' ".$clas." data-name='".$name."'>".$name."</option>";
             }            
         }
         return $str;

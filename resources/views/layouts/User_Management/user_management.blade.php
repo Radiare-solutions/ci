@@ -1,7 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.user_mgmt')
 
 @section('content')
-
+<!-- Main sidebar -->
+    <div class="sidebar sidebar-main sidebar-default sidebar-fixed bg-blue-800">
+        <div class="sidebar-content">
+            <!-- Main navigation -->
+            @include('layouts/sidebar', array('page' => 'user'))
+            <!-- /main navigation -->
+        </div>
+    </div>
+    <!-- /main sidebar -->
 <!--Main content -->
 <div class="content-wrapper">
 <!--    Content area -->
@@ -61,10 +69,6 @@
                                         <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="edit_user_form('<?php echo $user->_id; ?>');" ><i class="icon-pencil7"></i>Edit entry</a></li>
                                       
                                         <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
-                                        <li class="dropdown-header">Export</li>
-                                        <li><a href="#"><i class="icon-file-pdf"></i> Export to .pdf</a></li>
-                                        <li><a href="#"><i class="icon-file-excel"></i> Export to .csv</a></li>
-                                        <li><a href="#"><i class="icon-file-word"></i> Export to .doc</a></li>
                                     </ul>
                                 </li>
                             </ul>
