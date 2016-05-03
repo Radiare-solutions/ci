@@ -980,7 +980,6 @@ function edit_user_submit(uid) {
             // window.setTimeout(function(){location.reload()},3000)
         },
         error: function (data) {
-            alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
                 var errors = data.responseJSON.message;
@@ -1464,7 +1463,7 @@ function add_new_feed() {
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
             $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-            // window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function(){location.reload()},1000)
         }, complete: function () {
             $('#add_feed_details').attr("disabled", false);
         },
@@ -1565,4 +1564,121 @@ function delete_feed_details(fid) {
             }
         }
     });
+}
+
+function add_new_data_type_submit() {
+    console.log("submit role");
+    var url = "add_datatype";
+    var data = $('#add_data_type').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#add_data_type #errorResponse').removeClass("alert alert-danger");
+            $('form#add_data_type #errorResponse').show().html("Data Type Added successfully");
+            $('form#add_data_type #errorResponse').addClass("alert alert-success");
+            window.location.reload();
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#add_data_type #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#add_data_type #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function load_edit_datatype(id) {
+//    alert(id);
+    console.log("id : " + id);
+    var url = "load_data_type/" + id;
+    $.ajax({
+        type: 'post',
+        url: url,
+        success: function (data) {
+            var details = (data);
+            $('form#edit_data_type #editDataTypeName').val(details);
+            $('form#edit_data_type #dataTypeID').val(id);
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_data_type #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_data_type #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function edit_data_type_submit() {
+    console.log("submit edit_data_type");
+    var url = "edit_datatype_submit";
+    var data = $('#edit_data_type').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#edit_data_type #errorResponse').removeClass("alert alert-danger");
+            $('form#edit_data_type #errorResponse').show().html("Data Type Updated successfully");
+            $('form#edit_data_type #errorResponse').addClass("alert alert-success");
+            window.location.reload();
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_data_type #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_data_type #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function delete_datatype(id) {
+    var r = confirm("Are you sure to delete this record?")
+    if (r == true) {
+        console.log("you pressed ok");
+        var url = "delete_datatype/" + id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
+    } else {
+        console.log("you pressed cancel");
+    }
 }

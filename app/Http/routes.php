@@ -35,9 +35,17 @@ Route::get('/molecules.html', function () {
 Route::post('add_role', 'Role_Management_Controller@store');
 Route::post('edit_role_form/{id}', 'Role_Management_Controller@editroleform');
 Route::post('edit_role_submit', 'Role_Management_Controller@editrolesubmit');
+
 Route::post('add_user', 'User_Management_Controller@store');
 Route::post('edit_user_form/{id}', 'User_Management_Controller@edituserform');
 Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@editusersubmit']);
+
+// Data Types Section
+Route::get('datatype_mgmt', 'DataTypes\DataTypesController@index');
+Route::post('add_datatype', 'DataTypes\DataTypesController@store');
+Route::post('load_data_type/{id}', 'DataTypes\DataTypesController@load');
+Route::post('edit_datatype_submit', 'DataTypes\DataTypesController@store');
+Route::post('delete_datatype/{id}', 'DataTypes\DataTypesController@removeDataType');
 
 //Feed Management Section
 Route::get('/feeds.html', 'Feed_Management_Controller@index');

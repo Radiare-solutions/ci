@@ -43,14 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-////                                                                echo '<pre>';
-////                                                                print_r($roles);
-////                                                                exit;
-//                                                                
-                    ?>
-
-
+                    <?php if(count($users) > 0) { ?>
                     @foreach ($users as $user)
                     <tr>
                         <td>1</td>
@@ -76,6 +69,7 @@
                     </tr>
 
                     @endforeach
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -164,7 +158,7 @@
                                 </div>
                                 
                                 <div class="text-right">
-                                    <button type="button" onclick="edit_user_submit('<?php echo $user->_id; ?>');" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
+                                    <button type="button" onclick="edit_user_submit('<?php if(isset($user->id)) echo $user->_id; ?>');" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
                                 </div>
                             </div>
                         </div>

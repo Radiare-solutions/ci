@@ -12,6 +12,7 @@
                     <li <?php if($page == 'user') echo "class='active'";?>><a href="users.html">User</a></li>
                     <li <?php if($page == 'role') echo "class='active'";?>><a href="roles.html">Role</a></li>
                     <li <?php if($page == 'feed') echo "class='active'";?>><a href="feeds.html">Feed</a></li>
+                    <li <?php if($page == 'data_type') echo "class='active'";?>><a href="datatype_mgmt">Data Types</a></li>
                 </ul>
             </li>
             <li><a href="db-setup.html"><i class="icon-steam"></i> <span>Client Setup</span></a></li>

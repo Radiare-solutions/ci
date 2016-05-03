@@ -22,10 +22,10 @@ class User_Management_Controller extends Controller {
 
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-//                    'User_Name' => 'required',                    
-//                    'Email_Id' => 'required',                    
-//                    'Password' => 'required',                    
-//                    'Role_Name' => 'required',                    
+                    'User_Name' => 'required',                    
+                    'Email_Id' => 'required|email',                    
+                    'Password' => 'required',                    
+                    'Role_Name' => 'required',                    
         ]);
 
         if ($validator->fails()) {
@@ -48,10 +48,10 @@ class User_Management_Controller extends Controller {
     }
     public function editusersubmit($id, Request $request) {
         $validator = Validator::make($request->all(), [
-//                    'User_Name' => 'required',                    
-//                    'Email_Id' => 'required',                    
-//                    'Password' => 'required',                    
-//                    'Role_Name' => 'required',                    
+                    'User_Name' => 'required',                    
+                    'Email_Id' => 'required|email',                    
+                    'Password' => 'required',                    
+                    'Role_Name' => 'required',                    
         ]);
 
         if ($validator->fails()) {
