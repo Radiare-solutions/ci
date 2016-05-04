@@ -25,6 +25,7 @@ class Feed_Management_Controller extends Controller {
         $listfeedObj = Feed_Management_Models::all();
         $clientObj = Client::all();
         $dataTypeObj = DataTypes::where('isActive', 1)->get();
+        $types = DataTypes::where('isActive', 1)->get();
         $feeds = array();
         $clientOb = new Client();
         foreach ($listfeedObj as $feed) {
@@ -47,7 +48,12 @@ class Feed_Management_Controller extends Controller {
             $tempArr['clientName'] = $names['clientName'];
             $tempArr['bgName'] = $names['groupName'];
             $tempArr['data_type'] = $dataObj['typeName'];
-            $tempArr['rssLink'] = $feedAttr['rss_feed_link'];
+            //$tempArr['rssLink'] = $feedAttr['rss_feed_link'];            
+            $arr = array();
+            foreach ($types as $typeDetail) {
+                $typeAttr = $typeDetail['attributes'];
+                $tempArr[$typeAttr['typeName']] = $feedAttr[0][$typeAttr['typeName']];
+            }
             array_push($feeds, $tempArr);
         }
         return view('Feed_Management/feed_management', array(
@@ -117,9 +123,9 @@ class Feed_Management_Controller extends Controller {
         $str = '<option value="">select</option>';
         foreach ($therapy as $data) {
             $clas = "";
-            if($tid == (string) $data['_id'])
-                $clas = "selected=selected";            
-            $str.='<option value="' . $data['_id'] . '" '.$clas.'>' . $data['therapy'] . '</option>';
+            if ($tid == $data['_id'])
+                $clas = "selected=selected";
+            $str.='<option value="' . $data['_id'] . '" ' . $clas . '>' . $data['therapy'] . '</option>';
         }
         return response()->json([
                     'success' => true,
@@ -232,7 +238,7 @@ class Feed_Management_Controller extends Controller {
             $feedAttr = $feeddetails['attributes'];
             $cliObj = Client::find($feedAttr['client_id']);
             $names = $cliObj->getBGName($feedAttr['client_id'], $feedAttr['bg_id']);
-            if($feedAttr['type'] == 'molecule') {
+            if ($feedAttr['type'] == 'molecule') {
                 $l1Obj = Level1::find($feedAttr['level1_id']);
                 $l2Obj = new Level2();
                 $moleObj = Molecule::find($feedAttr['molecule_id']);
@@ -242,28 +248,36 @@ class Feed_Management_Controller extends Controller {
                 $details['level2ID'] = $feedAttr['level2_id'];
                 $details['level2Name'] = $l2Name;
                 $details['moleculeID'] = $feedAttr['molecule_id'];
-                $details['moleculeName'] = $moleObj['attributes']['Name'];            
+                $details['moleculeName'] = $moleObj['attributes']['Name'];
             }
-            if($feedAttr['type'] == 'indication') {
+            if ($feedAttr['type'] == 'indication') {
                 $ob = new ModelHelper();
                 $iNames = $ob->getIndicationName($feedAttr['indication_id']);
                 $details['therapeuticID'] = $feedAttr['therapeutic_id'];
                 $details['therapeuticName'] = $iNames[0]['therapy'];
                 $details['indicationID'] = $feedAttr['indication_id'];
-                $details['indicationName'] = $iNames[0]['indication'];                
+                $details['indicationName'] = $iNames[0]['indication'];
             }
             $details['clientID'] = $feedAttr['client_id'];
             $details['clientName'] = $names['clientName'];
             $details['groupID'] = (string) $feedAttr['bg_id'];
             $details['groupName'] = $names['groupName'];
             $details['type'] = $feedAttr['type'];
-            $details['linkType'] = $feedAttr['link_type'];
+            $types = DataTypes::where('isActive', 1)->get();
+            $arr = array();
+            foreach ($types as $typeDetail) {
+                $typeAttr = $typeDetail['attributes'];
+                $details[$typeAttr['typeName']] = $feedAttr[0][$typeAttr['typeName']];
+                array_push($arr, $typeAttr['typeName']);
+            }
+            $details['data_types'] = implode(",", $arr);
+            // $details['linkType'] = $feedAttr['link_type'];
             $details['fid'] = $feedAttr['_id'];
-            $details['feedLink'] = $feedAttr['rss_feed_link'];
+            //$details['feedLink'] = $feedAttr['rss_feed_link'];
             return $details;
         }
     }
-    
+
     public function edit_feeds(Request $request) {
         $ob = new Feed_Management_Models();
         $ob->updateFeed($request);

@@ -165,7 +165,7 @@ function edit_indication_submit() {
 function load_level2_data(l1id, form_action, l2id = '') {
     console.log("level 1 : " + l1id);
     if (l1id != "") {
-        if(form_action == 'edit')
+        if (form_action == 'edit')
             l2id = l2id;
         else
             l2id = null;
@@ -913,7 +913,9 @@ function add_new_role() {
             $('form#add_role #errorResponse').removeClass("alert alert-danger");
             $('form#add_role #errorResponse').show().html("Role Added successfully");
             $('form#add_role #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -1076,7 +1078,9 @@ function edit_role_submit() {
             $('form#edit_role #errorResponse').removeClass("alert alert-danger");
             $('form#edit_role #errorResponse').show().html("Role Updated successfully");
             $('form#edit_role #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},3000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 3000)
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -1134,7 +1138,7 @@ function displayEditFeedSection(id, bg, callMethod, l1id, l2id) {
 }
 
 function loadTherapeutic(bg) {
-    var url = "load_therapeutic_detail/" + bg + "/"+null;
+    var url = "load_therapeutic_detail/" + bg + "/" + null;
     $.ajax({
         type: 'post',
         url: url,
@@ -1179,27 +1183,26 @@ function loadIndications(tid, iid) {
 }
 
 function loadEditIndications(tid, iid) {
-    if(tid!="") {
-        if(iid == "")
+    if (tid != "") {
+        if (iid == "")
             iid = null;
-    var url = "load_indication_detail/" + tid + "/" + iid;
-    $.ajax({
-        type: 'post',
-        url: url,
-        dataType: 'json',
-        success: function (data) {
-            $('form#edit_feed #indication_details_edit').html(data.message);
-        },
-        error: function (data) {
+        var url = "load_indication_detail/" + tid + "/" + iid;
+        $.ajax({
+            type: 'post',
+            url: url,
+            dataType: 'json',
+            success: function (data) {
+                $('form#edit_feed #indication_details_edit').html(data.message);
+            },
+            error: function (data) {
 
-        }
-    });
-}
-else
-{
-    $('form#edit_feed #indication_details_edit').html("");
-    $('form#edit_feed #select2-indication_details_edit-container').html("");
-}
+            }
+        });
+    } else
+    {
+        $('form#edit_feed #indication_details_edit').html("");
+        $('form#edit_feed #select2-indication_details_edit-container').html("");
+    }
 }
 
 function loadLevels(bg) {
@@ -1228,7 +1231,7 @@ function loadEditLevels(bg, l1id) {
             dataType: 'json',
             success: function (data) {
                 $('form#edit_feed #level1_details_edit').html(data.message);
-                $('form#edit_feed #level2_details_edit').html("");                          
+                $('form#edit_feed #level2_details_edit').html("");
             },
             error: function (data) {
 
@@ -1241,7 +1244,7 @@ function loadEditLevels(bg, l1id) {
 }
 
 function loadFeedLevel2(l1id) {
-    var url = "load_level2/" + l1id;
+    var url = "load_level2_detail/" + l1id + "/null";
     $.ajax({
         type: 'post',
         url: url,
@@ -1305,10 +1308,10 @@ function loadEditFeedMolecule(l1id, l2id, mid) {
     if (l2id == "")
         l2id = $('form#edit_feed #level2_details_edit').val();
     //if (mid == "") 
-      //  mid = $('form#edit_feed #molecule_details_edit').val();
+    //  mid = $('form#edit_feed #molecule_details_edit').val();
     if ((l1id != "") && (l2id != ""))
     {
-        if(mid == "")
+        if (mid == "")
             mid = null;
         var url = "load_molecule_detail/" + l1id + "/" + l2id + "/" + mid;
         $.ajax({
@@ -1322,8 +1325,7 @@ function loadEditFeedMolecule(l1id, l2id, mid) {
 
             }
         });
-    } 
-    else
+    } else
     {
         $('form#edit_feed #select2-molecule_details_edit-container').html("");
     }
@@ -1398,6 +1400,8 @@ function load_edit_feed(id) {
         success: function (data) {
             var details = (data);
             console.log(details);
+            
+
             $('form#edit_feed #fid').val(id);
             $("form#edit_feed #client_details_edit option[value='" + details.clientID + "']").prop('selected', true);
             $("form#edit_feed #select2-client_details_edit-container").html(details.clientName);
@@ -1407,23 +1411,34 @@ function load_edit_feed(id) {
             // $("form#edit_feed #bg_details_edit option[value=" + details.groupID + "]").attr('selected', 'selected');
             $("form#edit_feed #select2-bg_details_edit-container").html(details.groupName);
             $("form#edit_feed #type_edit").attr('checked', details.type);
-            if(details.type == "molecule") {
+            if (details.type == "molecule") {
                 displayEditFeedSection(details.type, details.groupID, 'pgm', details.level1ID, details.level2ID);
                 // $("form#edit_feed #level1_details_edit option[value='" + details.level1ID + "']").prop('selected', true);
                 $("form#edit_feed #select2-level1_details_edit-container").html(details.level1Name);
                 loadEditFeedLevel2(details.level1ID, details.level2ID);
                 // $("form#edit_feed #level2_details_edit option[value='" + details.level2ID + "']").prop('selected', true);
-                $("form#edit_feed #select2-level2_details_edit-container").html(details.level2Name);            
+                $("form#edit_feed #select2-level2_details_edit-container").html(details.level2Name);
                 loadEditFeedMolecule(details.level1ID, details.level2ID, details.moleculeID);
                 $("form#edit_feed #select2-molecule_details_edit-container").html(details.moleculeName);
             }
-            if(details.type == "indication") {
+            if (details.type == "indication") {
                 displayEditFeedSection(details.type, details.groupID, 'pgm', details.therapeuticID, details.indicationID);
                 $("form#edit_feed #select2-thera_details_edit-container").html(details.therapeuticName);
                 loadEditIndications(details.therapeuticID, details.indicationID);
                 $("form#edit_feed #select2-indication_details_edit-container").html(details.indicationName);
             }
             $("form#edit_feed #link_type").val(details.linkType);
+            var dataTypes = details.data_types.split(",");
+            console.log(dataTypes);
+
+            for (var i = 0; i < dataTypes.length; i++) {
+                console.log("hello : " + (dataTypes[i]));
+                var dtypes = details[dataTypes[i]];
+                var dtype = dtypes.split(",");
+                for(var j=0;j<dtype.length;j++) {
+                    load_add_more(dataTypes[i], dtype[j]);
+                }
+            }
             $("form#edit_feed #rss_feed_edit").val(details.feedLink);
         },
         error: function (data) {
@@ -1463,7 +1478,9 @@ function add_new_feed() {
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
             $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function(){location.reload()},1000)
+            window.setTimeout(function () {
+                location.reload()
+            }, 1000)
         }, complete: function () {
             $('#add_feed_details').attr("disabled", false);
         },
@@ -1486,7 +1503,7 @@ function add_new_feed() {
 }
 
 function update_feed() {
-    console.log("submit feed");    
+    console.log("submit feed");
     var url = "edit_feed";
     var data = $('#edit_feed').serialize();
     $.ajax({
@@ -1682,3 +1699,46 @@ function delete_datatype(id) {
         console.log("you pressed cancel");
     }
 }
+
+function load_add_more(parent_div, value) {
+    console.log("div : " + parent_div);
+    var count = $('#counter').val();
+    var id = parent_div + count
+    var child_div = id;
+    console.log("child div : " + child_div);
+    $('#edit_' + parent_div).append("<span id='" + child_div + "'><input type='text' value="+value+" name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('edit_" + parent_div + "','" + id + "');>Remove</a><br></span>");
+    count++;
+    $('#counter').val(count);
+}
+
+function add_more(parent_div) {
+    console.log("div : " + parent_div);
+    var count = $('#counter').val();
+    var id = parent_div + count
+    var child_div = id;
+    console.log("child div : " + child_div);
+    $('#' + parent_div).append("<span id='" + child_div + "'><input type='text' name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('" + parent_div + "','" + id + "');>Remove</a><br></span>");
+    count++;
+    $('#counter').val(count);
+}
+
+function edit_add_more(parent_div) {
+    console.log("div : " + parent_div);
+    var count = $('#counter').val();
+    var id = parent_div + count
+    var child_div = id;
+    console.log("child div : " + child_div);
+    $('#edit_' + parent_div).append("<span id='" + child_div + "'><input type='text' name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('edit_" + parent_div + "','" + id + "');>Remove</a><br></span>");
+    count++;
+    $('#counter').val(count);
+}
+
+function remove_field(parent_div, child_div) {
+    console.log("div : " + parent_div + " - " + child_div);
+    $("#" + parent_div).find("#" + child_div).remove();
+}
+
+function show_divs() {
+
+}
+

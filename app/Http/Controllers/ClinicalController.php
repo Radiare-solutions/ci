@@ -165,7 +165,7 @@ class ClinicalController extends Controller
 
                         $result_next[]=$current_div->parentNode->parentNode->nodeValue;
                         $implode_array=implode("<br/>", $result_next);
-                        $explode_array=explode("Â", $implode_array);
+                        $explode_array=explode("ï¿½", $implode_array);
                         
                         $primary_text1=trim(str_replace("[1]","",$explode_array[0]));
                         $second_array=explode("[2]",$explode_array[1]);
@@ -243,7 +243,7 @@ class ClinicalController extends Controller
        }
 
        $implode_array=implode("<br/>", $ad_result_next);
-       $exp_array=explode("Â", strip_tags($implode_array));
+       $exp_array=explode("ï¿½", strip_tags($implode_array));
         foreach ($exp_array as $value) {
              $value1=preg_replace('#\x{00a0}#','', $value); // removing non breaking space from array values
              $val_array[]=trim($value1);
@@ -268,7 +268,7 @@ class ClinicalController extends Controller
         }
         }
        $implode_val_array=implode("<br/>", $result_second_element);
-       $exp_val_array=explode("Â", preg_replace("&# participants affected / at risk&","", strip_tags($implode_val_array)));
+       $exp_val_array=explode("ï¿½", preg_replace("&# participants affected / at risk&","", strip_tags($implode_val_array)));
        
         foreach ($exp_val_array as $value) {
              $exp_val=preg_replace('#\x{00a0}#','', $value);

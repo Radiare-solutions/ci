@@ -1,8 +1,9 @@
 <?php
 namespace App\Models;
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
+use Moloquent;
 
-class ClinicalTrialModel extends Eloquent
+class ClinicalTrialModel extends Moloquent
 {
     protected $collection="ci_clinical_trial";
     

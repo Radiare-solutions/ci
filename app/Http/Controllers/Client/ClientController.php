@@ -100,14 +100,13 @@ class ClientController extends Controller {
                             $tester = array();
                         }
                     }
-                    else {
+                }
+            } else {
                 $tester['cid'] = (string) $clientDetail['_id'];
                 $tester['clientName'] = $clientDetail['Name'];
-                if(!in_array($tester['cid'], $listDetails))
+                if (!in_array($tester['cid'], $listDetails))
                     array_push($listDetails, $tester);
             }
-                }
-            } 
         }
 //        echo '<pre>';
 //        print_r($listDetails);
@@ -254,13 +253,13 @@ class ClientController extends Controller {
     public function loadIndications($tid) {
         $str = '';
         $query = new Indication();
-        $result = $query->loadIndications($tid);
-        foreach ($result as $resultset) {
-            
-        }
+        $resultset = $query->loadIndications($tid);
+//        foreach ($result as $resultset) {
+//            
+//        }
         foreach ($resultset as $res) {
             $id = (string) $res['_id'];
-            $name = $res['Name'];
+            $name = $res['name'];
             $str.= '<option value="' . $id . '">' . $name . '</option>';
         }
         return response()->json([

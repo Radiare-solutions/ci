@@ -31,23 +31,31 @@
                         <th>BG Details</th>
                         <th>Indication</th>
                         <th>Molecule</th>            
-                        <th>Data Type</th>
-                        <th>RSS Link</th>                      
+                        <?php 
+                        foreach ($data_types as $dataType) {              
+                          echo '<th>'.$dataType['typeName'].'</th>';
+                        }
+                        ?>
 
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody >
                     <?php $i = 1; ?>
-                    @foreach($feeds as $feed) <tr>
+                    @foreach($feeds as $feed) 
+                    <?php //echo '<pre>'; print_r($feed); exit; ?>
+                    <tr>
                         <td>{{ $i }}</td>
 
                         <td>{{$feed['clientName']}}</td>
                         <td>{{$feed['bgName']}}</td>
                         <td>{{$feed['indication']}}</td>
                         <td>{{$feed['molecule']}}</td>
-                        <td>{{$feed['data_type']}}</td>
-                        <td>{{$feed['rssLink']}}</td>
+                        <?php 
+                        foreach ($data_types as $dataType) {              
+                          echo '<td>'.str_replace(",", "<br>",$feed[$dataType['typeName']]).'</td>';
+                        }
+                        ?>
                         <td class="text-center">
                             <ul class="icons-list">
                                 <li class="dropdown">
@@ -107,7 +115,7 @@
                                         <div class="form-group">
                                             <label>Business Group:</label>
                                             <select class="select" name="bg_details" id="bg_details">
-                                                
+
                                             </select>
                                         </div>
                                     </div>
@@ -119,69 +127,73 @@
                                             <input type="radio" name="type" id="type" onclick="displayFeedSection(this.value);" value="molecule">&nbsp; Molecule
                                         </div>
                                     </div>
-                                    
+
                                     <div id="molecule" class="hide">
-                                    <div class="col-md-3">	
-                                        <div class="form-group">
-                                            <label>level 1:</label>
-                                            <select class="select" name="level1_details" id="level1_details" onchange="loadFeedLevel2(this.value)">
-                                               
-                                            </select>
-                                        </div>
-                                    </div>
+                                        <div class="col-md-3">	
+                                            <div class="form-group">
+                                                <label>level 1:</label>
+                                                <select class="select" name="level1_details" id="level1_details" onchange="loadFeedLevel2(this.value)">
 
-                                    <div class="col-md-3">	
-                                        <div class="form-group">
-                                            <label>Level 2:</label>
-                                            <select class="select" name="level2_details" id="level2_details" onchange="loadFeedMolecule()">
-                                                
-                                            </select>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-md-6">	
-                                        <div class="form-group">
-                                            <label>Molecule:</label>
-                                            <select class="select" name="molecule_details" id="molecule_details">
-                                                
-                                            </select>
+                                        <div class="col-md-3">	
+                                            <div class="form-group">
+                                                <label>Level 2:</label>
+                                                <select class="select" name="level2_details" id="level2_details" onchange="loadFeedMolecule()">
+
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <div class="col-md-6">	
+                                            <div class="form-group">
+                                                <label>Molecule:</label>
+                                                <select class="select" name="molecule_details" id="molecule_details">
+
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div id="indication" class="hide">
-                                    <div class="col-md-6">	
-                                        <div class="form-group">
-                                            <label>Therapeutic Area:</label>
-                                            <select class="select" name="thera_details" id="thera_details" onchange="loadIndications(this.value, '')">
+                                        <div class="col-md-6">	
+                                            <div class="form-group">
+                                                <label>Therapeutic Area:</label>
+                                                <select class="select" name="thera_details" id="thera_details" onchange="loadIndications(this.value, '')">
 
-                                            </select>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-md-6">	
+                                            <div class="form-group">
+                                                <label>Indication:</label>
+                                                <select class="select" name="indication_details" id="indication_details">
+
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
 
-
-
-                                    <div class="col-md-6">	
-                                        <div class="form-group">
-                                            <label>Indication:</label>
-                                            <select class="select" name="indication_details" id="indication_details">
-                                               
-                                            </select>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Data Type</label>
-                                            <select name="link_type" id="link_type">
-                                                <option value="">select</option>
-                                                <?php
-                                                foreach($data_types as $dataType) {
-                                                    echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
-                                                }
+                                            <br>
+<!--                                            <select name="link_type" id="link_type">
+                                                <option value="">select</option> -->
+                                            <input type="hidden" name="counter" id="counter" value=1>
+                                            <?php
+                                            foreach ($data_types as $dataType) {
                                                 ?>
-                                            </select>
+                                                <?php echo $dataType['typeName']; ?>&nbsp;&nbsp;<input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="<?php echo $dataType['typeName']; ?>"></div><br>
+                                                <?php
+                                                // echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
+                                            }
+                                            ?>                                           
                                         </div>
                                     </div>
                                 </div>
@@ -249,73 +261,74 @@
                                             <input type="radio" name="type_edit" id="type_edit" onclick="displayEditFeedSection(this.value, '', 'click');" value="molecule">&nbsp; Molecule
                                         </div>
                                     </div>
-                                    
+
                                     <div id="molecule" class="hide">
-                                    <div class="col-md-3">	
-                                        <div class="form-group">
-                                            <label>level 1:</label>
-                                            <select class="select" name="level1_details_edit" id="level1_details_edit" onchange="loadEditFeedLevel2('', this.value)">
-                                               
-                                            </select>
-                                        </div>
-                                    </div>
+                                        <div class="col-md-3">	
+                                            <div class="form-group">
+                                                <label>level 1:</label>
+                                                <select class="select" name="level1_details_edit" id="level1_details_edit" onchange="loadEditFeedLevel2('', this.value)">
 
-                                    <div class="col-md-3">	
-                                        <div class="form-group">
-                                            <label>Level 2:</label>
-                                            <select class="select" name="level2_details_edit" id="level2_details_edit" onchange="loadEditFeedMolecule('', this.value, '');">
-                                               
-                                            </select>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-md-6">	
-                                        <div class="form-group">
-                                            <label>Molecule:</label>
-                                            <select class="select" name="molecule_details_edit" id="molecule_details_edit">
-                                                <option value=""></option>
-                                               
-                                            </select>
+                                        <div class="col-md-3">	
+                                            <div class="form-group">
+                                                <label>Level 2:</label>
+                                                <select class="select" name="level2_details_edit" id="level2_details_edit" onchange="loadEditFeedMolecule('', this.value, '');">
+
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <div class="col-md-6">	
+                                            <div class="form-group">
+                                                <label>Molecule:</label>
+                                                <select class="select" name="molecule_details_edit" id="molecule_details_edit">
+                                                    <option value=""></option>
+
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div id="indication" class="hide">
-                                    <div class="col-md-6">	
-                                        <div class="form-group">
-                                            <label>Therapeutic Area:</label>
-                                            <select class="select" name="thera_details_edit" id="thera_details_edit" onchange="loadEditIndications(this.value, '')">
-          
-                                            </select>
+                                        <div class="col-md-6">	
+                                            <div class="form-group">
+                                                <label>Therapeutic Area:</label>
+                                                <select class="select" name="thera_details_edit" id="thera_details_edit" onchange="loadEditIndications(this.value, '')">
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-md-6">	
+                                            <div class="form-group">
+                                                <label>Indication:</label>
+                                                <select class="select" name="indication_details_edit" id="indication_details_edit">
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
 
-
-
-                                    <div class="col-md-6">	
-                                        <div class="form-group">
-                                            <label>Indication:</label>
-                                            <select class="select" name="indication_details_edit" id="indication_details_edit">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Link Type</label>
-                                            <select name="link_type" id="link_type">
-                                                <option value="">select</option>
+                                            <label>Data Type</label><br>
+                                            <input type="hidden" name="counter" id="counter" value=1>
+                                            <?php
+                                            foreach ($data_types as $dataType) {                                                
+                                            ?>
+                                                <?php echo $dataType['typeName']; ?>&nbsp;&nbsp;<input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="edit_add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="edit_<?php echo $dataType['typeName']; ?>"></div><br>
                                                 <?php
-                                                foreach($data_types as $dataType) {
-                                                    echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
-                                                }
-                                                ?>
-                                            </select>
+                                            }
+                                            ?>                                           
+
                                         </div>
                                     </div>
-                                    
+
                                 </div>
 
 
