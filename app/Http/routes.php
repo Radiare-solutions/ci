@@ -64,7 +64,7 @@ Route::post('load_molecule_detail/{id}/{id1}/{id2}', 'Feed_Management_Controller
 /* end of soumya codes */
 
 /* start of mohana priya codes */
-Route::get('/clinical_trial', 'ClinicalController@Extract');
+Route::get('/clinical_trial/{id}', 'ClinicalController@Extract');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
 /* end of mohana priya codes */
 

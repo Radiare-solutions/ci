@@ -1210,6 +1210,7 @@ function loadEditIndications(tid, iid) {
 function loadLevels(bg, id1='') {
     if(id1 == '')
         id1 = null;
+    console.log("id : " + bg + " - " + id1);
     var url = "load_level1_detail/" + bg + "/" + id1;
     $.ajax({
         type: 'post',
@@ -1291,9 +1292,9 @@ function loadEditFeedLevel2(l1id, l2id) {
 
 function loadFeedMolecule(l1id='', l2id='', mid = '') {
     if(l1id == '')
-        var l1id = $('form#add_feed #level1_details').val();
+        var l1id = $('form #level1_details').val();
     if(l2id == '')
-        var l2id = $('form#add_feed #level2_details').val();
+        var l2id = $('form #level2_details').val();
     if(mid == '')
         var mid = null;
     var url = "load_molecule_detail/" + l1id + "/" + l2id + "/" + mid;
@@ -2043,4 +2044,18 @@ function delete_condition(id) {
     } else {
         console.log("you pressed cancel");
     }
+}
+
+function add_client_setup() {
+    console.log("setting up client");
+    var url = "clinical_trial/"+"adalimumab";
+    $.ajax({
+            type: 'get',
+            url: url,
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
 }

@@ -31,26 +31,26 @@ class IndicationController extends Controller {
 //               echo '<pre>';
 //               print_r($indicationDetail);
 //               exit;
-               $testing['Name'] = $therapyDetail['indication']['indication'];
-               $testing['_id'] = (string) $therapyDetail['indication']['_id'];
-               array_push($test, $testing);
+            $testing['Name'] = $therapyDetail['indication']['indication'];
+            $testing['_id'] = (string) $therapyDetail['indication']['_id'];
+            array_push($test, $testing);
             //}
             $ob->indicationName = $test;
             array_push($listDetails, $ob);
-            /*$details['therapyName'] = $therapyDetail['attributes']['Therapy'];
-            $details['_id'] = $therapyDetail['attributes']['_id'];
-            $ob = new \stdClass();
-            $test = array();
-            $ob->therapyName = $details['therapyName'];
-            $ob->_id = $details['_id'];
-            foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
-               $testing['Name'] = $indicationDetail['Name'];
-               $testing['_id'] = (string) $indicationDetail['_id'];
-               array_push($test, $testing);
-            }
-            $ob->indicationName = $test;
-            array_push($listDetails, $ob);
-            //exit; */
+            /* $details['therapyName'] = $therapyDetail['attributes']['Therapy'];
+              $details['_id'] = $therapyDetail['attributes']['_id'];
+              $ob = new \stdClass();
+              $test = array();
+              $ob->therapyName = $details['therapyName'];
+              $ob->_id = $details['_id'];
+              foreach ($therapyDetail['attributes']['Indication'] as $indicationDetail) {
+              $testing['Name'] = $indicationDetail['Name'];
+              $testing['_id'] = (string) $indicationDetail['_id'];
+              array_push($test, $testing);
+              }
+              $ob->indicationName = $test;
+              array_push($listDetails, $ob);
+              //exit; */
             //$therapyObj = Therapeutic::find($therapyDetail['attributes']['Therapy']);
         }
 //        echo '<pre>';
@@ -61,7 +61,7 @@ class IndicationController extends Controller {
 
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'indicationName' => 'required',
+                    'indicationName' => 'required|uk_phone',
                     'therapyName' => 'required',
         ]);
 
@@ -74,26 +74,26 @@ class IndicationController extends Controller {
                         'message' => $errors
                             ], 422);
         } else {
-            $obj = new Indication();                
-            $str =  $this->indicationExists($request);              
+            $obj = new Indication();
+            $str = $this->indicationExists($request);
 
             return response()->json([
                         'success' => true,
-                        'message' => "Indication ".$str." Successfully"
+                        'message' => "Indication " . $str . " Successfully"
                             ], 200);
         }
     }
 
-    public function indicationExists($request) {             
-        $obj = new Indication();                
-        return $obj->indicationExists($request);                        
+    public function indicationExists($request) {
+        $obj = new Indication();
+        return $obj->indicationExists($request);
     }
 
     public function load($tid, $iid) {
         $obj = new Indication();
-        return $obj->loadIndicationDetails($tid, $iid);        
+        return $obj->loadIndicationDetails($tid, $iid);
     }
-    
+
     public function removeIndication($tid, $iid) {
         $obj = new Indication();
         return $obj->removeIndication($tid, $iid);

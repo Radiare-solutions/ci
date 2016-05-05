@@ -110,4 +110,9 @@ return [
 
     'attributes' => [],
 
+    'custom' => [
+    'phone' => [
+        'uk_phone' => 'Please enter UK phone number which starts with +44',
+    ],
+],
 ];
