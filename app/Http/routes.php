@@ -132,6 +132,10 @@ Route::post('edit_condition', 'Verify\ConditionController@store');
 Route::post('delete_condition/{id}', 'Verify\ConditionController@removeCondition');
 /* end of verify codes */
 
+/* start of client setup codes */
+Route::get('client_setup', 'Client\ClientSetupController@index');
+/* end of client setup codes */
+
 
 /* start of clinical trial codes */
 Route::get('study_summary', 'ClinicalTrials\StudySummaryController@loadStudySummary');

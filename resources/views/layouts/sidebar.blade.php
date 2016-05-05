@@ -15,7 +15,7 @@
                     <li <?php if($page == 'data_type') echo "class='active'";?>><a href="datatype_mgmt">Data Types</a></li>
                 </ul>
             </li>
-            <li><a href="db-setup.html"><i class="icon-steam"></i> <span>Client Setup</span></a></li>
+            <li <?php if($page == 'client_setup') echo "class='active'";?>><a href="client_setup"><i class="icon-steam"></i> <span>Client Setup</span></a></li>
             <li>
                 <a href="#"><i class="icon-database-arrow"></i> <span>Verify</span></a>
                 <ul>

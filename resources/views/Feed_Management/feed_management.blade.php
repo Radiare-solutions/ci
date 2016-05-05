@@ -196,13 +196,7 @@
                                             ?>                                           
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label>Add RSS Link:</label>
-                                    <textarea rows="2" cols="5" class="form-control" placeholder="Enter RSS Link here" name='rss_feed'></textarea>
-                                </div>
+                                </div>                              
 
                                 <div class="text-right">
                                     <button type="button" id="add_feed_details" class="btn btn-primary" onclick="add_new_feed();">Submit<i class="icon-arrow-right14 position-right"></i></button>
@@ -329,13 +323,7 @@
                                         </div>
                                     </div>
 
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label>Add RSS Link:</label>
-                                    <textarea rows="2" cols="5" class="form-control" placeholder="Enter RSS Link here" name='rss_feed_edit' id="rss_feed_edit"></textarea>
-                                </div>
+                                </div>                               
 
                                 <div class="text-right">
                                     <button type="button" class="btn btn-primary" onclick="update_feed()">Update<i class="icon-arrow-right14 position-right"></i></button>
