@@ -7,6 +7,12 @@ use App\Models\RssModel as RssModel;
 
 use App\Models\ClinicalTrialModel as ClinicalTrialModel;
 
+use App\Models\ConditionModel as ConditionModel;
+
+use App\Models\SponserModel as SponserModel;
+
+use App\Models\DrugModel as DrugModel;
+
 use App\Http\Requests;
 
 /* 
@@ -23,7 +29,10 @@ class ClinicalController extends Controller
    public function Extract(){
        set_time_limit(0);
        ini_set('max_execution_time', 0);
-       $api_query="https://clinicaltrials.gov/search?term=adalimumab&displayxml=true";
+       $molecule_or_indication=urlencode("adalimumab");
+       
+       $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       
        $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
        
@@ -34,6 +43,8 @@ class ClinicalController extends Controller
        $rss_feed_type="Clinical Trial";
        
        $RssModel= new RssModel();
+       $ClinicalTrialModel= new ClinicalTrialModel();
+       
        $feedExist=$RssModel->RssFeedselect($api_query,$rss_feed_type);
        if($feedExist==null){
 
@@ -44,7 +55,7 @@ class ClinicalController extends Controller
            $rss_feed_id=$feedExist->_id;
        }
            
-            $clinical_api_query=file_get_contents("https://clinicaltrials.gov/search?term=".urlencode("adalimumab")."&displayxml=true&count=2");
+            $clinical_api_query=file_get_contents("$api_query"."&count=1");
             $clinical_study_xml=simplexml_load_string($clinical_api_query);
 
             
@@ -52,15 +63,9 @@ class ClinicalController extends Controller
                 
                if(isset($answer->url)) {
                $url=(string)$answer->url; 
+
                $title=(string)$answer->title; 
                $status_name=(string)$answer->status; 
-               echo "url : ".$url."<br>";
-               if(empty($url))
-                   echo "empty<br>";
-               else {
-                   echo "proceed<br>";
-               }
-               
                
                         $result_url="$url?displayxml=true";
 
@@ -134,7 +139,7 @@ class ClinicalController extends Controller
                         
                         $intervention_implode=implode("<br/>",$inter_arr);
                         $intervention_array1=$clinical_content_ext->intervention;
-                        $detailed_intervention=array();
+                        $detailed_intervention_array=array();
                         foreach($intervention_array1 as $inter_item1) {
                         $intervention_type=(string)$inter_item1->intervention_type;
                         $intervention_name=(string)$inter_item1->intervention_name;
@@ -164,18 +169,22 @@ class ClinicalController extends Controller
                         if(isset($current_div->parentNode->parentNode->nodeValue)) {
 
                         $result_next[]=$current_div->parentNode->parentNode->nodeValue;
-                        $implode_array=implode("<br/>", $result_next);
-                        $explode_array=explode("�", $implode_array);
+                        $implode_array=implode("<br/>", $result_next);     
                         
-                        $primary_text1=trim(str_replace("[1]","",$explode_array[0]));
-                        $second_array=explode("[2]",$explode_array[1]);
-                        $primary_res1=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $second_array[0])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $second_array[0])));
-                        $primary_text2=trim($second_array[1]);
-
-                        $third_array=explode("[3]",$explode_array[2]);
-                        $primary_res2=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $third_array[0])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $third_array[0])));
-                        $primary_text3=trim($third_array[1]);
-                        $primary_res3=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $explode_array[3])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $explode_array[3])));
+                        $explode_array=explode("[2]", $implode_array);
+                        
+                        $res_pri=explode(":",trim(str_replace("[1]","",$explode_array[0])));
+                        $primary_text1=$res_pri[0];
+                        $primary_res1=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $res_pri[1])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $res_pri[1])));
+                        
+                        $second_array=explode("[3]",$explode_array[1]);
+                        $res_pri1=explode(":",trim($second_array[0]));
+                        $primary_text2=$res_pri1[0];
+                        $primary_res2=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $res_pri1[1])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $res_pri1[1])));
+                        
+                        $res_pri2=explode(":",trim($second_array[1]));
+                        $primary_text3=$res_pri2[0];
+                        $primary_res3=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $res_pri2[1])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $res_pri2[1])));
                         }
                         }
                         
@@ -197,9 +206,9 @@ class ClinicalController extends Controller
                         $serious_event_values=$serious_event_array[1];
                           
                         $implode_serious=implode("", $this->saveHTML($html_extraction_event,"indent1",3));
-                        $implode_serious_cnt=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',$implode_serious);
-                        $implode_serious_cnt=preg_replace('/<\/?a[^>]*>/','',$implode_serious_cnt);
-                        $implode_serious_cnt=str_replace("Hide Serious Adverse Events","",$implode_serious_cnt);
+                        $implode_serious_cnt2=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',$implode_serious);
+                        $implode_serious_cnt1=preg_replace('/<\/?a[^>]*>/','',$implode_serious_cnt2);
+                        $implode_serious_cnt=str_replace("Hide Serious Adverse Events","",$implode_serious_cnt1);
                          
                         // getting other adverse events
                         $html_extraction_event1=file_get_contents("$study_result_url?sect=X40156#othr");
@@ -211,19 +220,36 @@ class ClinicalController extends Controller
                         $implode_other_cnt=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',utf8_decode(implode("", $this->saveHTML($implode_other,"header3 indent2",1))));
                         
                         $html_extraction_outcome=file_get_contents("$study_result_url?sect=X01256#all");
-                        $detailed_outcome_measure=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',utf8_decode(implode("", $this->saveHTML($html_extraction_outcome,"indent1",2)))); 
-                        $detailed_outcome_measure=iconv(mb_detect_encoding($detailed_outcome_measure, mb_detect_order(), true), "UTF-8", $detailed_outcome_measure);
+                        $detailed_outcome_measure1=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',utf8_decode(implode("", $this->saveHTML($html_extraction_outcome,"indent1",2)))); 
+                        $detailed_outcome_measure=iconv(mb_detect_encoding($detailed_outcome_measure1, mb_detect_order(), true), "UTF-8", $detailed_outcome_measure1);
 
                         $serious_adv_val=array("key"=>$serious_event_header,"value"=>$serious_event_values);
                         $other_adv_val=array("key"=>$other_event_header,"value"=>$other_event_values);
                          
-                        $ClinicalTrialModel= new ClinicalTrialModel();
+                        $SponserModel= new SponserModel();
+                        $sponser_id=$SponserModel->AddSponser($sponsor_name);
                         
-                        $ClinicalTrialModel->ClinicalTrialInsert($rss_feed_id,$nct_id,$title,$sponsor_name,$collaborator_name,$drug_name,$phase,$condition_name,$intervention_implode,
+                        $DrugModel= new DrugModel();
+                        $drug_id=$DrugModel->AddDrug($drug_name);
+                        
+                        $ConditionModel= new ConditionModel();
+                        $condition_id=$ConditionModel->AddCondition($condition_name);
+                        
+               $UrlExist=$ClinicalTrialModel->FetchClinicalTrial($url,$molecule_or_indication);
+               if($UrlExist==null){        
+                        $ClinicalTrialModel->ClinicalTrialInsert($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
                         $status_name,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
-                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure);
+                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponser_id);
                         
+               }else{
+//                        $clinical_trial_id=$UrlExist->_id;
+                        $ClinicalTrialModel->ClinicalTrialUpdate($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
+                        $status_name,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
+                        $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
+                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponser_id);
+                          
+               }
                }
             }
            
@@ -233,6 +259,7 @@ class ClinicalController extends Controller
    public function adverseEvent($html){
         
        $adverse_table_a=$this->DOM($html);
+       
         //fetching serious adverse header name from html content using class name of html tag
        $adverse_table_spans = $adverse_table_a->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'header3 brt bold_events_color')]");
         $ad_result_next = array();
@@ -243,12 +270,10 @@ class ClinicalController extends Controller
        }
 
        $implode_array=implode("<br/>", $ad_result_next);
-       $exp_array=explode("�", strip_tags($implode_array));
-        foreach ($exp_array as $value) {
-             $value1=preg_replace('#\x{00a0}#','', $value); // removing non breaking space from array values
-             $val_array[]=trim($value1);
-        }
-        $explode_array=  array_values(array_filter($val_array, function($val) {return $val!=='';}));  
+       $exp_array =explode("<br/>",preg_replace('#\x{00a0}#','<br/>', utf8_decode(preg_replace("/\s/",'',$implode_array))));
+       
+       $explode_array=  array_values(array_filter($exp_array, function($val) {return $val!=='';}));  
+ 
         //fetching serious adverse total values from html content using class name of html tag
         $result_second_element=array();
         if(isset($adverse_current_div->parentNode->parentNode)) {
@@ -267,16 +292,13 @@ class ClinicalController extends Controller
           
         }
         }
+        
        $implode_val_array=implode("<br/>", $result_second_element);
-       $exp_val_array=explode("�", preg_replace("&# participants affected / at risk&","", strip_tags($implode_val_array)));
-       
-        foreach ($exp_val_array as $value) {
-             $exp_val=preg_replace('#\x{00a0}#','', $value);
-             $second_val_array[]=trim($exp_val);
-        }       
-       $explode_val_array= array_values(array_filter($second_val_array, function($val) {return $val!=='';}));
-        //echo "<pre>";var_dump($explode_val_array);echo "</pre>";
-       
+       $exp_array =explode("<br/>",preg_replace('#\x{00a0}#','<br/>', utf8_decode(preg_replace("/\s/",'',preg_replace("&# participants affected / at risk&","", strip_tags($implode_val_array))))));
+     
+       $explode_val_array= array_values(array_filter($exp_array, function($val) {return $val!=='';}));
+//        echo "<pre>";var_dump($explode_val_array);echo "</pre>";
+//       exit();
        $odd = array();
         $even = array();
         foreach ($explode_val_array as $k => $v) {
@@ -293,7 +315,8 @@ class ClinicalController extends Controller
         }
         
         $two_array=array($explode_array,$second_elm_val);
-
+//        var_dump($two_array);
+//exit();
         return $two_array;
    }
    

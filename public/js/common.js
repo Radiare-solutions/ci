@@ -1101,8 +1101,10 @@ function edit_role_submit() {
 
 //Feed Management
 
-function displayFeedSection(id) {
+function displayFeedSection(id, gid, call, id1,id2) {
     var bg = $('#bg_details').val();
+    if((bg == "")||(bg==null))
+        bg = gid;
     console.log("bg : " + bg);
     if (id == 'indication') {
         $('#indication').removeClass("hide");
@@ -1112,7 +1114,7 @@ function displayFeedSection(id) {
     if (id == 'molecule') {
         $('#molecule').removeClass("hide");
         $('#indication').addClass("hide");
-        loadLevels(bg);
+        loadLevels(bg, id1);
     }
 }
 
@@ -1205,8 +1207,10 @@ function loadEditIndications(tid, iid) {
     }
 }
 
-function loadLevels(bg) {
-    var url = "load_level1_detail/" + bg + "/" + null;
+function loadLevels(bg, id1='') {
+    if(id1 == '')
+        id1 = null;
+    var url = "load_level1_detail/" + bg + "/" + id1;
     $.ajax({
         type: 'post',
         url: url,
@@ -1243,8 +1247,10 @@ function loadEditLevels(bg, l1id) {
     }
 }
 
-function loadFeedLevel2(l1id) {
-    var url = "load_level2_detail/" + l1id + "/null";
+function loadFeedLevel2(l1id, l2id='') {
+    if(l2id == '')
+        l2id = null;
+    var url = "load_level2_detail/" + l1id + "/" + l2id;
     $.ajax({
         type: 'post',
         url: url,
@@ -1283,10 +1289,14 @@ function loadEditFeedLevel2(l1id, l2id) {
 
 }
 
-function loadFeedMolecule() {
-    var l1id = $('form #level1_details').val();
-    var l2id = $('form #level2_details').val();
-    var url = "load_feed_molecules/" + l1id + "/" + l2id;
+function loadFeedMolecule(l1id='', l2id='', mid = '') {
+    if(l1id == '')
+        var l1id = $('form#add_feed #level1_details').val();
+    if(l2id == '')
+        var l2id = $('form#add_feed #level2_details').val();
+    if(mid == '')
+        var mid = null;
+    var url = "load_molecule_detail/" + l1id + "/" + l2id + "/" + mid;
     $.ajax({
         type: 'post',
         url: url,
@@ -1331,9 +1341,11 @@ function loadEditFeedMolecule(l1id, l2id, mid) {
     }
 }
 
-function loadBG(cid) {
+function loadBG(cid, bgid='') {
     console.log("cid : " + cid);
-    var url = "load_bg/" + cid + "/" + null;
+    if(bgid =='')
+        bgid = null;
+    var url = "load_bg/" + cid + "/" + bgid;
     $.ajax({
         type: 'post',
         url: url,
@@ -1706,18 +1718,18 @@ function load_add_more(parent_div, value) {
     var id = parent_div + count
     var child_div = id;
     console.log("child div : " + child_div);
-    $('#edit_' + parent_div).append("<span id='" + child_div + "'><input type='text' value="+value+" name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('edit_" + parent_div + "','" + id + "');>Remove</a><br></span>");
+    $('#edit_' + parent_div).append("<span id='" + child_div + "'><br><input type='text' value="+value+" name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('edit_" + parent_div + "','" + id + "');>Remove</a><br></span>");
     count++;
     $('#counter').val(count);
 }
 
-function add_more(parent_div) {
+function add_more(parent_div, val='') {
     console.log("div : " + parent_div);
     var count = $('#counter').val();
     var id = parent_div + count
     var child_div = id;
     console.log("child div : " + child_div);
-    $('#' + parent_div).append("<span id='" + child_div + "'><input type='text' name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('" + parent_div + "','" + id + "');>Remove</a><br></span>");
+    $('#' + parent_div).append("<span id='" + child_div + "'><br><input type='text' value='"+val+"' name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('" + parent_div + "','" + id + "');>Remove</a><br></span>");
     count++;
     $('#counter').val(count);
 }
@@ -1728,7 +1740,7 @@ function edit_add_more(parent_div) {
     var id = parent_div + count
     var child_div = id;
     console.log("child div : " + child_div);
-    $('#edit_' + parent_div).append("<span id='" + child_div + "'><input type='text' name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('edit_" + parent_div + "','" + id + "');>Remove</a><br></span>");
+    $('#edit_' + parent_div).append("<span id='" + child_div + "'><br><input type='text' name='" + parent_div + "[]' id='" + id + "'>&nbsp;&nbsp;<a href='javascript:void(0);' onclick=remove_field('edit_" + parent_div + "','" + id + "');>Remove</a><br></span>");
     count++;
     $('#counter').val(count);
 }
@@ -1738,7 +1750,297 @@ function remove_field(parent_div, child_div) {
     $("#" + parent_div).find("#" + child_div).remove();
 }
 
-function show_divs() {
-
+function load_previous_feed(fid) {
+    console.log("fid : " + fid);    
+    load_last_feed(fid);
 }
 
+function load_last_feed(id) {
+//   alert(id);
+    console.log("id : " + id);
+    var url = "load_feed/" + id;
+    $.ajax({
+        type: 'post',
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            var details = (data);
+            console.log(details);
+                        
+            $("form#add_feed #client_details option[value='" + details.clientID + "']").prop('selected', true);
+            $("form#add_feed #select2-client_details-container").html(details.clientName);
+            loadBG(details.clientID, details.groupID);
+            //$("form#edit_feed #bg_details_edit option[value='"+details.groupID+"']").attr("selected","selected");
+            // $("form#edit_feed #bg_details_edit ").val(details.groupID).attr("selected");
+            // $("form#edit_feed #bg_details_edit option[value=" + details.groupID + "]").attr('selected', 'selected');
+            $("form#add_feed #bg_details option[value='" + details.groupID + "']").prop('selected', true);
+            $("form#add_feed #select2-bg_details-container").html(details.groupName);
+            $("form#add_feed #type").attr('checked', details.type);
+            if (details.type == "molecule") {
+                displayFeedSection(details.type, details.groupID, 'pgm', details.level1ID, details.level2ID);
+                // $("form#edit_feed #level1_details_edit option[value='" + details.level1ID + "']").prop('selected', true);
+                $("form#add_feed #select2-level1_details-container").html(details.level1Name);
+                loadFeedLevel2(details.level1ID, details.level2ID);
+                // $("form#edit_feed #level2_details_edit option[value='" + details.level2ID + "']").prop('selected', true);
+                $("form#add_feed #select2-level2_details-container").html(details.level2Name);
+                loadFeedMolecule(details.level1ID, details.level2ID, details.moleculeID);
+                $("form#add_feed #select2-molecule_details-container").html(details.moleculeName);
+            }
+            if (details.type == "indication") {
+                displayFeedSection(details.type, details.groupID, 'pgm', details.therapeuticID, details.indicationID);
+                $("form#add_feed #select2-thera_details-container").html(details.therapeuticName);
+                loadIndications(details.therapeuticID, details.indicationID);
+                $("form#add_feed #select2-indication_details-container").html(details.indicationName);
+            }
+            var dataTypes = details.data_types.split(",");
+            console.log(dataTypes);
+
+            for (var i = 0; i < dataTypes.length; i++) {
+                console.log("hello : " + (dataTypes[i]));
+                var dtypes = details[dataTypes[i]];
+                var dtype = dtypes.split(",");
+                for(var j=0;j<dtype.length;j++) {
+                    add_more(dataTypes[i], dtype[j]);
+                }
+            }
+            $("form#add_feed #rss_feed").val(details.feedLink);
+        },
+        error: function (data) {
+            
+        }
+    });
+}
+
+function load_edit_sponsor(id) {
+    var url = "load_sponsor/" + id;
+    $.ajax({
+        type: 'post',
+        url: url,
+        success: function (data) {
+            var details = (data);
+            $('form#edit_sponsor #editSponsorName').val(details);
+            $('form#edit_sponsor #sponsorID').val(id);
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_sponsor #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_sponsor #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function edit_sponsor_submit() {
+    console.log("submit edit_data_type");
+    var url = "edit_sponsor";
+    var data = $('#edit_sponsor').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#edit_sponsor #errorResponse').removeClass("alert alert-danger");
+            $('form#edit_sponsor #errorResponse').show().html("Sponsor Updated successfully");
+            $('form#edit_sponsor #errorResponse').addClass("alert alert-success");
+            window.location.reload();
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_sponsor #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_sponsor #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function delete_sponsor(id) {
+    var r = confirm("Are you sure to delete this record?")
+    if (r == true) {
+        var url = "delete_sponsor/" + id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
+    } else {
+        console.log("you pressed cancel");
+    }
+}
+
+function load_edit_drug(id) {
+    var url = "load_drug/" + id;
+    $.ajax({
+        type: 'post',
+        url: url,
+        success: function (data) {
+            var details = (data);
+            $('form#edit_drug #editDrugName').val(details);
+            $('form#edit_drug #drugID').val(id);
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_drug #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_drug #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function edit_drug_submit() {
+    console.log("submit edit_data_type");
+    var url = "edit_drug";
+    var data = $('#edit_drug').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#edit_drug #errorResponse').removeClass("alert alert-danger");
+            $('form#edit_drug #errorResponse').show().html("drug Updated successfully");
+            $('form#edit_drug #errorResponse').addClass("alert alert-success");
+            window.location.reload();
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_drug #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_drug #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function delete_drug(id) {
+    var r = confirm("Are you sure to delete this record?")
+    if (r == true) {
+        var url = "delete_drug/" + id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
+    } else {
+        console.log("you pressed cancel");
+    }
+}
+
+function load_edit_condition(id) {
+    var url = "load_condition/" + id;
+    $.ajax({
+        type: 'post',
+        url: url,
+        success: function (data) {
+            var details = (data);
+            $('form#edit_condition #editConditionName').val(details);
+            $('form#edit_condition #conditionID').val(id);
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_condition #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_condition #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function edit_condition_submit() {
+    console.log("submit edit_data_type");
+    var url = "edit_condition";
+    var data = $('#edit_condition').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            // success logic
+            $('form#edit_condition #errorResponse').removeClass("alert alert-danger");
+            $('form#edit_condition #errorResponse').show().html("condition Updated successfully");
+            $('form#edit_condition #errorResponse').addClass("alert alert-success");
+            window.location.reload();
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#edit_condition #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#edit_condition #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+}
+
+function delete_condition(id) {
+    var r = confirm("Are you sure to delete this record?")
+    if (r == true) {
+        var url = "delete_condition/" + id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
+    } else {
+        console.log("you pressed cancel");
+    }
+}

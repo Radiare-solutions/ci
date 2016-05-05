@@ -115,6 +115,23 @@ Route::post('remove_molecule_entry/{id}/{id1}', ['uses' => 'Client\ClientControl
 Route::post('edit_bg_entry/{id}/{id1}', ['uses' => 'Client\ClientController@editBGEntry']);
 Route::post('edit_bg_submit', 'Client\ClientController@storeEditGroup');
 
+/* start of verify codes */
+Route::get('sponsor_mgmt', 'Verify\SponsorController@index');
+Route::post('load_sponsor/{id}', 'Verify\SponsorController@loadSponsor');
+Route::post('edit_sponsor', 'Verify\SponsorController@store');
+Route::post('delete_sponsor/{id}', 'Verify\SponsorController@removeSponsor');
+
+Route::get('drug_mgmt', 'Verify\DrugController@index');
+Route::post('load_drug/{id}', 'Verify\DrugController@loadDrug');
+Route::post('edit_drug', 'Verify\DrugController@store');
+Route::post('delete_drug/{id}', 'Verify\DrugController@removeDrug');
+
+Route::get('condition_mgmt', 'Verify\ConditionController@index');
+Route::post('load_condition/{id}', 'Verify\ConditionController@loadCondition');
+Route::post('edit_condition', 'Verify\ConditionController@store');
+Route::post('delete_condition/{id}', 'Verify\ConditionController@removeCondition');
+/* end of verify codes */
+
 
 /* start of clinical trial codes */
 Route::get('study_summary', 'ClinicalTrials\StudySummaryController@loadStudySummary');

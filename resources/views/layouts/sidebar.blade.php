@@ -19,9 +19,9 @@
             <li>
                 <a href="#"><i class="icon-database-arrow"></i> <span>Verify</span></a>
                 <ul>
-                    <li><a href="product.html">Drug</a></li>
-                    <li><a href="condition.html">Condition</a></li>
-                    <li><a href="sponsor.html">Sponsor</a></li>
+                    <li <?php if($page == 'drug') echo "class='active'";?>><a href="drug_mgmt">Drug</a></li>
+                    <li <?php if($page == 'condition') echo "class='active'";?>><a href="condition_mgmt">Condition</a></li>
+                    <li <?php if($page == 'sponsor') echo "class='active'";?>><a href="sponsor_mgmt">Sponsor</a></li>
                 </ul>
             </li>
 

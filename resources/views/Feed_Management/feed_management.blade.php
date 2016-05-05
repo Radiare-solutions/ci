@@ -19,7 +19,7 @@
             </div>
 
             <hr class="no-margin"/>	
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_form_add"> <i class="icon-plus3"></i>  Add Feed</button>
+            <button type="button" onclick="load_previous_feed('<?php echo $lastID;?>');" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_form_add"> <i class="icon-plus3"></i>  Add Feed</button>
             <div id="message_section" style="display: none;">
                 <hr class="no-margin"/>
             </div>
@@ -189,7 +189,7 @@
                                             <?php
                                             foreach ($data_types as $dataType) {
                                                 ?>
-                                                <?php echo $dataType['typeName']; ?>&nbsp;&nbsp;<input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="<?php echo $dataType['typeName']; ?>"></div><br>
+                                            <b><?php echo $dataType['typeName']; ?></b><br><input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="<?php echo $dataType['typeName']; ?>"></div><br>
                                                 <?php
                                                 // echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
                                             }
@@ -321,7 +321,7 @@
                                             <?php
                                             foreach ($data_types as $dataType) {                                                
                                             ?>
-                                                <?php echo $dataType['typeName']; ?>&nbsp;&nbsp;<input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="edit_add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="edit_<?php echo $dataType['typeName']; ?>"></div><br>
+                                            <b><?php echo $dataType['typeName']; ?></b><br><input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="edit_add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="edit_<?php echo $dataType['typeName']; ?>"></div><br>
                                                 <?php
                                             }
                                             ?>                                           

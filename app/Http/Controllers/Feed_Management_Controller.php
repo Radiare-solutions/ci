@@ -28,6 +28,7 @@ class Feed_Management_Controller extends Controller {
         $types = DataTypes::where('isActive', 1)->get();
         $feeds = array();
         $clientOb = new Client();
+        $lastID = "";
         foreach ($listfeedObj as $feed) {
             $feedAttr = $feed['attributes'];
             $names = $clientOb->getBGName($feedAttr['client_id'], $feedAttr['bg_id']);
@@ -49,6 +50,7 @@ class Feed_Management_Controller extends Controller {
             $tempArr['bgName'] = $names['groupName'];
             $tempArr['data_type'] = $dataObj['typeName'];
             //$tempArr['rssLink'] = $feedAttr['rss_feed_link'];            
+            $lastID = $tempArr['_id'];
             $arr = array();
             foreach ($types as $typeDetail) {
                 $typeAttr = $typeDetail['attributes'];
@@ -59,7 +61,8 @@ class Feed_Management_Controller extends Controller {
         return view('Feed_Management/feed_management', array(
             'feeds' => $feeds,
             'client_list' => $clientObj,
-            'data_types' => $dataTypeObj
+            'data_types' => $dataTypeObj,
+            'lastID' => $lastID
                 )
         );
     }
