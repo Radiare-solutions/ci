@@ -55,7 +55,7 @@
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li class="dropdown-header">Options</li>
                                         <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="load_edit_role('<?php echo $role->_id;?>');"><i class="icon-pencil7"></i>Edit entry</a></li>
-                                        <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                        <li><a href="javascript:void(0);" onclick="delete_role('<?php echo $role->_id;?>')"><i class="icon-bin"></i>Remove entry</a></li>
                                     </ul>
                                 </li>
                             </ul>

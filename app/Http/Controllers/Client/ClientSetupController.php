@@ -9,6 +9,7 @@ use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
 
 use App\Models\Client\Client;
+use App\Models\Client\ClientSetup;
 /**
  * Description
  *
@@ -28,6 +29,31 @@ class ClientSetupController extends Controller {
         return view("client/setup/index", array(
             'clientsList' => $listArray
         ));
+    }
+    
+    public function store(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    // 'RoleName' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $errors = json_decode($errors);
+
+            return response()->json([
+                        'success' => false,
+                        'message' => $errors
+                            ], 422);
+        } else {
+            $roleObj = new ClientSetup();
+            $roleObj->add($request);
+            
+            return response()->json([
+                        'success' => true,
+                        'trial' => $request->feed_url,
+                        'message' => "Role Added Successfully"
+                            ], 200);
+        }
     }
     
 }

@@ -146,6 +146,16 @@ class ModelHelper extends Eloquent {
             $str.= "<option value='" . $id . "' data-name='" . $name . "' ".$clas.">" . $name . "</option>";
         }
         return $str;
-    }        
+    }   
+    
+    public function getRoleName($rid) {
+        $this->therapyID = new \MongoDB\BSON\ObjectId($rid);
+        $roleObj = Role_Management_Models::where('Role_Id', $this->therapyID)->first();
+        return $roleObj->attributes['Role_Name'];
+    }
+    
+    public function checkIndicationExists() {
+        
+    }
     
 }

@@ -898,6 +898,50 @@ function delete_molecule_entry(bgid, mid) {
     }
 }
 
+function delete_user(id) {
+    var r = confirm("Are you sure to delete this record?")
+    if (r == true) {
+        console.log("you pressed ok");
+        var url = "remove_user/" + id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
+    } else {
+        console.log("you pressed cancel");
+    }
+}
+
+function delete_role(id) {
+    var r = confirm("Are you sure to delete this record?")
+    if (r == true) {
+        console.log("you pressed ok");
+        var url = "remove_role/" + id;
+        $.ajax({
+            type: 'post',
+            url: url,
+            //dataType: 'json',
+            success: function (data) {
+                var details = (data);
+                console.log(details);
+                window.location.reload();
+            },
+            error: function (data) {
+            }
+        });
+    } else {
+        console.log("you pressed cancel");
+    }
+}
+
 function add_new_role() {
 //    alert("DFDSFGS");
     console.log("submit role");
@@ -965,9 +1009,9 @@ function new_user() {
         }
     });
 }
-function edit_user_submit(uid) {
+function edit_user_submit() {
     console.log("submit edit_user");
-    var url = "edit_user_submit/" + uid;
+    var url = "edit_user_submit";
     var data = $('#edit_user').serialize();
     $.ajax({
         type: 'post',
@@ -1009,6 +1053,7 @@ function edit_user_form(id) {
         success: function (data) {
             var details = (data);
             console.log(details.User_Name);
+            $('#modal_form_edit form#edit_user #editUserID').val(id);
             $('#modal_form_edit form#edit_user #Edit_User_Name').val(details.User_Name);
             $('#modal_form_edit form#edit_user #Edit_Email_Id').val(details.Email_Id);
             $('#modal_form_edit form#edit_user #Edit_Password').val(details.Password);
@@ -2048,6 +2093,66 @@ function delete_condition(id) {
 
 function add_client_setup() {
     console.log("setting up client");
+    var url = "add_client_setup";
+        var type = $('#type').val();
+//        var drugName = "";
+//        if(type == "indication")
+//        drugName = $("#select2-indication_details-container").text();
+//    
+//    else
+//        drugName = $("#select2-molecule_details-container").text();
+//    
+//    
+   var data = $('#client_setup').serialize();
+//
+//        
+//        console.log("type : " + +type+" - " +drugName);
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        
+        success: function (data) {
+            // success logic
+            console.log(data.trial);
+            $('form#client_setup #errorResponse').removeClass("alert alert-danger");
+            $('form#client_setup #errorResponse').show().html("Setting up client... please wait");
+            $('form#client_setup #errorResponse').addClass("alert alert-success");
+            //var url = "clinical_trial/"+"adalimumab";
+            var url = "clinical_trial";
+            $.ajax({
+                type: 'post',
+                url: url,
+                async:false,
+                data: {trial:data.trial},
+                crossDomain: true,
+                dataType: 'json',
+                jsonp:false,
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (data) {
+                }
+            });
+            window.location.reload(); 
+        },
+        error: function (data) {
+            if (typeof data.responseJSON != "undefined")
+            {
+                var errors = data.responseJSON.message;
+                var errorsHtml = '';
+
+                $.each(errors, function (key, value) {
+                    errorsHtml += '<li>' + value + '</li>';
+                });
+                console.log(errorsHtml);
+                $('form#client_setup #errorResponse').show().html(errorsHtml); //this is my div with messages
+                $('form#client_setup #errorResponse').addClass("alert alert-danger");
+            }
+        }
+    });
+    /*
     var url = "clinical_trial/"+"adalimumab";
     $.ajax({
             type: 'get',
@@ -2057,5 +2162,5 @@ function add_client_setup() {
             },
             error: function (data) {
             }
-        });
+        }); */
 }

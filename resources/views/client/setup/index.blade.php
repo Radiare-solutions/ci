@@ -26,6 +26,7 @@
 
 
         <form name="client_setup" id="client_setup" method="post">
+            <div id="errorResponse"></div>
             <div class="panel panel-flat">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-body">

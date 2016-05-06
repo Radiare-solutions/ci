@@ -23,16 +23,14 @@ class User_Management_Models extends Eloquent {
 
     public function add_user($request) {
 
-        $user = array('User_Id' => new \MongoDB\BSON\ObjectId(),'User_Name' => "$request->User_Name",'Email_Id' => "$request->Email_Id",  'Password' => "$request->Password",  'Role_Id' => "$request->Role_Name", 'Created_Date' => "2013-10-02T01:11:18.965Z");
+        $user = array('User_Id' => new \MongoDB\BSON\ObjectId(),'User_Name' => "$request->User_Name",'Email_Id' => "$request->Email_Id",  'Password' => "$request->Password",  'Role_Id' => "$request->Role_Name", 'isActive' => 1);
         User_Management_Models::insert(array($user));
         return redirect('/');
     }
-    public function edit_user_submit($id,$request) {
+    public function edit_user_submit($request) {
 
-        $user = array('User_Name' => "$request->User_Name",'Email_Id' => "$request->Email_Id",  'Password' => "$request->Password",  'Role_Id' => "$request->Role_Name", 'Created_Date' => "2013-10-02T01:11:18.965Z");
-        User_Management_Models::where('CI_Users')
-            ->where('_id', '$id')
-            ->update(array($user)) ;
+        $user = array('User_Name' => "$request->User_Name",'Email_Id' => "$request->Email_Id",  'Password' => "$request->Password",  'Role_Id' => "$request->Role_Name");
+        User_Management_Models::where('User_Id', new \MongoDB\BSON\ObjectId($request->editUserID))->update(($user)) ;
         return redirect('/');
     }
 
@@ -41,5 +39,9 @@ class User_Management_Models extends Eloquent {
         return $users;
     }
     
-
+    public function removeUser($id) {
+        $user = array('isActive' => 0);
+        User_Management_Models::where('User_Id', new \MongoDB\BSON\ObjectId($id))->update(($user)) ;
+    }
+    
 }

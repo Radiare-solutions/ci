@@ -26,13 +26,14 @@ class ClinicalController extends Controller
      * return value - none
      *  null - if no match found
      */
-   public function Extract($name){
+   public function Extract(Request $request){
+       $name = $request->trial;
        set_time_limit(0);
        ini_set('max_execution_time', 0);
        $molecule_or_indication=urlencode($name);
-       
-       $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
-       
+       //https://clinicaltrials.gov/search?term=adalimumab&displayxml=true
+       //$api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       $api_query = $name;
        $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
        
@@ -55,7 +56,7 @@ class ClinicalController extends Controller
            $rss_feed_id=$feedExist->_id;
        }
            
-            $clinical_api_query=file_get_contents("$api_query"."&count=1");
+            $clinical_api_query=file_get_contents("$api_query"."&count=3");
             $clinical_study_xml=simplexml_load_string($clinical_api_query);
 
             

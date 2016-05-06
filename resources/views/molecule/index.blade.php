@@ -52,9 +52,9 @@
                     <thead>
                         <tr>
                             <th>Sl.No</th>                           
-                            <th>Molecule</th>
-                             <th>Level 2</th>
-                            <th>Level 1</th>
+                            <th>Molecule Name</th>
+                             <th>Secondary Group</th>
+                             <th>Primary Group</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -147,7 +147,7 @@
                                 <div class="panel-body">
                                     
                                     <div class="form-group">
-                                        <label>Level 1:</label>
+                                        <label>Primary Group:</label>
                                         <select class="select" name="level1Name" onchange="load_level2_data(this.value,'edit')" id="level1Name">
                                             <option value=""></option>
                                             <?php                                            
@@ -159,14 +159,14 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label>Level 2:</label>
+                                        <label>Secondary Group:</label>
                                         <select class="select" name="level2Name" id="level2Name">
                                             <option value=""></option>                                            
                                         </select>
                                     </div>
                                    
                                     <div class="form-group">
-                                        <label>Molecule:</label>
+                                        <label>Molecule Name:</label>
                                         <input type="text" class="form-control" name="moleculeName" id="moleculeName" placeholder="Enter the New Molecule">
                                         <input type="hidden" name="mid" id="mid" >
                                         <input type="hidden" name="mIndex" id="mIndex" >
@@ -200,7 +200,7 @@
                                 <div class="panel-body">
                                     
                                     <div class="form-group">
-                                        <label>Level 1:</label>
+                                        <label>Primary Group:</label>
                                         <select class="select" name="level1Name" onchange="load_level2_data(this.value, 'add')" id="level1Name">
                                             <option value=""></option>
                                             <?php                                            
@@ -212,14 +212,14 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label>Level 2:</label>
+                                        <label>Secondary Group:</label>
                                         <select class="select" name="level2Name" id="level2Name">
                                             <option value=""></option>                                            
                                         </select>
                                     </div>
                                    
                                     <div class="form-group">
-                                        <label>Molecule:</label>
+                                        <label>Molecule Name:</label>
                                         <input type="text" class="form-control" name="moleculeName" placeholder="Enter the New Molecule">
                                     </div>
                                     

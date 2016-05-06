@@ -23,7 +23,7 @@ class Role_Management_Models extends Eloquent {
 
     public function add_role($request) {
 
-        $role = array('Role_Name' => "$request->RoleName", 'Role_Id' => new \MongoDB\BSON\ObjectId());
+        $role = array('Role_Name' => "$request->RoleName", 'isActive'=> 1, 'Role_Id' => new \MongoDB\BSON\ObjectId());
         Role_Management_Models::insert(array($role));
         return redirect('/');
     }
@@ -41,5 +41,10 @@ class Role_Management_Models extends Eloquent {
         $roles = Role_Management_Models::all();
         return $roles;
     }
+    
+    public function removeRole($id) {
+        $role = array('isActive' => 0);
+        Role_Management_Models::where('_id', new \MongoDB\BSON\ObjectId($id))->update(($role)) ;
+    }    
 
 }

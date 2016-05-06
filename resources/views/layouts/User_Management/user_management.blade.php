@@ -38,18 +38,19 @@
                         <th>Sl.No</th>
                         <th>User Name</th>
                         <th>Email Id</th>
+                        <th>Role</th>
                        
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(count($users) > 0) { ?>
-                    @foreach ($users as $user)
+                    <?php if(count($listUserObj) > 0) { $i = 1;?>
+                    @foreach ($listUserObj as $user)
                     <tr>
-                        <td>1</td>
-                        <td>{{ $user->User_Name }}</td>
-                        <td>{{ $user->Email_Id }}</td>                                               
-
+                        <td><?php echo $i;?></td>
+                        <td>{{ $user['userName'] }}</td>
+                        <td>{{ $user['email'] }}</td>                                               
+                        <td>{{ $user['roleName'] }}</td>
                         <td class="text-center">
                             <ul class="icons-list">
                                 <li class="dropdown">
@@ -59,15 +60,15 @@
 
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li class="dropdown-header">Options</li>
-                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="edit_user_form('<?php echo $user->_id; ?>');" ><i class="icon-pencil7"></i>Edit entry</a></li>
+                                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_form_edit" onclick="edit_user_form('<?php echo $user['User_Id']; ?>');" ><i class="icon-pencil7"></i>Edit entry</a></li>
                                       
-                                        <li><a href="#"><i class="icon-bin"></i>Remove entry</a></li>
+                                        <li><a href="javascript:void(0);" onclick="delete_user('<?php echo $user['User_Id'];?>')"><i class="icon-bin"></i>Remove entry</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </td>
                     </tr>
-
+                    <?php $i++; ?>
                     @endforeach
                     <?php } ?>
                 </tbody>
@@ -132,6 +133,7 @@
                     <form method="post" id="edit_user" name="edit_user">
                         <div id="errorResponse"></div>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="editUserID" id="editUserID">
                         <div class="panel panel-flat">
                             <div class="panel-body">
                                 <div class="form-group">
@@ -154,11 +156,12 @@
                                         @foreach($role_options as $role)
                                         <option value="{{$role->Role_Id}}">{{$role->Role_Name}}</option>
                                         @endforeach
+                                    
                                     </select>
                                 </div>
                                 
                                 <div class="text-right">
-                                    <button type="button" onclick="edit_user_submit('<?php if(isset($user->id)) echo $user->_id; ?>');" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
+                                    <button type="button" onclick="edit_user_submit();" class="btn btn-primary">Submit<i class="icon-arrow-right14 position-right"></i></button>
                                 </div>
                             </div>
                         </div>

@@ -35,10 +35,12 @@ Route::get('/molecules.html', function () {
 Route::post('add_role', 'Role_Management_Controller@store');
 Route::post('edit_role_form/{id}', 'Role_Management_Controller@editroleform');
 Route::post('edit_role_submit', 'Role_Management_Controller@editrolesubmit');
+Route::post('remove_role/{id}', 'Role_Management_Controller@removeRole');
 
 Route::post('add_user', 'User_Management_Controller@store');
 Route::post('edit_user_form/{id}', 'User_Management_Controller@edituserform');
-Route::post('edit_user_submit/{uid}', ['uses' => 'User_Management_Controller@editusersubmit']);
+Route::post('edit_user_submit', ['uses' => 'User_Management_Controller@editusersubmit']);
+Route::post('remove_user/{id}', 'User_Management_Controller@removeUser');
 
 // Data Types Section
 Route::get('datatype_mgmt', 'DataTypes\DataTypesController@index');
@@ -64,7 +66,7 @@ Route::post('load_molecule_detail/{id}/{id1}/{id2}', 'Feed_Management_Controller
 /* end of soumya codes */
 
 /* start of mohana priya codes */
-Route::get('/clinical_trial/{id}', 'ClinicalController@Extract');
+Route::post('clinical_trial', 'ClinicalController@Extract');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
 /* end of mohana priya codes */
 
@@ -134,6 +136,7 @@ Route::post('delete_condition/{id}', 'Verify\ConditionController@removeCondition
 
 /* start of client setup codes */
 Route::get('client_setup', 'Client\ClientSetupController@index');
+Route::post('add_client_setup', 'Client\ClientSetupController@store');
 /* end of client setup codes */
 
 
