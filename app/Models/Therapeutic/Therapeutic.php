@@ -40,6 +40,26 @@ class Therapeutic extends Eloquent {
         }
     }
     
+    public function insertFromDataFile($therapeuticName) {
+            $id = new \MongoDB\BSON\ObjectId();
+            $molecule = array(
+                '_id' => $id,
+                'Name' => $therapeuticName,
+                'isActive' => 1,
+            );
+            Therapeutic::insert(array($molecule));
+            
+            // put an entry in indication table during insertion
+            $ob = new Indication();
+            $ob->Therapy = $id;
+            $ob->Indication = array();
+            $ob->save();
+    }
+    
+    public function therapeuticAreaUpdate($id) {
+        //Therapeutic::where('_id', $id)->update(array('Name' => $request->therapeuticName));
+    }
+    
     public function loadTherapeuticDetails($tid) {
         $tid = new \MongoDB\BSON\ObjectId($tid);
         $result = Therapeutic::find($tid);

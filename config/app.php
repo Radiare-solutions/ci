@@ -157,6 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
 Jenssegers\Mongodb\MongodbServiceProvider::class,
+//PHPExcel\PHPExcel::class,
     ],
 
     /*
@@ -203,7 +204,8 @@ Jenssegers\Mongodb\MongodbServiceProvider::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'ViewHelper' => App\Helpers\ViewHelper::class,
-'Moloquent' => 'Jenssegers\Mongodb\Model',
+'Moloquent' => 'Jenssegers\Mongodb\Model',        
+        
     ],
 
 ];

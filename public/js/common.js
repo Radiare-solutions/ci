@@ -13,9 +13,7 @@ function add_indication_submit() {
             $('form#add_indication #errorResponse').removeClass("alert alert-danger");
             $('form#add_indication #errorResponse').show().html("Indication Added successfully");
             $('form#add_indication #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")

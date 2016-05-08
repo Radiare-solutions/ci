@@ -2,6 +2,11 @@
 
 @section('content')
 
+<script type="text/javascript">
+    $(window).load(function(){
+     $('#loader').fadeOut();
+});
+</script>
 
 <!-- Page content -->
 <div class="page-content">
@@ -43,7 +48,7 @@
                 </div>
 
                 <hr class="no-margin"/>	
-
+<div id="loader">Loading ... Please Wait</div>
 
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_form_vertical"> <i class="icon-plus3"></i>  Add Molecule</button>
 

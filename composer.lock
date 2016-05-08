@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4c7d96066ca6baef332f18b4711f88bc",
-    "content-hash": "9962f7f3d9e7d6bc09ecb5e470cdf80e",
+    "hash": "d1be58b0a41da0010422692cf4e3fc16",
+    "content-hash": "86d5acc126fc46e2ee2d6eb60cd8500f",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -853,6 +853,43 @@
                 "php"
             ],
             "time": "2016-04-19 13:41:41"
+        },
+        {
+            "name": "os/php-excel",
+            "version": "2.1",
+            "target-dir": "PHPExcel",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ouardisoft/PHPExcel.git",
+                "reference": "1dcb280a82b94943a00d478eac099542aa0be2bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ouardisoft/PHPExcel/zipball/1dcb280a82b94943a00d478eac099542aa0be2bd",
+                "reference": "1dcb280a82b94943a00d478eac099542aa0be2bd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.6"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "LOUARDI Abdeltif",
+                    "email": "louardi.abdeltif@yahoo.fr",
+                    "homepage": "http://phphub.net"
+                }
+            ],
+            "description": "PHP Excel Library",
+            "homepage": "http://github.com/ouardisoft/PHPExcel",
+            "keywords": [
+                "excel"
+            ],
+            "time": "2012-05-02 20:42:37"
         },
         {
             "name": "paragonie/random_compat",

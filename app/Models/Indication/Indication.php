@@ -333,4 +333,11 @@ class Indication extends Eloquent {
         return $therapy;
     }
 
+    
+    public function insertFromDataFile($tid, $indicationName) {
+        $indication = array('Name' => "$indicationName", '_id' => new \MongoDB\BSON\ObjectId(), 'isActive' => 1);
+        $this->therapyName = new \MongoDB\BSON\ObjectId($tid);
+        Indication::where('Therapy', $this->therapyName)->push('Indication', ($indication));
+
+    }
 }

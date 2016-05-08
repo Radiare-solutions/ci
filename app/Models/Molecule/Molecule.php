@@ -217,5 +217,19 @@ class Molecule extends Eloquent {
         $tid = new \MongoDB\BSON\ObjectId($mid);
         Molecule::where('_id', $mid)->update(array('isActive' => 0));
     }
+    
+    public function addMolecule($l1id, $l2id, $name) {
+        $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
+        $this->l2id = new \MongoDB\BSON\ObjectId($l2id);
+        $this->moleculeName = $name;
+        $molecule = array(
+            '_id' => new \MongoDB\BSON\ObjectId(),
+            'Name' => $name,
+            'level1id' => $this->l1id,
+            'level2id' => $this->l2id,
+            'isActive' => 1
+        );
+        Molecule::insert(array($molecule));
+    }
 
 }

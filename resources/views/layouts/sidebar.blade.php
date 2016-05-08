@@ -5,16 +5,16 @@
             <li>
                 <a href="javascript:void(0);"><i class="icon-stack2"></i> <span>Category Management</span></a>
                 <ul>
+                    <li <?php if($page == 'client') echo "class='active'";?>><a href="client_mgmt">Client</a></li>
                     <li <?php if($page == 'molecule') echo "class='active'";?>><a href="molecule_mgmt">Molecule</a></li>
                     <li <?php if($page == 'indication') echo "class='active'";?>><a href="indication_mgmt">Indication</a></li>
-                    <li <?php if($page == 'client') echo "class='active'";?>><a href="client_mgmt">Client</a></li>
                     <li <?php if($page == 'therapeutic') echo "class='active'";?>><a href="therapeutic_mgmt">Therapeutic</a></li>
-                    <li <?php if($page == 'user') echo "class='active'";?>><a href="users.html">User</a></li>
-                    <li <?php if($page == 'role') echo "class='active'";?>><a href="roles.html">Role</a></li>
-                    <li <?php if($page == 'feed') echo "class='active'";?>><a href="feeds.html">Feed</a></li>
-                    <li <?php if($page == 'data_type') echo "class='active'";?>><a href="datatype_mgmt">Data Types</a></li>
+<!--                    <li <?php if($page == 'user') //echo "class='active'";?>><a href="users.html">User</a></li>-->
+                    <li <?php if($page == 'role') echo "class='active'";?>><a href="roles.html">Role</a></li>                    
+                    <li <?php if($page == 'data_type') echo "class='active'";?>><a href="datatype_mgmt">Data</a></li>
                 </ul>
             </li>
+            <li <?php if($page == 'feed') echo "class='active'";?>><a href="feeds.html"><i class="icon-menu9"></i> <span>Feed</span></a></li>
             <li <?php if($page == 'client_setup') echo "class='active'";?>><a href="client_setup"><i class="icon-steam"></i> <span>Client Setup</span></a></li>
             <li>
                 <a href="#"><i class="icon-database-arrow"></i> <span>Verify</span></a>

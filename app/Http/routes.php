@@ -70,6 +70,9 @@ Route::post('clinical_trial', 'ClinicalController@Extract');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
 /* end of mohana priya codes */
 
+Route::get('import_indication_data', 'ImportIndicationDataController@load');
+Route::get('import_molecule_data', 'ImportMoleculeDataController@load');
+
 Route::get('indication_mgmt', function() {
     return view('indication/index');
 });

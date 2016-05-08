@@ -64,6 +64,30 @@ class Level2 extends Eloquent {
             return $res['Level2']['Name'];
         }
     }
+    
+    public function getLevel2IDByName($l2name) {
+        // $this->l2id = new \MongoDB\BSON\ObjectId($l2id);
+        $this->l2id = $l2name;
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Level2'),
+                        array('$unwind' => '$Level2.Name'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(                                    
+                                    array('Level2.Name' => $this->l2id),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Level2' => 1,
+                            )),
+            ));
+        });
+        foreach($result as $res) {
+            return $res['Level2']['_id'];
+        }
+    }
 
     public function loadLevel2Data($l1id, $l2id) {
         $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
@@ -95,6 +119,13 @@ class Level2 extends Eloquent {
             }            
         }
         return $str;
+    }
+    
+    public function addLevel2($l1id, $l2name) {
+        $indication = array('_id' => new \MongoDB\BSON\ObjectId(), 'Name' => $l2name, 'isActive' => 1);
+        $this->l1id = new \MongoDB\BSON\ObjectId($l1id);
+        if(!empty($l2name))
+            Level2::where('_id', $this->l1id)->push('Level2', ($indication));
     }
 
 }
