@@ -66,7 +66,7 @@
                                 <div class="col-md-12 col-xs-12">
 
                                     <div class="col-md-4 text-center">
-                                        <strong class="text-xl"><?php echo $detailSummary['sponsor_name']; ?></strong><br/>
+                                        <strong class="text-xl"><?php echo $verifyNames['sponsor_name']; ?></strong><br/>
                                         <span class="text">Sponsor</span>
                                     </div>
                                     <div class="col-md-4 text-center " >
@@ -74,10 +74,10 @@
                                         <span class="text">Study Phase </span>
                                     </div>
                                     <?php
-                                        $condition = explode(" ", $detailSummary['condition_name']);
+                                        $condition = explode(" ", $verifyNames['condition_name']);
                                     ?>
                                     <div class="col-md-4 text-center " >
-                                        <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $detailSummary['condition_name']; ?>" ><?php echo $condition[0];?></strong><br/>
+                                        <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $verifyNames['condition_name']; ?>" ><?php echo $condition[0];?></strong><br/>
                                         <span class="text">Condition</span>
                                     </div>
 

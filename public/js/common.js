@@ -30,64 +30,6 @@ function add_indication_submit() {
             }
         }
     });
-
-    /*.ajax({
-     type: 'post',
-     url: url,
-     data: data,
-     dataType: 'json',
-     success: function (data) {
-     // success logic
-     $('form#add_indication #errorResponse').removeClass("alert alert-danger");
-     $('form#add_indication #errorResponse').show().html("Indication Added successfully");
-     $('form#add_indication #errorResponse').addClass("alert alert-success");
-     /*window.setTimeout(function () {
-     location.reload()
-     }, 3000) 
-     },
-     error: function (data) {
-     if (typeof data.responseJSON != "undefined")
-     {
-     var errors = data.responseJSON.message;
-     var errorsHtml = '';
-     
-     $.each(errors, function (key, value) {
-     errorsHtml += '<li>' + value + '</li>';
-     });
-     console.log(errorsHtml);
-     $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
-     $('form#add_indication #errorResponse').addClass("alert alert-danger");
-     }
-     }
-     });$.ajax({
-     type: 'post',
-     url: url,
-     data: data,
-     dataType: 'json',
-     success: function (data) {
-     // success logic
-     $('form#add_indication #errorResponse').removeClass("alert alert-danger");
-     $('form#add_indication #errorResponse').show().html("Indication Added successfully");
-     $('form#add_indication #errorResponse').addClass("alert alert-success");
-     /*window.setTimeout(function () {
-     location.reload()
-     }, 3000) 
-     },
-     error: function (data) {
-     if (typeof data.responseJSON != "undefined")
-     {
-     var errors = data.responseJSON.message;
-     var errorsHtml = '';
-     
-     $.each(errors, function (key, value) {
-     errorsHtml += '<li>' + value + '</li>';
-     });
-     console.log(errorsHtml);
-     $('form#add_indication #errorResponse').show().html(errorsHtml); //this is my div with messages
-     $('form#add_indication #errorResponse').addClass("alert alert-danger");
-     }
-     }
-     }); */
 }
 
 function load_indication_details(tid, iid) {
@@ -138,9 +80,7 @@ function edit_indication_submit() {
             $('form#edit_indication #errorResponse').removeClass("alert alert-danger");
             $('form#edit_indication #errorResponse').show().html("Indication Updated successfully");
             $('form#edit_indication #errorResponse').addClass("alert alert-success");
-//            window.setTimeout(function () {
-//                location.reload()
-//            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -207,9 +147,7 @@ function add_molecule_submit() {
             $('form#add_molecule #errorResponse').removeClass("alert alert-danger");
             $('form#add_molecule #errorResponse').show().html("Molecule Added successfully");
             $('form#add_molecule #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -281,9 +219,7 @@ function edit_molecule_submit() {
             $('form#edit_molecule #errorResponse').removeClass("alert alert-danger");
             $('form#edit_molecule #errorResponse').show().html("Molecule Updated successfully");
             $('form#edit_molecule #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             //alert(JSON.stringify(data));
@@ -317,9 +253,7 @@ function add_therapeutic_submit() {
             $('form#add_therapeutic #errorResponse').removeClass("alert alert-danger");
             $('form#add_therapeutic #errorResponse').show().html("Therapeutic Area Added successfully");
             $('form#add_therapeutic #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+           window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -383,9 +317,7 @@ function edit_therapeutic_submit() {
             $('form#edit_therapeutic #errorResponse').removeClass("alert alert-danger");
             $('form#edit_therapeutic #errorResponse').show().html("Therapeutic Updated successfully");
             $('form#edit_therapeutic #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -420,9 +352,7 @@ function add_client_submit() {
             $('form#add_client #errorResponse').removeClass("alert alert-danger");
             $('form#add_client #errorResponse').show().html("Client Added successfully");
             $('form#add_client #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -455,9 +385,7 @@ function add_group_submit() {
             $('form#add_bg #errorResponse').removeClass("alert alert-danger");
             $('form#add_bg #errorResponse').show().html("Business Group Added successfully");
             $('form#add_bg #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -525,9 +453,7 @@ function edit_bg_submit() {
             $('form#edit_bg #errorResponse').removeClass("alert alert-danger");
             $('form#edit_bg #errorResponse').show().html("Business Group Added successfully");
             $('form#edit_bg #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -592,9 +518,7 @@ function add_indication_entry_submit() {
             $('form#add_indication_entry #errorResponse').removeClass("alert alert-danger");
             $('form#add_indication_entry #errorResponse').show().html("Indication Entry Added successfully");
             $('form#add_indication_entry #errorResponse').addClass("alert alert-success");
-//            window.setTimeout(function () {
-//                location.reload()
-//            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -659,9 +583,7 @@ function add_molecule_entry_submit() {
             $('form#add_molecule #errorResponse').removeClass("alert alert-danger");
             $('form#add_molecule #errorResponse').show().html("Molecule Entry Added successfully");
             $('form#add_molecule #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -955,9 +877,7 @@ function add_new_role() {
             $('form#add_role #errorResponse').removeClass("alert alert-danger");
             $('form#add_role #errorResponse').show().html("Role Added successfully");
             $('form#add_role #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -989,7 +909,7 @@ function new_user() {
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
             $('form#add_user #errorResponse').show().html("Role Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-            // window.setTimeout(function(){location.reload()},3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -1021,7 +941,7 @@ function edit_user_submit() {
             $('form#edit_user #errorResponse').removeClass("alert alert-danger");
             $('form#edit_user #errorResponse').show().html("Role Added successfully");
             $('form#edit_user #errorResponse').addClass("alert alert-success");
-            // window.setTimeout(function(){location.reload()},3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -1121,9 +1041,7 @@ function edit_role_submit() {
             $('form#edit_role #errorResponse').removeClass("alert alert-danger");
             $('form#edit_role #errorResponse').show().html("Role Updated successfully");
             $('form#edit_role #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 3000)
+            window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
@@ -1492,7 +1410,9 @@ function load_edit_feed(id) {
                 var dtypes = details[dataTypes[i]];
                 var dtype = dtypes.split(",");
                 for(var j=0;j<dtype.length;j++) {
-                    load_add_more(dataTypes[i], dtype[j]);
+                    var did = dataTypes[i];
+                    did = did.replace(" ", "");
+                    load_add_more(did, dtype[j]);
                 }
             }
             $("form#edit_feed #rss_feed_edit").val(details.feedLink);
@@ -1523,22 +1443,12 @@ function add_new_feed() {
         url: url,
         data: data,
         dataType: 'json',
-        beforeSend: function () {
-            $('#add_feed_details').attr("disabled", true);
-        },
         success: function (data) {
             // success logic
-            $.modal.close();
-//            $('#modal_form_add').hide();
-            $(".navbar-top").load("roles.html");
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
             $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-            window.setTimeout(function () {
-                location.reload()
-            }, 1000)
-        }, complete: function () {
-            $('#add_feed_details').attr("disabled", false);
+            window.location.reload();
         },
         error: function (data) {
             alert(JSON.stringify(data));
@@ -1578,10 +1488,8 @@ function update_feed() {
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
             $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
             $('form#add_user #errorResponse').addClass("alert alert-success");
-            // window.setTimeout(function(){location.reload()},3000)
-        }, complete: function () {
-            $('#add_feed_details').attr("disabled", false);
-        },
+            window.location.reload();
+        }, 
         error: function (data) {
             alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
@@ -1614,8 +1522,8 @@ function delete_feed_details(fid) {
             $(".navbar-top").load("feeds.html");
             $('#message_section').show();
             $('html,body').animate({scrollTop: $('.content').offset().top}, "slow");
-            $('#message_section').html('<div style="border: 1px solid rgba(0,166,90,0.7); padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i> RSS Feed deleted successfully</div>');
-            $('#message_section').fadeOut(5000);
+            $('#message_section').html('<div style="border: 1px solid rgba(0,166,90,0.7); padding: 15px;background: #f9f9f9"><i class="ifc-thumb_up"></i> RSS Feed deleted successfully</div>');            
+            window.location.reload();
 
         },
         error: function (data) {
@@ -1758,6 +1666,7 @@ function delete_datatype(id) {
 
 function load_add_more(parent_div, value) {
     console.log("div : " + parent_div);
+    parent_div = parent_div.replace(" ", "");
     var count = $('#counter').val();
     var id = parent_div + count
     var child_div = id;
@@ -1768,6 +1677,7 @@ function load_add_more(parent_div, value) {
 }
 
 function add_more(parent_div, val='') {
+    parent_div = parent_div.replace(" ", "");
     console.log("div : " + parent_div);
     var count = $('#counter').val();
     var id = parent_div + count
@@ -1780,6 +1690,7 @@ function add_more(parent_div, val='') {
 
 function edit_add_more(parent_div) {
     console.log("div : " + parent_div);
+    parent_div = parent_div.replace(" ", "");
     var count = $('#counter').val();
     var id = parent_div + count
     var child_div = id;
@@ -1791,6 +1702,7 @@ function edit_add_more(parent_div) {
 
 function remove_field(parent_div, child_div) {
     console.log("div : " + parent_div + " - " + child_div);
+    parent_div = parent_div.replace(" ", "");
     $("#" + parent_div).find("#" + child_div).remove();
 }
 
@@ -1839,13 +1751,17 @@ function load_last_feed(id) {
             var dataTypes = details.data_types.split(",");
             console.log(dataTypes);
 
-            for (var i = 0; i < dataTypes.length; i++) {
+            for (var i = 0; i < dataTypes.length; i++) 
+            {
                 console.log("hello : " + (dataTypes[i]));
-                var dtypes = details[dataTypes[i]];
+                var tmp = dataTypes[i].replace(" ", "");
+                var dtypes = details[tmp];
+                console.log("dtypes : " + dtypes);
                 var dtype = dtypes.split(",");
-                for(var j=0;j<dtype.length;j++) {
-                    add_more(dataTypes[i], dtype[j]);
-                }
+                for(var j=0;j<dtype.length;j++) 
+                    {
+                        add_more(tmp, dtype[j]);
+                    }
             }
             $("form#add_feed #rss_feed").val(details.feedLink);
         },
@@ -2128,12 +2044,12 @@ function add_client_setup() {
                 dataType: 'json',
                 jsonp:false,
                 success: function (data) {
-                    window.location.reload();
+                    window.location.href="feeds.html";
                 },
                 error: function (data) {
                 }
             });
-            window.location.reload(); 
+            window.location.href="feeds.html";
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")

@@ -54,7 +54,9 @@ class Feed_Management_Controller extends Controller {
             $arr = array();
             foreach ($types as $typeDetail) {
                 $typeAttr = $typeDetail['attributes'];
-                $tempArr[$typeAttr['typeName']] = $feedAttr[0][$typeAttr['typeName']];
+                $tmp = str_replace(" ", "", $typeAttr['typeName']);
+                
+                $tempArr[$tmp] = $feedAttr[0][$tmp];
             }
             array_push($feeds, $tempArr);
         }
@@ -270,7 +272,8 @@ class Feed_Management_Controller extends Controller {
             $arr = array();
             foreach ($types as $typeDetail) {
                 $typeAttr = $typeDetail['attributes'];
-                $details[$typeAttr['typeName']] = $feedAttr[0][$typeAttr['typeName']];
+                $tmp = str_replace(" ", "", $typeAttr['typeName']);
+                $details[$tmp] = $feedAttr[0][$tmp];
                 array_push($arr, $typeAttr['typeName']);
             }
             $details['data_types'] = implode(",", $arr);

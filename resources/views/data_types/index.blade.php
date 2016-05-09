@@ -16,7 +16,7 @@
     <div class="content">
         <div class="panel panel-flat">
             <div class="panel-heading">
-                <h5 class="panel-title">Data Type Management</h5>
+                <h5 class="panel-title">Data Management</h5>
                 <div class="heading-elements">
                     <ul class="icons-list">
                         <li><a data-action="collapse"></a></li>
@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Sl.No</th>
-                        <th>DataType Name</th>
+                        <th>Data Name</th>
                        
                         <th class="text-center">Actions</th>
                     </tr>
@@ -84,7 +84,7 @@
                         <div class="panel panel-flat">
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label>Data Type Name :</label>
+                                    <label>Data Name :</label>
                                     <input type="text" name="dataTypeName" id="dataTypeName" class="form-control" placeholder="Enter New Data Type">
                                 </div>
 
@@ -112,7 +112,7 @@
                         <div class="panel panel-flat">
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label>Data Type Name :</label>
+                                    <label>Data Name :</label>
                                     <input type="hidden" name="dataTypeID" id="dataTypeID">
                                     <input type="text" name="editDataTypeName" id="editDataTypeName" class="form-control" placeholder="Edit Data Type Name">
                                 </div>

@@ -53,7 +53,7 @@
                         <td>{{$feed['molecule']}}</td>
                         <?php 
                         foreach ($data_types as $dataType) {              
-                          echo '<td>'.str_replace(",", "<br>",$feed[$dataType['typeName']]).'</td>';
+                          echo '<td>'.str_replace(",", "<br>",$feed[str_replace(" ", "", $dataType['typeName'])]).'</td>';
                         }
                         ?>
                         <td class="text-center">
@@ -82,7 +82,7 @@
         <!--Add New User Form-->
 
         <div id="modal_form_add" class="modal fade">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -181,7 +181,7 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Data Type</label>
+                                            <label>Data </label>
                                             <br>
 <!--                                            <select name="link_type" id="link_type">
                                                 <option value="">select</option> -->
@@ -189,7 +189,7 @@
                                             <?php
                                             foreach ($data_types as $dataType) {
                                                 ?>
-                                            <b><?php echo $dataType['typeName']; ?></b><br><input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="<?php echo $dataType['typeName']; ?>"></div><br>
+                                            <b><?php echo $dataType['typeName']; ?></b><br><input type="text" name="<?php echo str_replace(" ", "", $dataType['typeName']); ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="add_more('<?php echo str_replace(" ","", $dataType['typeName']); ?>');">Add More</a><br/><div id="<?php echo str_replace(" ", "", $dataType['typeName']); ?>"></div><br>
                                                 <?php
                                                 // echo '<option value="'.$dataType['_id'].'">'.$dataType['typeName'].'</option>';
                                             }
@@ -315,7 +315,7 @@
                                             <?php
                                             foreach ($data_types as $dataType) {                                                
                                             ?>
-                                            <b><?php echo $dataType['typeName']; ?></b><br><input type="text" name="<?php echo $dataType['typeName']; ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="edit_add_more('<?php echo $dataType['typeName']; ?>');">Add More</a><br/><div id="edit_<?php echo $dataType['typeName']; ?>"></div><br>
+                                            <b><?php echo $dataType['typeName']; ?></b><br><input type="text" name="<?php echo str_replace(" ", "", $dataType['typeName']); ?>[]">&nbsp;&nbsp; <a href="javascript:void(0);" onclick="edit_add_more('<?php echo str_replace(" ", "", $dataType['typeName']); ?>');">Add More</a><br/><div id="edit_<?php echo str_replace(" ", "", $dataType['typeName']); ?>"></div><br>
                                                 <?php
                                             }
                                             ?>                                           
