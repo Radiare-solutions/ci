@@ -231,5 +231,13 @@ class Molecule extends Eloquent {
         );
         Molecule::insert(array($molecule));
     }
+    
+    public function checkMoleculesExists($l1id, $l2id, $mname) {
+        $res = Molecule::where(array('level1id' => $l1id, 'level2id' => $l2id, 'Name' => $mname))->get();
+        if(count($res) > 0)
+            return 1;
+        else
+            return 0;
+    }
 
 }

@@ -34,11 +34,22 @@ class IndicationRequest extends Request {
         $validator->after(function() use ($validator) {
             $ob = new Indication();
             $req = $this->request;
-            $res = 0;
-            if (!empty($req->get('indicationName')) && (!empty($req->get('therapyName'))))
-                $res = $ob->checkDuplicateByIndicationNameAndTherapeuticID((string) $req->get('therapyName'), $req->get('indicationName'));
-            if ($res == 1)
-                $validator->errors()->add('indicationName', 'Indication Name Already Exists');
+            if(empty($req->get('indicationID')))
+            {
+                $res = 0;
+                if (!empty($req->get('indicationName')) && (!empty($req->get('therapyName'))))
+                    $res = $ob->checkDuplicateByIndicationNameAndTherapeuticID((string) $req->get('therapyName'), $req->get('indicationName'),'');
+                if ($res == 1)
+                    $validator->errors()->add('indicationName', 'Indication Name Already Exists');
+            }
+            else
+            {
+                $res = 0;
+                if (!empty($req->get('indicationName')) && (!empty($req->get('therapyName'))))
+                    $res = $ob->checkEditDuplicateByIndicationNameAndTherapeuticID((string) $req->get('therapyName'), $req->get('indicationName'), (string) $req->get('indicationID'));
+                if ($res == 1)
+                    $validator->errors()->add('indicationName', 'Indication Name Already Exists');                
+            }
         });
 
 

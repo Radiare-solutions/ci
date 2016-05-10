@@ -7,6 +7,7 @@ use App\Models\Molecule\Molecule;
 use App\Models\Molecule\Level1;
 use App\Models\Molecule\Level2;
 use Illuminate\Http\Request;
+use App\Http\Requests\MoleculeRequest;
 use Validator;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
@@ -55,12 +56,12 @@ class MoleculeController extends Controller {
         return view('molecule/index', array('level1' => $level1, 'details' => json_encode($listDetails)));        
     }
 
-    public function store(Request $request) {
+    public function store(MoleculeRequest $request) {
         if(!empty($request->mid)) {
             $validator = Validator::make($request->all(), [
                     'level1Name' => 'required',
                     'level2Name' => 'required',
-                    'moleculeName' => 'required',
+                    'moleculeName' => 'required|unique:molecules,Name,'.$request->mid.',_id',
             ]);
         }
         else {

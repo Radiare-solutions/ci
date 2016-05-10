@@ -345,7 +345,7 @@ class Indication extends Eloquent {
         
         $this->therapyName = new \MongoDB\BSON\ObjectId($tid);
         $this->indicationName = $indicationName;
-
+        
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array('$unwind' => '$Indication'),
@@ -354,7 +354,43 @@ class Indication extends Eloquent {
                             '$match' => array(
                                 '$and' => array(
                                     array('Therapy' => $this->therapyName),
-                                    array('Indication.Name' => array('$in' => array($this->indicationName))),
+                                    array('Indication.Name' => array('$in' => array($this->indicationName))),                                    
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Therapy' => 1,
+                                'Indication' => 1,
+                            )),
+            ));
+        });
+        $id = "";
+        foreach ($result as $query) {
+           $id = $query['Indication']['_id'];
+        }
+        if (empty($id)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+    
+     public function checkEditDuplicateByIndicationNameAndTherapeuticID($tid, $indicationName, $iid) {
+        
+        $this->therapyName = new \MongoDB\BSON\ObjectId($tid);
+        $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+        $this->indicationName = $indicationName;
+        
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Indication'),
+                        array('$unwind' => '$Indication._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('Therapy' => $this->therapyName),
+                                    array('Indication._id' => array('$ne' => $this->indicationID)),                                    
+                                    array('Indication.Name' => array('$in' => array($this->indicationName))),                                    
                                 )
                             )
                         ),

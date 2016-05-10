@@ -86,10 +86,9 @@ function edit_indication_submit() {
             window.location.reload();
         },
         error: function (data) {
-            alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                var errors = data.responseJSON;
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {
