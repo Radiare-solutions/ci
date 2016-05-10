@@ -13,16 +13,16 @@ class ConditionModel extends Eloquent
          return $ConditionModel->_id;
     }
     
-    public function FetchCondition($condition_name){
-       $ConditionModel=DrugModel::where("condition_name",'=',$condition_name)->first();
-       return $ConditionModel->_id;
+   public function FetchCondition($condition_name){
+       $ConditionModel=ConditionModel::where("condition_name",'=',$condition_name)->first();
+       return $ConditionModel;
     } 
     
     public function editCondition($request) {
         $condition = array('condition_name' => "$request->editConditionName");
         ConditionModel::where('_id', $request->conditionID)->update(($condition));
         return "Updated";
-    }
+}
     
     public function loadConditionDetails($id) {
         $ob = ConditionModel::find(new \MongoDB\BSON\ObjectId($id));

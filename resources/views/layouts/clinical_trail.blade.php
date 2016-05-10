@@ -343,7 +343,7 @@
                 Morris.Bar({
                     element: 'morris-bar-graph',
                     data: [
-                        {x: 'DB Adalimumab ', y: 7 / 171 * 100},
+                        {x: '<?php echo $test;?> ', y:  4.09},
                         {x: 'DB Placebo ', y: 4 / 163 * 100},
                         {x: 'Any Adalimumab ', y: 21 / 326 * 100}
 

@@ -9,9 +9,11 @@ use App\Models\ClinicalTrialModel as ClinicalTrialModel;
 
 use App\Models\ConditionModel as ConditionModel;
 
-use App\Models\SponserModel as SponserModel;
+use App\Models\SponsorModel as SponsorModel;
 
 use App\Models\DrugModel as DrugModel;
+
+use App\Models\StatusModel as StatusModel;
 
 use App\Http\Requests;
 
@@ -27,13 +29,12 @@ class ClinicalController extends Controller
      *  null - if no match found
      */
    public function Extract(Request $request){
-       $name = $request->trial;
        set_time_limit(0);
        ini_set('max_execution_time', 0);
-       $molecule_or_indication=urlencode($name);
-       //https://clinicaltrials.gov/search?term=adalimumab&displayxml=true
-       //$api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
-       $api_query = $name;
+       $molecule_or_indication=urlencode("adalimumab");
+       $api_query = $request->trial;
+       // $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       
        $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
        
@@ -56,7 +57,7 @@ class ClinicalController extends Controller
            $rss_feed_id=$feedExist->_id;
        }
            
-            $clinical_api_query=file_get_contents("$api_query"."&count=".$attr);
+            $clinical_api_query=file_get_contents("$api_query"."&count=2");
             $clinical_study_xml=simplexml_load_string($clinical_api_query);
 
             
@@ -73,12 +74,12 @@ class ClinicalController extends Controller
                         $clinical_result_ext=file_get_contents($result_url);
                         $clinical_content_ext=simplexml_load_string($clinical_result_ext);
 
-                        $start_date=DATE("Y-m",  strtotime((string)$clinical_content_ext->start_date))."-00";
-                        $study_completion_date=DATE("Y-m",strtotime((string)$clinical_content_ext->completion_date))."-00";
-                        $primary_completion_date=DATE("Y-m",strtotime((string)$clinical_content_ext->primary_completion_date))."-00";
-                        $lastchanged_date=DATE("Y-m-d",strtotime((string)$clinical_content_ext->lastchanged_date));
-                        $firstreceived_date=DATE("Y-m-d",strtotime((string)$clinical_content_ext->firstreceived_date));
-                        $verification_date=DATE("Y-m",strtotime((string)$clinical_content_ext->verification_date))."-00";
+                        $start_date=(string)$clinical_content_ext->start_date;
+                        $study_completion_date=(string)$clinical_content_ext->completion_date;
+                        $primary_completion_date=(string)$clinical_content_ext->primary_completion_date;
+                        $lastchanged_date=(string)$clinical_content_ext->lastchanged_date;
+                        $firstreceived_date=(string)$clinical_content_ext->firstreceived_date;
+                        $verification_date=(string)$clinical_content_ext->verification_date;
 
                         $id_info=$clinical_content_ext->id_info;
                         $nct_id=(string)$id_info->nct_id[0];
@@ -131,10 +132,33 @@ class ClinicalController extends Controller
                         foreach($intervention_array as $inter_item){
                             $intervention_type=(string)$inter_item->intervention_type;
                             $intervention_name=(string)$inter_item->intervention_name;
+                            if($intervention_type!='Drug'){
+                                
+                                //intervention should not contain the word of placebo
+                                if(!preg_match_all("#placebo#i",$intervention_name,$matches)){ 
+                                $inter_arr[]="<li style='margin:1ex 0.5ex' class='color-bullet'>".$intervention_type.": ".$intervention_name."</li>";
+                                }
+                            }
+                        }
+                        
+                        $flag=0;
+                        foreach($intervention_array as $inter_item1){
+                            
+                            $intervention_type=(string)$inter_item1->intervention_type;
+                            $intervention_name=(string)$inter_item1->intervention_name;
                             if($intervention_type=='Drug'){
-                                $drug_arr[]=trim($intervention_name); 
+                                //drug name should not contain the word of placebo
+                                if(!preg_match_all("#placebo#i",$intervention_name,$matches)){
+                                $drug_arr[]=trim($intervention_name);
+                                $flag++;
+                                }
                             }else{
-                                $inter_arr[]=$intervention_type.": ".$intervention_name;
+                                //intervention should not contain the word of placebo
+                                if($flag==0){
+                                if(!preg_match_all("#placebo#i",$intervention_name,$matches)){ 
+                                $drug_arr[]=$intervention_name;
+                                }
+                                }
                             }
                         }
                         
@@ -151,14 +175,11 @@ class ClinicalController extends Controller
                             $other_name_array[]=$other_name[$i];
                         }
                         
-                        $detailed_intervention_array[]="<li>".$intervention_type.": ".$intervention_name."</li>".(string)$inter_item1->description."<br/>"."<b>Other Name: </b>".implode(",", $other_name_array);
+                        $detailed_intervention_array[]="<li style='margin:1ex 0.5ex' class='color-bullet'>".$intervention_type.": ".$intervention_name."</li>".(string)$inter_item1->description."<br/>"."Other Name:".implode(",", $other_name_array);
                         }
                         
                         $detailed_intervention=implode("",$detailed_intervention_array);
-                        
-                        $drug_name=implode("<br/>",$drug_arr);
 
-                       
                         $html_extraction=file_get_contents("$study_result_url?sect=X70156#outcome1");
                         $a = $this->DOM($html_extraction);
                         if(!is_null($a)){
@@ -170,10 +191,10 @@ class ClinicalController extends Controller
                         if(isset($current_div->parentNode->parentNode->nodeValue)) {
 
                         $result_next[]=$current_div->parentNode->parentNode->nodeValue;
-                        $implode_array=implode("<br/>", $result_next);     
+                        $implode_array=implode("<br/>", $result_next);
                         
                         $explode_array=explode("[2]", $implode_array);
-                        
+
                         $res_pri=explode(":",trim(str_replace("[1]","",$explode_array[0])));
                         $primary_text1=$res_pri[0];
                         $primary_res1=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $res_pri[1])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $res_pri[1])));
@@ -209,7 +230,7 @@ class ClinicalController extends Controller
                         $implode_serious=implode("", $this->saveHTML($html_extraction_event,"indent1",3));
                         $implode_serious_cnt2=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',$implode_serious);
                         $implode_serious_cnt1=preg_replace('/<\/?a[^>]*>/','',$implode_serious_cnt2);
-                        $implode_serious_cnt=str_replace("Hide Serious Adverse Events","",$implode_serious_cnt1);
+                        $implode_serious_cnt=$this->addTableClass(str_replace("Hide Serious Adverse Events","",$implode_serious_cnt1));
                          
                         // getting other adverse events
                         $html_extraction_event1=file_get_contents("$study_result_url?sect=X40156#othr");
@@ -218,37 +239,88 @@ class ClinicalController extends Controller
                         $other_event_values=$other_event_array[1];
 
                         $implode_other=implode("", $this->saveHTML($html_extraction_event1,"indent1",3)); 
-                        $implode_other_cnt=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',utf8_decode(implode("", $this->saveHTML($implode_other,"header3 indent2",1))));
+                        $implode_other_cnt1=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',utf8_decode(implode("", $this->saveHTML($implode_other,"header3 indent2",1))));
+                        $implode_other_cnt=$this->addTableClass(str_replace("Hide Other Adverse Events","",$implode_other_cnt1));
                         
                         $html_extraction_outcome=file_get_contents("$study_result_url?sect=X01256#all");
                         $detailed_outcome_measure1=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>',utf8_decode(implode("", $this->saveHTML($html_extraction_outcome,"indent1",2)))); 
-                        $detailed_outcome_measure=iconv(mb_detect_encoding($detailed_outcome_measure1, mb_detect_order(), true), "UTF-8", $detailed_outcome_measure1);
-
+                        $detailed_outcome_measure=$this->addTableClass(iconv(mb_detect_encoding($detailed_outcome_measure1, mb_detect_order(), true), "UTF-8", $detailed_outcome_measure1));
+                        
                         $serious_adv_val=array("key"=>$serious_event_header,"value"=>$serious_event_values);
                         $other_adv_val=array("key"=>$other_event_header,"value"=>$other_event_values);
                          
-                        $SponserModel= new SponserModel();
-                        $sponser_id=$SponserModel->AddSponser($sponsor_name);
+                        $SponsorModel= new SponsorModel();
+                        $sponsor_name=ucfirst(strtolower($sponsor_name));
+                        $sponsor_name_id1=$SponsorModel->FetchSponsor(trim($sponsor_name)); //checking whether the sponsor name is exist or not exist
+                        $sponsor_name_id=$sponsor_name_id1['attributes'];
                         
+                        if(count($sponsor_name_id)==0 || $sponsor_name_id==null || $sponsor_name_id=="")
+                        {
+                          $sponsor_id=$SponsorModel->AddSponsor(trim($sponsor_name));   //we are adding the sponsor into the sponsor collection if sponsor is not exist
+                        }else{
+                          $sponsor_id=$sponsor_name_id['_id']; 
+                        }
+                       
                         $DrugModel= new DrugModel();
-                        $drug_id=$DrugModel->AddDrug($drug_name);
+                        
+                        $drug_id_arr=array();
+                        foreach ($drug_arr as $value) {
+                            
+                        $value=ucfirst(strtolower($value));
+                        
+                        $drug_name_id1=$DrugModel->FetchDrug($value); //checking whether the drug name is exist or not exist
+                      
+                        $drug_name_id=$drug_name_id1['attributes'];
+                        
+                         if(count($drug_name_id)==0 || $drug_name_id==null || $drug_name_id=="")
+                         {
+                           $drug_id_arr[]=$DrugModel->AddDrug($value);  //we are adding the drug name into the drug collection if drug is not exist 
+                         }else{
+                           $drug_id_arr[]=$drug_name_id['_id'];    
+                         }
+                         
+                         }
+                         
+                        $drug_id=  implode(",", $drug_id_arr);
                         
                         $ConditionModel= new ConditionModel();
-                        $condition_id=$ConditionModel->AddCondition($condition_name);
+                        $condition_name=ucfirst(strtolower($condition_name));
+                        $condition_name_id1=$ConditionModel->fetchCondition(trim($condition_name)); //checking whether the condition name is exist or not exist
+                        $condition_name_id=$condition_name_id1['attributes'];
+                        
+                 
+                        if(count($condition_name_id)==0 || $condition_name_id==null || $condition_name_id=="") //we are adding the condition into the condition collection if condition is not exist
+                        {
+                          $condition_id=$ConditionModel->AddCondition(trim($condition_name)); 
+                        }else{
+                          $condition_id= $condition_name_id['_id']; 
+                        }
+                        
+                        $StatusModel= new StatusModel();
+                        $status_name=ucfirst(strtolower($status_name));
+                        $status_name_id1=$StatusModel->fetchStatus(trim($status_name)); //checking whether the condition name is exist or not exist
+                        $status_name_id=$status_name_id1['attributes'];
+                        if(count($status_name_id)==0 || $status_name_id==null || $status_name_id=="") //we are adding the condition into the condition collection if condition is not exist
+                        {
+                          $status_id=$StatusModel->AddStatus(trim($status_name)); 
+                        }else{
+                          $status_id= $status_name_id['_id']; 
+                        }
+                        
                         
                $UrlExist=$ClinicalTrialModel->FetchClinicalTrial($url,$molecule_or_indication);
                if($UrlExist==null){        
                         $ClinicalTrialModel->ClinicalTrialInsert($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
-                        $status_name,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
+                        $status_id,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
-                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponser_id);
+                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponsor_id);
                         
                }else{
 //                        $clinical_trial_id=$UrlExist->_id;
                         $ClinicalTrialModel->ClinicalTrialUpdate($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
-                        $status_name,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
+                        $status_id,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
-                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponser_id);
+                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponsor_id);
                           
                }
                }
@@ -296,7 +368,7 @@ class ClinicalController extends Controller
         
        $implode_val_array=implode("<br/>", $result_second_element);
        $exp_array =explode("<br/>",preg_replace('#\x{00a0}#','<br/>', utf8_decode(preg_replace("/\s/",'',preg_replace("&# participants affected / at risk&","", strip_tags($implode_val_array))))));
-     
+       
        $explode_val_array= array_values(array_filter($exp_array, function($val) {return $val!=='';}));
 //        echo "<pre>";var_dump($explode_val_array);echo "</pre>";
 //       exit();
@@ -355,5 +427,26 @@ class ClinicalController extends Controller
         
 
    }
+   
+    public function addTableClass($html){
+
+       if(!empty($html)) {
+        $DOM = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $DOM->loadHTML($html);
+        libxml_use_internal_errors(false);
+        $items = $DOM->getElementsByTagName('table');
+        for ($i = 0; $i < $items->length; $i++) 
+        {
+                $img = $items->item($i);
+                $img->removeAttribute('class');
+                $img->setAttribute('class',"table table-bordered no-margin");
+        }
+       $html = $DOM->saveHTML();  
+       return $html;
+       } 
+       else { return null; }
+    }
+    
    
 }

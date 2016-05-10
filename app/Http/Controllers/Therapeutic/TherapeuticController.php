@@ -26,10 +26,10 @@ class TherapeuticController extends Controller {
     }
 
     public function store(Request $request) {
+        
         $validator = Validator::make($request->all(), [
-                    'therapeuticName' => 'required',                    
-        ]);
-
+                    'therapeuticName' => 'required|unique:therapy,Name,'.$request->tid.',_id',                    
+        ]);        
         if ($validator->fails()) {
             $errors = $validator->errors();
             $errors = json_decode($errors);

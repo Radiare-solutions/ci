@@ -68,7 +68,7 @@
                         <div id="molecule" class="hide">
                             <div class="col-md-3">	
                                 <div class="form-group">
-                                    <label>level 1:</label>
+                                    <label>Primary Group:</label>
                                     <select class="select" name="level1_details" id="level1_details" onchange="loadFeedLevel2(this.value)">
 
                                     </select>
@@ -77,7 +77,7 @@
 
                             <div class="col-md-3">	
                                 <div class="form-group">
-                                    <label>Level 2:</label>
+                                    <label>Secondary Group:</label>
                                     <select class="select" name="level2_details" id="level2_details" onchange="loadFeedMolecule()">
 
                                     </select>
@@ -86,7 +86,7 @@
 
                             <div class="col-md-6">	
                                 <div class="form-group">
-                                    <label>Molecule:</label>
+                                    <label>Molecule Name:</label>
                                     <select class="select" name="molecule_details" id="molecule_details">
 
                                     </select>

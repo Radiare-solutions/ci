@@ -27,12 +27,12 @@ class DataTypesController extends Controller {
     public function store(Request $request) {
         if(empty($request->dataTypeID)) {
             $validator = Validator::make($request->all(), [
-                    'dataTypeName' => 'required',
+                    'dataTypeName' => 'required|unique:data_types,typeName,_id',
             ]);
         }
         else {
             $validator = Validator::make($request->all(), [
-                    'editDataTypeName' => 'required',
+                    'editDataTypeName' => 'required|unique:data_types,typeName,'.$request->dataTypeID.',_id',
             ]);
         }
 

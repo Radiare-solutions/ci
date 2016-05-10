@@ -32,7 +32,7 @@ class ConditionController extends Controller {
     
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'editConditionName' => 'required',
+                    'editConditionName' => 'required|unique:ci_clinical_condition,condition_name,'.$request->conditionID.',_id',
             ]);
         
         if ($validator->fails()) {

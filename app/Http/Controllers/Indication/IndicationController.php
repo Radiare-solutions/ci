@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Indication\Indication;
 use App\Models\Therapeutic\Therapeutic;
 use Illuminate\Http\Request;
+use App\Http\Requests\IndicationRequest;
 use Validator;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
@@ -59,12 +60,12 @@ class IndicationController extends Controller {
         return view('indication/index', array('therapy' => $therapy, 'therapeutic' => $therapeutic, 'details' => json_encode($listDetails)));
     }
 
-    public function store(Request $request) {
+    public function store(IndicationRequest $request) {
         $validator = Validator::make($request->all(), [
-                    'indicationName' => 'required|uk_phone',
+                    //'indicationName' => 'required',
                     'therapyName' => 'required',
         ]);
-
+        
         if ($validator->fails()) {
             $errors = $validator->errors();
             $errors = json_decode($errors);
@@ -82,7 +83,7 @@ class IndicationController extends Controller {
                         'message' => "Indication " . $str . " Successfully"
                             ], 200);
         }
-    }
+    }    
 
     public function indicationExists($request) {
         $obj = new Indication();

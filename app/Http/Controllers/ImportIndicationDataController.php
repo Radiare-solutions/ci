@@ -46,34 +46,34 @@ class ImportIndicationDataController extends Controller {
             $i = $counter - 1;
             $row = $objWorksheet->rangeToArray('A' . $counter . ':' . $highest_col . $counter);
 
-            if (empty($row[$i][2])) 
+            if (empty($row[$i][1])) 
             {
                 $tOb = \App\Models\Therapeutic\Therapeutic::where('Name', $therapeuticName)->first();
                 $tID = $tOb['attributes']['_id'];
                 $iOb = new \App\Models\Indication\Indication();
-                $iOb->insertFromDataFile((string) $tID, $row[$i][1]);
+                $iOb->insertFromDataFile((string) $tID, $row[$i][0]);
             } 
             else 
             {
-                $therapeuticName = $row[$i][2];
-                if (!in_array($row[$i][2], $therapy)) 
+                $therapeuticName = $row[$i][1];
+                if (!in_array($row[$i][1], $therapy)) 
                 {
                     $tOb = new \App\Models\Therapeutic\Therapeutic();
-                    $tOb->insertFromDataFile($row[$i][2]);                    
+                    $tOb->insertFromDataFile($row[$i][1]);                    
                     array_push($therapy, $therapeuticName);
 
                     $tOb = \App\Models\Therapeutic\Therapeutic::where('Name', $therapeuticName)->first();
                     $tID = $tOb['attributes']['_id'];
 
                     $iOb = new \App\Models\Indication\Indication();
-                    $iOb->insertFromDataFile((string) $tID, $row[$i][1]);
+                    $iOb->insertFromDataFile((string) $tID, $row[$i][0]);
                 }
                 else 
                 {
                     $tOb = \App\Models\Therapeutic\Therapeutic::where('Name', $therapeuticName)->first();
                     $tID = $tOb['attributes']['_id'];
                     $iOb = new \App\Models\Indication\Indication();
-                    $iOb->insertFromDataFile((string) $tID, $row[$i][1]);                    
+                    $iOb->insertFromDataFile((string) $tID, $row[$i][0]);                    
                 }
             }
         }

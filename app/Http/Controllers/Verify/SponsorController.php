@@ -8,7 +8,7 @@ use Validator;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
 
-use App\Models\SponserModel as SponserModel;
+use App\Models\SponsorModel as SponsorModel;
 
 /**
  * Description of SponsorController
@@ -19,7 +19,7 @@ class SponsorController extends Controller {
     
     public function index() {
         $listDetails = array();
-        $sponsorObj = SponserModel::where('isActive', 1)->get();
+        $sponsorObj = SponsorModel::where('isActive', 1)->get();
         foreach ($sponsorObj as $sponsorDetail) {
             $sponsorAttr = $sponsorDetail['attributes'];
             $arr['_id'] = (string) $sponsorAttr['_id'];
@@ -32,7 +32,7 @@ class SponsorController extends Controller {
     
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'editSponsorName' => 'required',
+                    'editSponsorName' => 'required|unique:ci_clinical_sponsor,sponsor_name,'.$request->sponsorID.',_id',
             ]);
         
         if ($validator->fails()) {
@@ -55,17 +55,17 @@ class SponsorController extends Controller {
     }
     
     public function sponsorExists($request) {
-        $obj = new SponserModel();
+        $obj = new SponsorModel();
         return $obj->editSponsor($request);
     }
     
     public function loadSponsor($id ) {
-        $obj = new SponserModel();
+        $obj = new SponsorModel();
         return $obj->loadSponsorDetails($id);        
     }
     
     public function removeSponsor($id) {
-        $obj = new SponserModel();
+        $obj = new SponsorModel();
         return $obj->removeSponsor($id);
     }
     

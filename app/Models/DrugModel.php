@@ -15,14 +15,14 @@ class DrugModel extends Eloquent
     
      public function FetchDrug($drug_name){
        $DrugModel=DrugModel::where("drug_name",'=',$drug_name)->first();
-       return $DrugModel->_id;
+       return $DrugModel;
     }
     
     public function editDrug($request) {
        $drug = array('drug_name' => "$request->editDrugName");
        DrugModel::where('_id', $request->drugID)->update(($drug));
        return "Updated";
-    }
+}
     
     public function loadDrugDetails($id) {
        $ob = DrugModel::find(new \MongoDB\BSON\ObjectId($id));

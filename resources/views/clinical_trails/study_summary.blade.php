@@ -1,10 +1,13 @@
-@extends('layouts.clinical_trail')
-
-@section('content')
-
 <?php
     $detailSummary = $summaryData['attributes'];
 ?>
+@extends('layouts.clinical_trail', 
+            array(
+                    'test' => 'hello world'
+                )
+        )
+
+@section('content')
 
                 <!-- BEGIN PROFILE HEADER -->
                 <section class="full-bleed">
@@ -66,7 +69,10 @@
                                 <div class="col-md-12 col-xs-12">
 
                                     <div class="col-md-4 text-center">
-                                        <strong class="text-xl"><?php echo $verifyNames['sponsor_name']; ?></strong><br/>
+                                        <?php
+                                            $sponsor = explode(" ", $verifyNames['sponsor_name']);
+                                        ?>
+                                        <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $verifyNames['sponsor_name']; ?>" ><?php echo $sponsor[0];?></strong><br/>
                                         <span class="text">Sponsor</span>
                                     </div>
                                     <div class="col-md-4 text-center " >
@@ -97,7 +103,7 @@
                                         <span class="text">Enrollment</span>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <strong class="text-xl"><?php echo $detailSummary['status_name'];?></strong><br/>
+                                        <strong class="text-xl"><?php echo $verifyNames['status_name'];?></strong><br/>
                                         <span class="text">Status</span>
                                     </div>
 
@@ -174,7 +180,7 @@
                                                 <div class="tile-text text-medium">
                                                     Primary Outcome Measure
                                                     <p class="text-light text-xs no-margin">
-                                                        Change From Baseline in Modified Total Sharp X-Ray Score at Week 26 [ Time Frame: Baseline, Week 26 ] [ Designated as safety issue: No ]...<button class="btn btn-xs btn-flat btn-primary hidden-xs" href="index.html">Read More</button>
+                                                        <?php echo ViewHelper::displayRevisedText($detailSummary['primary_measure_def']);?>
                                                     </p>
                                                 </div>
 

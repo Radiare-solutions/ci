@@ -32,7 +32,7 @@ class DrugController extends Controller {
     
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'editDrugName' => 'required',
+                    'editDrugName' => 'required|unique:ci_clinical_drug,drug_name,'.$request->drugID.',_id',
             ]);
         
         if ($validator->fails()) {

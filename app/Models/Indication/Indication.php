@@ -340,4 +340,38 @@ class Indication extends Eloquent {
         Indication::where('Therapy', $this->therapyName)->push('Indication', ($indication));
 
     }
+    
+     public function checkDuplicateByIndicationNameAndTherapeuticID($tid, $indicationName) {
+        
+        $this->therapyName = new \MongoDB\BSON\ObjectId($tid);
+        $this->indicationName = $indicationName;
+
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$Indication'),
+                        array('$unwind' => '$Indication._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('Therapy' => $this->therapyName),
+                                    array('Indication.Name' => array('$in' => array($this->indicationName))),
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'Therapy' => 1,
+                                'Indication' => 1,
+                            )),
+            ));
+        });
+        $id = "";
+        foreach ($result as $query) {
+           $id = $query['Indication']['_id'];
+        }
+        if (empty($id)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 }

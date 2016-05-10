@@ -14,7 +14,6 @@
                     <li <?php if($page == 'data_type') echo "class='active'";?>><a href="datatype_mgmt">Data</a></li>
                 </ul>
             </li>
-            <li <?php if($page == 'feed') echo "class='active'";?>><a href="feeds.html"><i class="icon-menu9"></i> <span>Feed</span></a></li>
             <li <?php if($page == 'client_setup') echo "class='active'";?>><a href="client_setup"><i class="icon-steam"></i> <span>Client Setup</span></a></li>
             <li>
                 <a href="#"><i class="icon-database-arrow"></i> <span>Verify</span></a>
@@ -24,7 +23,7 @@
                     <li <?php if($page == 'sponsor') echo "class='active'";?>><a href="sponsor_mgmt">Sponsor</a></li>
                 </ul>
             </li>
-
+            <li <?php if($page == 'feed') echo "class='active'";?>><a href="feeds.html"><i class="icon-menu9"></i> <span>Feed</span></a></li>
         </ul>
     </div>
 </div>

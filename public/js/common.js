@@ -16,9 +16,12 @@ function add_indication_submit() {
             window.location.reload();
         },
         error: function (data) {
+            //var data = json_decode(data);
+            //data = JSON.stringify(data);
+            console.log(data);
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                var errors = data.responseJSON;
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {
