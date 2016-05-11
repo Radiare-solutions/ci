@@ -34,9 +34,6 @@ class FeedRequest extends Request
             }
             
             $dTypeOb = DataTypes::where('isActive', 1)->get();
-//            echo '<pre>';
-//            print_r($dTypeOb);
-//            exit;
             foreach($dTypeOb as $typeDetails) {
                 $temp = str_replace(" ", "", $typeDetails['attributes']['typeName']);
                 $str = implode(",", $req->get($temp));

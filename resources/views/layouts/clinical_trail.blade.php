@@ -337,6 +337,12 @@
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script src="{{ URL::asset("js/vend/c3.js") }}"></script>
 
+		<script src="{{ URL::asset("js/libs/moment/moment.min.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/bootstrap-datepicker/bootstrap-datepicker.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/bootstrap-multiselect/bootstrap-multiselect.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/microtemplating/microtemplating.min.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/jquery-knob/jquery.knob.min.js") }}"></script>
+		<script src="{{ URL::asset("js/core/demo/DemoPageSearch.js") }}"></script>
         <!-- END JAVASCRIPT -->
         <script>
             if ($('#morris-bar-graph').length > 0) {
@@ -398,7 +404,15 @@
                 });
             }
 
+</script>
+<script>
+$('.dial').each(function () {
+			var options = materialadmin.App.getKnobStyle($(this));
+			$(this).knob(options);
 
+		});
+
+</script>
 
 
         </script>

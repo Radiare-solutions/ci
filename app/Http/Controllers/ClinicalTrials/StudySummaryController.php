@@ -12,7 +12,7 @@ use App\Models\StatusModel;
 class StudySummaryController extends Controller {
     
     public function loadStudySummary() {   
-        $id = "57317e534884820b74009f1f";
+        $id = "5732c7314884822404001f3b";
         $obj = ClinicalTrialModel::find(new \MongoDB\BSON\ObjectId($id))->first();
         $trialAttr = $obj['attributes'];
         $sponsorObj = SponsorModel::find($trialAttr['sponsor_id']);

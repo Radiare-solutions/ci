@@ -72,7 +72,8 @@
                                         <?php
                                             $sponsor = explode(" ", $verifyNames['sponsor_name']);
                                         ?>
-                                        <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $verifyNames['sponsor_name']; ?>" ><?php echo $sponsor[0];?></strong><br/>
+                                        <strong class="text-xl"><?php echo $verifyNames['sponsor_name']; ?></strong><br/>
+                                         <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $verifyNames['sponsor_name']; ?>" ><?php echo $sponsor[0];?></strong><br/>
                                         <span class="text">Sponsor</span>
                                     </div>
                                     <div class="col-md-4 text-center " >
@@ -158,7 +159,9 @@
                                                 <div class="tile-text text-medium">	
                                                     Intervention
                                                     <p class="text-light text-xs no-margin">
+                                                    <ul>
                                                          <?php echo ViewHelper::displayRevisedText($detailSummary['intervention']); ?>
+                                                    </ul>
                                                     </p>
                                                 </div>
 
@@ -180,7 +183,9 @@
                                                 <div class="tile-text text-medium">
                                                     Primary Outcome Measure
                                                     <p class="text-light text-xs no-margin">
+                                                    <ul>
                                                         <?php echo ViewHelper::displayRevisedText($detailSummary['primary_measure_def']);?>
+                                                    </ul>
                                                     </p>
                                                 </div>
 
