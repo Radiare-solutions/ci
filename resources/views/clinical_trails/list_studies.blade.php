@@ -85,7 +85,7 @@ array(
                 <li ><a href="#web2">Phase</a></li>
                 <li><a href="#web1">Drug</a></li>
                 <li><a href="#web1">Condition</a></li>
-                <li><a href="#web1">Sponsor</a></li>
+                <li><a href="#web5">Sponsor</a></li>
             </ul> 
 
 
@@ -276,6 +276,30 @@ array(
 
                     </div>
                 </div>
+                
+                                <div class="tab-pane" id="web5">
+                    <div class="small-padding  ">
+                        <h4 class="text-normal text-xl"></h4>
+                        <ul class="nav nav-pills nav-stacked nav-transparent">
+                            <?php
+                            foreach($sponsorData as $sponsor_data) {
+                            ?>
+                            <li>
+                                <div class="checkbox checkbox-styled tile-text">
+                                    <label>
+                                        <input type="checkbox" value="<?php echo $sponsor_data['id'];?>">
+                                        <span>
+                                            <?php echo $sponsor_data['sponsor_name'];?>
+                                        </span>
+                                    </label>
+                                    <span class="badge pull-right"><?php echo $sponsor_data['total'];?></span>
+                                </div>
+                            </li>
+                            <?php } ?>								
+                        </ul>
+                    </div>
+                </div>
+                
             </div>
 
 
