@@ -143,7 +143,7 @@ class Molecule extends Eloquent {
                 'level2id' => $this->l2id,
                 'isActive' => 1
             );
-            Molecule::insert(array($molecule));
+            Molecule::insert(array($molecule));            
         } else {  // insert
             $this->l1id = new \MongoDB\BSON\ObjectId($request->level1Name);
             $this->l2id = new \MongoDB\BSON\ObjectId($request->level2Name);
@@ -239,5 +239,13 @@ class Molecule extends Eloquent {
         else
             return 0;
     }
+    
+    public function checkEditMoleculesExists($l1id, $l2id, $mid, $mname) {
+        $res = Molecule::where(array('level1id' => $l1id, 'level2id' => $l2id, '_id' => $mid, 'Name' => $mname))->get();
+        if(count($res) > 0)
+            return 1;
+        else
+            return 0;
+    }    
 
 }

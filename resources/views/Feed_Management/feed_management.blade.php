@@ -92,6 +92,7 @@
                     <form name="add_feed" id="add_feed" method="post">
                         <div class="panel panel-flat">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <div id="errorResponse"></div>
                             <div class="panel-body">
 
 

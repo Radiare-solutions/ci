@@ -13,6 +13,7 @@ use App\Models\Molecule\Level2;
 use App\Models\DataTypes\DataTypes;
 use App\Models\ModelHelper;
 use Illuminate\Http\Request;
+use App\Http\Requests\FeedRequest;
 use Validator;
 use Carbon\Carbon;
 use MongoDB\Model;
@@ -95,7 +96,7 @@ class Feed_Management_Controller extends Controller {
                         ], 200);
     }
 
-    public function add_feeds(Request $request) {
+    public function add_feeds(FeedRequest $request) {
         $validator = Validator::make($request->all(), [
 //                    'User_Name' => 'required',                    
 //                    'Email_Id' => 'required',                    
@@ -284,7 +285,7 @@ class Feed_Management_Controller extends Controller {
         }
     }
 
-    public function edit_feeds(Request $request) {
+    public function edit_feeds(FeedRequest $request) {
         $ob = new Feed_Management_Models();
         $ob->updateFeed($request);
     }

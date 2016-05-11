@@ -33,9 +33,9 @@ class ClinicalController extends Controller
        ini_set('max_execution_time', 0);
        $molecule_or_indication=urlencode("adalimumab");
        $api_query = $request->trial;
-       // $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       // $api_query="https://clinicaltrials.gov/search?term=adalimumab&displayxml=true";
        
-       $content = file_get_contents($api_query);
+$content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
        
        //Fetching count from Clinical trial rss feed as molecule wise
@@ -112,12 +112,39 @@ class ClinicalController extends Controller
                         
                         $brief_sum=$clinical_content_ext->brief_summary;
                         $brief_summary=(string)$brief_sum->textblock;
-
-                        $primary_measure=$clinical_content_ext->primary_outcome;
+                        $primary_outcome=$clinical_content_ext->primary_outcome;
                         
-                        $primary_measure_def=$primary_measure->measure." [ Time Frame: ".$primary_measure->time_frame." ] [ Designated as safety issue: ".$primary_measure->safety_issue." ]<br/> ".$primary_measure->description;
-
-
+                        $primary_measure_def_arr=array();
+                        foreach ($primary_outcome as $primary_measure) {
+                         $primary_measure_def_arr[]="<li style='margin:1ex 0.5ex' class='color-bullet'>".$primary_measure->measure." [ Time Frame: ".$primary_measure->time_frame." ] [ Designated as safety issue: ".$primary_measure->safety_issue." ]<br/> ".$primary_measure->description."</li>";  
+                        }
+                      
+                        $primary_measure_def=implode(" ",$primary_measure_def_arr);
+                        
+                        $secondary_measure_def_arr=array();
+                        $secondary_outcome=$clinical_content_ext->secondary_outcome;
+                        foreach ($secondary_outcome as $secondary_measure) {
+                         $secondary_measure_def_arr[]="<li style='margin:1ex 0.5ex' class='color-bullet'>".$secondary_measure->measure." [ Time Frame: ".$secondary_measure->time_frame." ] [ Designated as safety issue: ".$secondary_measure->safety_issue." ]<br/> ".$secondary_measure->description."</li>";  
+                        }
+                      
+                        $secondary_measure_def=implode(" ",$secondary_measure_def_arr);
+                        
+                        $eligibility=$clinical_content_ext->eligibility;
+                        $criteria=$eligibility->criteria;
+                        $eligibility_criteria=(string)$criteria->textblock;
+                        
+                        $eligibility_gender=(string)$eligibility->gender;
+                        
+                        $minimum_age=(string)$eligibility->minimum_age;
+                        
+                        $maximum_age=(string)$eligibility->maximum_age;
+                        $age=$minimum_age." to ".$maximum_age;
+                        
+                        $healthy_volunteers=(String)$eligibility->healthy_volunteers;
+                        
+                        $countries=$clinical_content_ext->location_countries;
+                        $location_country=(String)$countries->country;
+                        
                         $study_type=(string)$clinical_content_ext->study_type;
 
                         $study_design=(string)$clinical_content_ext->study_design;
@@ -308,19 +335,21 @@ class ClinicalController extends Controller
                         }
                         
                         
-               $UrlExist=$ClinicalTrialModel->FetchClinicalTrial($url,$molecule_or_indication);
+               $UrlExist=$ClinicalTrialModel->FetchClinicalTrial($url);
                if($UrlExist==null){        
                         $ClinicalTrialModel->ClinicalTrialInsert($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
                         $status_id,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
-                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponsor_id);
+                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,
+                        $sponsor_id,$secondary_measure_def,$eligibility_criteria,$age,$eligibility_gender,$healthy_volunteers,$location_country);
                         
                }else{
 //                        $clinical_trial_id=$UrlExist->_id;
                         $ClinicalTrialModel->ClinicalTrialUpdate($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
                         $status_id,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
-                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,$sponsor_id);
+                        $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,
+                        $sponsor_id,$secondary_measure_def,$eligibility_criteria,$age,$eligibility_gender,$healthy_volunteers,$location_country);
                           
                }
                }
@@ -384,7 +413,8 @@ class ClinicalController extends Controller
         }
         $second_elm_val=array();
         for ($index = 0; $index < count($even); $index++) {
-            $second_elm_val[]=$even[$index].$odd[$index];
+            $adverse_val=$even[$index].$odd[$index];
+            $second_elm_val[]=preg_match_all('#((.*?))#', $adverse_val, $matches);
         }
         
         $two_array=array($explode_array,$second_elm_val);
@@ -446,7 +476,5 @@ class ClinicalController extends Controller
        return $html;
        } 
        else { return null; }
-    }
-    
-   
+    }  
 }

@@ -152,9 +152,12 @@ function add_molecule_submit() {
             window.location.reload();
         },
         error: function (data) {
+           
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                if(data.responseJSON.message != "")
+                    var errors = data.responseJSON.message;
+                
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {
@@ -163,7 +166,7 @@ function add_molecule_submit() {
                 console.log(errorsHtml);
                 $('form#add_molecule #errorResponse').show().html(errorsHtml); //this is my div with messages
                 $('form#add_molecule #errorResponse').addClass("alert alert-danger");
-            }
+            }            
         }
     });
 }
@@ -392,7 +395,7 @@ function add_group_submit() {
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                var errors = data.responseJSON;
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {
@@ -453,14 +456,14 @@ function edit_bg_submit() {
         success: function (data) {
             // success logic
             $('form#edit_bg #errorResponse').removeClass("alert alert-danger");
-            $('form#edit_bg #errorResponse').show().html("Business Group Added successfully");
+            $('form#edit_bg #errorResponse').show().html("Business Group Updated successfully");
             $('form#edit_bg #errorResponse').addClass("alert alert-success");
             window.location.reload();
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                var errors = data.responseJSON;
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {
@@ -1414,7 +1417,7 @@ function load_edit_feed(id) {
                 for(var j=0;j<dtype.length;j++) {
                     var did = dataTypes[i];
                     did = did.replace(" ", "");
-                    load_add_more(did, dtype[j]);
+                    load_add_more(did, dtype[j].replace(" ", ""));
                 }
             }
             $("form#edit_feed #rss_feed_edit").val(details.feedLink);
@@ -1456,7 +1459,7 @@ function add_new_feed() {
             alert(JSON.stringify(data));
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                var errors = data.responseJSON;
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {
@@ -2056,7 +2059,7 @@ function add_client_setup() {
         error: function (data) {
             if (typeof data.responseJSON != "undefined")
             {
-                var errors = data.responseJSON.message;
+                var errors = data.responseJSON;
                 var errorsHtml = '';
 
                 $.each(errors, function (key, value) {

@@ -177,7 +177,7 @@ class Client extends Eloquent {
         );
         \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
                 //array('Name' => $request->clientName),           
-                array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => $this->groupID)))
+                array('$push' => array('BusinessGroup' => array('Name' => $request->groupName, '_id' => $this->groupID, 'isActive' => 1)))
         );
         \Illuminate\Support\Facades\DB::collection($this->collection)->where('_id', $this->clientID)->update(
                 array('Name' => $request->clientName)                
@@ -296,5 +296,74 @@ class Client extends Eloquent {
         $mid = new \MongoDB\BSON\ObjectId($mid);
         Client::where('_id', $mid)->update(array('isActive' => 0));
     }
+    
+    public function checkDuplicateGroupName($cid, $bgName) {
+        
+        $this->clientID = new \MongoDB\BSON\ObjectId($cid);
+        $this->groupName = $bgName;
+        
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$BusinessGroup'),
+                        array('$unwind' => '$BusinessGroup._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('_id' => $this->clientID),
+                                    array('BusinessGroup.Name' => array('$in' => array($this->groupName))),                                    
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'BusinessGroup' => 1,
+                            )),
+            ));
+        });
+        $id = "";
+        foreach ($result as $query) {
+           $id = $query['BusinessGroup']['_id'];
+        }
+        if (empty($id)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+    
+    public function checkEditDuplicateGroupName($cid, $bgid, $cName, $bgName) {
+        
+        $this->clientID = new \MongoDB\BSON\ObjectId($cid);
+        $this->groupID = new \MongoDB\BSON\ObjectId($bgid);
+        $this->clientName = $cName;
+        $this->groupName = $bgName;
+        
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array('$unwind' => '$BusinessGroup'),
+                        array('$unwind' => '$BusinessGroup._id'),
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('_id' => ($this->clientID)),
+                                    array('BusinessGroup._id' => array('$ne' => $this->groupID)),        
+                                    array('BusinessGroup.Name' => array('$in' => array($this->groupName))),                                    
+                                )
+                            )
+                        ),
+                        array('$project' => array(
+                                'BusinessGroup' => 1,
+                            )),
+            ));
+        });
+        $id = "";
+        foreach ($result as $query) {
+           $id = $query['BusinessGroup']['_id'];
+        }
+        if (empty($id)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }    
 
 }

@@ -11,6 +11,7 @@ use App\Models\Molecule\Level1;
 use App\Models\Molecule\Level2;
 use App\Models\Therapeutic\Therapeutic;
 use Illuminate\Http\Request;
+use App\Http\Requests\BusinessGroupRequest;
 use Validator;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
@@ -271,7 +272,7 @@ class ClientController extends Controller {
 
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'clientName' => 'required',
+                    'clientName' => 'required|unique:clients,Name,'.$request->cid.',_id',
         ]);
 
         if ($validator->fails()) {
@@ -301,7 +302,7 @@ class ClientController extends Controller {
         return $obj->loadClientDetails($cid);
     }
 
-    public function storeGroup(Request $request) {
+    public function storeGroup(BusinessGroupRequest $request) {
         $validator = Validator::make($request->all(), [
                     'clientName' => 'required',
                     'groupName' => 'required',
@@ -324,7 +325,7 @@ class ClientController extends Controller {
         }
     }
 
-    public function storeEditGroup(Request $request) {
+    public function storeEditGroup(BusinessGroupRequest $request) {
         $validator = Validator::make($request->all(), [
                     'clientName' => 'required',
                     'groupName' => 'required',
@@ -340,10 +341,10 @@ class ClientController extends Controller {
                             ], 422);
         } else {
             $str = $this->groupExists($request);
-//            return response()->json([
-//                        'success' => true,
-//                        'message' => "Business Group " . $str . " Successfully"
-//                            ], 200);
+            return response()->json([
+                        'success' => true,
+                        'message' => "Business Group " . $str . " Successfully"
+                            ], 200);
         }
     }
 

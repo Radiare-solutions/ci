@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use MongoDB\Model;
 use MongoDB\BSON\ObjectID;
-
+use App\Http\Requests\ClientSetupRequest;
 use App\Models\Client\Client;
 use App\Models\Client\ClientSetup;
 /**
@@ -31,7 +31,7 @@ class ClientSetupController extends Controller {
         ));
     }
     
-    public function store(Request $request) {
+    public function store(ClientSetupRequest $request) {
         $validator = Validator::make($request->all(), [
                     // 'RoleName' => 'required',
         ]);

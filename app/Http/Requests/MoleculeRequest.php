@@ -16,7 +16,7 @@ class MoleculeRequest extends Request {
         return [
             'level1Name' => 'required',
             'level2Name' => 'required',
-            'moleculeName' => 'required'
+            'moleculeName' => 'required',
         ];
     }
 
@@ -47,7 +47,7 @@ class MoleculeRequest extends Request {
             {
                 $res = 0;
                 if (!empty($req->get('level1Name')) && (!empty($req->get('level2Name'))))
-                    $res = $ob->checkDuplicateByIndicationNameAndTherapeuticID((string) $req->get('level1Name'), (string) $req->get('level2Name'), $req->get('moleculeName'));
+                    $res = $ob->checkEditMoleculesExists((string) $req->get('level1Name'), (string) $req->get('level2Name'), (string) $req->get('mid'), $req->get('moleculeName'));
                 if ($res == 1)
                     $validator->errors()->add('moleculeName', 'Molecule Name Already Exists');                
             }
