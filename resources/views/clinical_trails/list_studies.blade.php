@@ -303,7 +303,9 @@ array(
             </div>
         </form>
 
-
+<input type="hidden" name="page" id="page" value="0">
+<input type="hidden" name="field" id="field" value="clinical_name">
+<input type="hidden" name="order" id="order" value="asc">
             <!-- BEGIN TAB CONTENT -->
             <div class="card-body tab-content style-default-bright" style="border-left:1px solid #C4C4C4;">
                 <div class="">

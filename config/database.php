@@ -76,8 +76,7 @@ return [
 
         'mongodb' => array(
             'driver' => 'mongodb',
-            // 'host' => env('DB_HOST', '127.0.0.1'),
-            'host' => env('DB_HOST', array( '127.0.0.1, 192.168.1.150')),
+            'host' => env('DB_HOST', '127.0.0.1'),            
             /*'read' => array(
                 'host' => env('DB_HOST_READ'),
                 'database' => 'admin',

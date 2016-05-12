@@ -2084,11 +2084,14 @@ function add_client_setup() {
         }); */
 }
 
-function load_studies_by_filter(type, page = 0, field = 'clinical_name', order = 'asc') {
+function load_studies_by_filter(type, page, field, order) {
     console.log("type : " + type);
     var data = $('#filter_data').serialize();
     // $('input[name="'+type+'[]"]').serialize();
-    
+    page = $("#page").val();
+    field = $("#field").val();
+    order = $("#order").val();
+    console.log("fields : " + page + " - " + field + " - " + order);
     var url = "filter_studies/"+page+"/"+field+"/"+order;
     // var data = $('#edit_condition').serialize();
     $.ajax({
@@ -2098,6 +2101,12 @@ function load_studies_by_filter(type, page = 0, field = 'clinical_name', order =
         dataType: 'json',
         success: function (data) {
             $("strong#total").html(data.total);
+            if(data.total == "")
+            {
+                $("#page").val('0');
+                $("#field").val('clinical_name');
+                $("#order").val('asc');            
+            }
             $(".list-results").html(data.message);
         },
         error: function (data) {
@@ -2110,12 +2119,16 @@ function load_studies_by_filter(type, page = 0, field = 'clinical_name', order =
     });
 }
 
-function load_result_pager(page_id=1,field, order) {
+function load_result_pager(page_id,field, order) {
     console.log("page id : " + page_id);
+    $("#page").val(page_id);
     load_studies_by_filter('', page_id, field, order);
 }
 
 function sort_result_pager(field, order) {
     console.log("sort : " + field + " - " + order);
-    load_result_pager(1, field, order);
+    var page_id = $("#page").val();
+    $("#field").val(field);
+    $("#order").val(order);
+    load_result_pager(page_id, field, order);
 }

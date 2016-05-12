@@ -1,5 +1,7 @@
 <?php
-$i = ($page*5)+1;
+
+$recordsPerPage = 5;
+$i = ($page * $recordsPerPage) + 1;
 $str = '';
 $total = 1;
 if (count($details) > 0) {
@@ -16,6 +18,7 @@ if (count($details) > 0) {
             $str.='<div class="col-xs-1">
     <p class="text-medium text-lg text-black">' . $i . ')</p>
 </div>
+
 <div class="col-xs-11 no-padding">
     <p class="no-padding no-margin">
         <a class="text-medium text-lg text-primary" href="study-summary.html">' . $detail["title"] . '</a><br/>
@@ -40,17 +43,37 @@ if (count($details) > 0) {
             $i++;
         }
     }
-    if (($i > 5)||($total > 5)) {
-        $str.='<ul class="pagination"><li class="disabled"><a href="#">«</a></li>';
-        $pages = ceil($total/5);
+    if (($i > $recordsPerPage) || ($total > $recordsPerPage)) {
+        $disableStart = "";
+        $disableEnd = "";
+        $j = 0;
+        $k = 0;        
+        if ($page == 0)  { // disable the arrow  
+            $disableStart = "disabled";
+            $pageStartLink = $page;
+        }
+        else
+        {
+            $pageStartLink = $page-1;
+        }
+        $str.='<ul class="pagination"><li class="' . $disableStart . '"><a href="javascript:void(0);" onclick="load_result_pager('.($pageStartLink).')">«</a></li>';
+        $pages = ceil($total / $recordsPerPage);
         for ($j = 0; $j < $pages; $j++) {
             $active = "";
-            $k = $j+1;
-            if($page == $j)
+            $k = $j + 1;
+            if ($page == $j)
                 $active = "active";
-            $str.='<li class="'.$active.'"><a href="javascript:void(0);" onclick="load_result_pager('.$j.');">' . $k . '<span class="sr-only">(current)</span></a></li>';
+            $str.='<li class="' . $active . '"><a href="javascript:void(0);" onclick="load_result_pager(' . $j . ');">' . $k . '<span class="sr-only">(current)</span></a></li>';
         }
-        $str.="<li><a href='#'>»</a></li></ul>";
+        if (($page+1) == $pages) {
+            $disableEnd = "disabled";
+            $pageEndLink = $page;
+        }
+        else
+        {
+            $pageEndLink = $page+1;
+        }
+        $str.="<li class='" . $disableEnd . "'><a href='javascript:void(0);' onclick='load_result_pager(".($pageEndLink).")'>»</a></li></ul>";
     }
 } else {
     $str.= 'No Results Found';

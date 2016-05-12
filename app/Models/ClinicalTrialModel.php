@@ -126,6 +126,7 @@ class ClinicalTrialModel extends Eloquent {
 
     public function getFilteredResults($request, $page=0, $field='clinical_title', $order='asc') {
         $this->field = $field;
+        $this->order = $order;
         $this->page = $page;
         if($this->order == 'asc')
             $this->order = -1;
@@ -174,8 +175,7 @@ class ClinicalTrialModel extends Eloquent {
         }
     }
 
-    public function getTotalFilteredResults($request) {
-        
+    public function getTotalFilteredResults($request) {        
             $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
                 return $collection->aggregate(array(
                             array(
