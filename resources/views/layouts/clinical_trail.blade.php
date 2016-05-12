@@ -18,7 +18,7 @@
         <link type="text/css" rel="stylesheet" href="{{ URL::asset("css/theme-1/material-design-iconic-font.min.css?1421434286") }}" />
         <link type="text/css" rel="stylesheet" href="{{ URL::asset("css/theme-1/libs/morris/morris.core.css?1420463396") }}" />
         <!-- END STYLESHEETS -->
-
+        <script type="text/javascript" src="{{ URL::asset("js/common.js") }}"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script type="text/javascript" src="{{ URL::asset("assets/js/libs/utils/html5shiv.js?1403934957") }}"></script>

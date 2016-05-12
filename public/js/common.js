@@ -2083,3 +2083,39 @@ function add_client_setup() {
             }
         }); */
 }
+
+function load_studies_by_filter(type, page = 0, field = 'clinical_name', order = 'asc') {
+    console.log("type : " + type);
+    var data = $('#filter_data').serialize();
+    // $('input[name="'+type+'[]"]').serialize();
+    
+    var url = "filter_studies/"+page+"/"+field+"/"+order;
+    // var data = $('#edit_condition').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            $("strong#total").html(data.total);
+            $(".list-results").html(data.message);
+        },
+        error: function (data) {
+            console.log("error");
+            if (typeof data.responseJSON != "undefined")
+            {
+
+            }
+        }
+    });
+}
+
+function load_result_pager(page_id=1,field, order) {
+    console.log("page id : " + page_id);
+    load_studies_by_filter('', page_id, field, order);
+}
+
+function sort_result_pager(field, order) {
+    console.log("sort : " + field + " - " + order);
+    load_result_pager(1, field, order);
+}

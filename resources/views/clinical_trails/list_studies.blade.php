@@ -89,7 +89,7 @@ array(
             </ul> 
 
 
-
+            <form name="filter_data" id="filter_data">
             <div class="col-sm-3 no-padding tab-content ">
                 <div class="tab-pane active" id="web1">
                     <div class="small-padding ">
@@ -287,7 +287,7 @@ array(
                             <li>
                                 <div class="checkbox checkbox-styled tile-text">
                                     <label>
-                                        <input type="checkbox" value="<?php echo $sponsor_data['id'];?>">
+                                        <input type="checkbox" value="<?php echo $sponsor_data['id'];?>" name="sponsor[]" id="sponsor" onclick="load_studies_by_filter('sponsor', 0, 'clinical_trial', 'asc');">
                                         <span>
                                             <?php echo $sponsor_data['sponsor_name'];?>
                                         </span>
@@ -301,7 +301,7 @@ array(
                 </div>
                 
             </div>
-
+        </form>
 
 
             <!-- BEGIN TAB CONTENT -->
@@ -312,7 +312,7 @@ array(
 
                             <!-- BEGIN PAGE HEADER -->
                             <div class="margin-bottom-xxl">
-                                <span class="text-light text-lg">Search results <strong>34</strong></span>
+                                <span class="text-light text-lg">Search results: <strong id="total">0</strong></span>
                                 <div class="btn-group btn-group-sm pull-right">
                                     <button type="button" class="btn btn-default-light dropdown-toggle" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-arrow-down"></span> Sort
@@ -320,8 +320,8 @@ array(
                                     <ul class="dropdown-menu dropdown-menu-right animation-dock" role="menu">
                                         <li class="active"><a href="#">Date asc</a></li>
                                         <li><a href="#">Date desc</a></li>
-                                        <li><a href="#">Title asc</a></li>
-                                        <li><a href="#">Title desc</a></li>
+                                        <li><a href="javascript:void(0);" onclick="sort_result_pager('clinical_title', 'asc');">Title asc</a></li>
+                                        <li><a href="javascript:void(0);" onclick="sort_result_pager('clinical_title', 'desc');">Title desc</a></li>
                                     </ul>
                                 </div>
                             </div><!--end .margin-bottom-xxl -->
@@ -329,198 +329,20 @@ array(
 
                             <!-- BEGIN RESULT LIST -->
                             <div class="list-results list-results-underlined">
-                                <div class="col-xs-1">
-                                    <p class="text-medium text-lg text-black">1)</p>
-                                </div>
-                                <div class="col-xs-11 no-padding">
-                                    <p class="no-padding no-margin">
-                                        <a class="text-medium text-lg text-primary" href="study-summary.html">A Study of Adalimumab in Japanese Subjects With Rheumatoid Arthritis</a><br/>
-                                    </p>
-                                    <div class="col-md-10">
-                                        <!-- <div class="col-md-2">
-                                        <b>Sl NO : </b> 1 
-                                        </div> -->
-
-                                        <div class="col-md-4">
-                                            <b>Phase : </b> Phase 3 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <b>Condition : </b> Rheumatoid Arthritis
-                                        </div>
-                                        <div class="col-md-12">
-                                            <b>Interventions : </b>Biological: Double-blind adalimumab;   Drug: Double-blind Placebo;   Biological: Open-label Adalimumab;   Biological: Open-labelAdalimumabRescue
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 text-center ">
-                                        <strong>Completed</strong>
-                                        <br/>
-                                        <div class="knob knob-success knob-default-light-track size-1"><input type="text" class="dial" value="100" data-angleOffset=-125 data-angleArc=250 data-readOnly=true></div>
-                                    </div>
-                                </div><!--end .col -->
-                                <div class="col-xs-1">
-                                    <p class="text-medium text-lg text-black">2)</p>
-                                </div>
-                                <div class="col-xs-11 no-padding">
-                                    <p class="no-padding no-margin">
-                                        <a class="text-medium text-lg text-primary" href="study-summary.html">A Study of Adalimumab in Japanese Subjects With Rheumatoid Arthritis</a><br/>
-                                    </p>
-                                    <div class="col-md-10">
-                                        <!-- <div class="col-md-2">
-                                        <b>Sl NO : </b> 1 
-                                        </div> -->
-
-                                        <div class="col-md-4">
-                                            <b>Phase : </b> Phase 3 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <b>Condition : </b> Rheumatoid Arthritis
-                                        </div>
-                                        <div class="col-md-12">
-                                            <b>Interventions : </b>Biological: Double-blind adalimumab;   Drug: Double-blind Placebo;   Biological: Open-label Adalimumab;   Biological: Open-labelAdalimumabRescue
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 text-center ">
-                                        <strong>Completed</strong>
-                                        <br/>
-                                        <div class="knob knob-success knob-default-light-track size-1"><input type="text" class="dial" value="100" data-angleOffset=-125 data-angleArc=250 data-readOnly=true></div>
-                                    </div>
-                                </div><!--end .col -->
-                                <div class="col-xs-1">
-                                    <p class="text-medium text-lg text-black">3)</p>
-                                </div>
-                                <div class="col-xs-11 no-padding">
-                                    <p class="no-padding no-margin">
-                                        <a class="text-medium text-lg text-primary" href="study-summary.html">A Study of Adalimumab in Japanese Subjects With Rheumatoid Arthritis</a><br/>
-                                    </p>
-                                    <div class="col-md-10">
-                                        <!-- <div class="col-md-2">
-                                        <b>Sl NO : </b> 1 
-                                        </div> -->
-
-                                        <div class="col-md-4">
-                                            <b>Phase : </b> Phase 3 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <b>Condition : </b> Rheumatoid Arthritis
-                                        </div>
-                                        <div class="col-md-12">
-                                            <b>Interventions : </b>Biological: Double-blind adalimumab;   Drug: Double-blind Placebo;   Biological: Open-label Adalimumab;   Biological: Open-labelAdalimumabRescue
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 text-center ">
-                                        <strong>Completed</strong>
-                                        <br/>
-                                        <div class="knob knob-success knob-default-light-track size-1"><input type="text" class="dial" value="100" data-angleOffset=-125 data-angleArc=250 data-readOnly=true></div>
-                                    </div>
-                                </div><!--end .col -->
-                                <div class="col-xs-1">
-                                    <p class="text-medium text-lg text-black">4)</p>
-                                </div>
-                                <div class="col-xs-11 no-padding">
-                                    <p class="no-padding no-margin">
-                                        <a class="text-medium text-lg text-primary" href="study-summary.html">A Study of Adalimumab in Japanese Subjects With Rheumatoid Arthritis</a><br/>
-                                    </p>
-                                    <div class="col-md-10">
-                                        <!-- <div class="col-md-2">
-                                        <b>Sl NO : </b> 1 
-                                        </div> -->
-
-                                        <div class="col-md-4">
-                                            <b>Phase : </b> Phase 3 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <b>Condition : </b> Rheumatoid Arthritis
-                                        </div>
-                                        <div class="col-md-12">
-                                            <b>Interventions : </b>Biological: Double-blind adalimumab;   Drug: Double-blind Placebo;   Biological: Open-label Adalimumab;   Biological: Open-labelAdalimumabRescue
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 text-center ">
-                                        <strong>Completed</strong>
-                                        <br/>
-                                        <div class="knob knob-success knob-default-light-track size-1"><input type="text" class="dial" value="100" data-angleOffset=-125 data-angleArc=250 data-readOnly=true></div>
-                                    </div>
-                                </div><!--end .col -->
-                                <div class="col-xs-1">
-                                    <p class="text-medium text-lg text-black">5)</p>
-                                </div>
-                                <div class="col-xs-11 no-padding">
-                                    <p class="no-padding no-margin">
-                                        <a class="text-medium text-lg text-primary" href="study-summary.html">A Study of Adalimumab in Japanese Subjects With Rheumatoid Arthritis</a><br/>
-                                    </p>
-                                    <div class="col-md-10">
-                                        <!-- <div class="col-md-2">
-                                        <b>Sl NO : </b> 1 
-                                        </div> -->
-
-                                        <div class="col-md-4">
-                                            <b>Phase : </b> Phase 3 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <b>Condition : </b> Rheumatoid Arthritis
-                                        </div>
-                                        <div class="col-md-12">
-                                            <b>Interventions : </b>Biological: Double-blind adalimumab;   Drug: Double-blind Placebo;   Biological: Open-label Adalimumab;   Biological: Open-labelAdalimumabRescue
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 text-center ">
-                                        <strong>Completed</strong>
-                                        <br/>
-                                        <div class="knob knob-success knob-default-light-track size-1"><input type="text" class="dial" value="100" data-angleOffset=-125 data-angleArc=250 data-readOnly=true></div>
-                                    </div>
-                                </div><!--end .col -->
-                                <div class="col-xs-1">
-                                    <p class="text-medium text-lg text-black">6)</p>
-                                </div>
-                                <div class="col-xs-11 no-padding">
-                                    <p class="no-padding no-margin">
-                                        <a class="text-medium text-lg text-primary" href="study-summary.html">A Study of Adalimumab in Japanese Subjects With Rheumatoid Arthritis</a><br/>
-                                    </p>
-                                    <div class="col-md-10">
-                                        <!-- <div class="col-md-2">
-                                        <b>Sl NO : </b> 1 
-                                        </div> -->
-
-                                        <div class="col-md-4">
-                                            <b>Phase : </b> Phase 3 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <b>Condition : </b> Rheumatoid Arthritis
-                                        </div>
-                                        <div class="col-md-12">
-                                            <b>Interventions : </b>Biological: Double-blind adalimumab;   Drug: Double-blind Placebo;   Biological: Open-label Adalimumab;   Biological: Open-labelAdalimumabRescue
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 text-center ">
-                                        <strong>Completed</strong>
-                                        <br/>
-                                        <div class="knob knob-success knob-default-light-track size-1"><input type="text" class="dial" value="100" data-angleOffset=-125 data-angleArc=250 data-readOnly=true></div>
-                                    </div>
-                                </div><!--end .col -->
-
-
-
-
-
+                                
                             </div><!--end .list-results -->
                             <!-- END RESULTS LIST -->
 
                             <!-- BEGIN PAGING -->
-                            <ul class="pagination">
-                                <li class="disabled"><a href="#">«</a></li>
+<!--                            <ul class="pagination">
+                                <li class="disabled"><a href="#">«</a></li>                                
                                 <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
                                 <li><a href="#">2</a></li>
                                 <li><a href="#">3</a></li>
                                 <li><a href="#">4</a></li>
                                 <li><a href="#">5</a></li>
                                 <li><a href="#">»</a></li>
-                            </ul>
+                            </ul>-->
                             <!-- END PAGING -->
 
 

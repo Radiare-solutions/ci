@@ -57,7 +57,7 @@ $content = file_get_contents($api_query);
            $rss_feed_id=$feedExist->_id;
        }
            
-            $clinical_api_query=file_get_contents("$api_query"."&count=2");
+            $clinical_api_query=file_get_contents("$api_query"."&count=".$attr);
             $clinical_study_xml=simplexml_load_string($clinical_api_query);
 
             
