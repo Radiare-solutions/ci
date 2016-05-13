@@ -15,6 +15,8 @@ use App\Models\DrugModel as DrugModel;
 
 use App\Models\StatusModel as StatusModel;
 
+use App\Models\PhaseModel as PhaseModel;
+
 use App\Http\Requests;
 
 /* 
@@ -32,10 +34,11 @@ class ClinicalController extends Controller
        set_time_limit(0);
        ini_set('max_execution_time', 0);
        $molecule_or_indication=urlencode("adalimumab");
-       $api_query = $request->trial;
-       // $api_query="https://clinicaltrials.gov/search?term=adalimumab&displayxml=true";
        
-$content = file_get_contents($api_query);
+       // $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       $api_query = $request->trial;
+       
+       $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
        
        //Fetching count from Clinical trial rss feed as molecule wise
@@ -57,7 +60,7 @@ $content = file_get_contents($api_query);
            $rss_feed_id=$feedExist->_id;
        }
            
-            $clinical_api_query=file_get_contents("$api_query"."&count=".$attr);
+            $clinical_api_query=file_get_contents("$api_query"."&count=$attr");
             $clinical_study_xml=simplexml_load_string($clinical_api_query);
 
             
@@ -100,7 +103,7 @@ $content = file_get_contents($api_query);
                         $collaborator=$sponsors_array->collaborator;
                         $collaborator_name=(string)$collaborator->agency." ".(string)$collaborator->agency_class;
 
-                        $phase=(string)$clinical_content_ext->phase;
+                        $phase_name=(string)$clinical_content_ext->phase;
                         
                         $brief_title=(string)$clinical_content_ext->brief_title;
                         
@@ -277,6 +280,7 @@ $content = file_get_contents($api_query);
                         $other_adv_val=array("key"=>$other_event_header,"value"=>$other_event_values);
                          
                         $SponsorModel= new SponsorModel();
+                        $sponsor_name=preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $sponsor_name);
                         $sponsor_name=ucfirst(strtolower($sponsor_name));
                         $sponsor_name_id1=$SponsorModel->FetchSponsor(trim($sponsor_name)); //checking whether the sponsor name is exist or not exist
                         $sponsor_name_id=$sponsor_name_id1['attributes'];
@@ -287,12 +291,26 @@ $content = file_get_contents($api_query);
                         }else{
                           $sponsor_id=$sponsor_name_id['_id']; 
                         }
+                        
+                        $PhaseModel= new PhaseModel();
+                        $phase_name=preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $phase_name);    
+                        $phase_name=ucfirst(strtolower($phase_name));
+                        $phase_name_id1=$PhaseModel->FetchPhase(trim($phase_name)); //checking whether the sponsor name is exist or not exist
+                        $phase_name_id=$phase_name_id1['attributes'];
+                        
+                        if(count($phase_name_id)==0 || $phase_name_id==null || $phase_name_id=="")
+                        {
+                          $phase_id=$PhaseModel->AddPhase(trim($phase_name));   //we are adding the sponsor into the sponsor collection if sponsor is not exist
+                        }else{
+                          $phase_id=$phase_name_id['_id']; 
+                        }
                        
+                        
                         $DrugModel= new DrugModel();
                         
                         $drug_id_arr=array();
                         foreach ($drug_arr as $value) {
-                            
+                        $value=preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $value);    
                         $value=ucfirst(strtolower($value));
                         
                         $drug_name_id1=$DrugModel->FetchDrug($value); //checking whether the drug name is exist or not exist
@@ -311,6 +329,7 @@ $content = file_get_contents($api_query);
                         $drug_id=  implode(",", $drug_id_arr);
                         
                         $ConditionModel= new ConditionModel();
+                        $condition_name=preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $condition_name);
                         $condition_name=ucfirst(strtolower($condition_name));
                         $condition_name_id1=$ConditionModel->fetchCondition(trim($condition_name)); //checking whether the condition name is exist or not exist
                         $condition_name_id=$condition_name_id1['attributes'];
@@ -324,6 +343,7 @@ $content = file_get_contents($api_query);
                         }
                         
                         $StatusModel= new StatusModel();
+                        $status_name= preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $status_name);
                         $status_name=ucfirst(strtolower($status_name));
                         $status_name_id1=$StatusModel->fetchStatus(trim($status_name)); //checking whether the condition name is exist or not exist
                         $status_name_id=$status_name_id1['attributes'];
@@ -337,7 +357,7 @@ $content = file_get_contents($api_query);
                         
                $UrlExist=$ClinicalTrialModel->FetchClinicalTrial($url);
                if($UrlExist==null){        
-                        $ClinicalTrialModel->ClinicalTrialInsert($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
+                        $ClinicalTrialModel->ClinicalTrialInsert($rss_feed_id,$nct_id,$title,$collaborator_name,$phase_id,$intervention_implode,
                         $status_id,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
                         $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,
@@ -345,7 +365,7 @@ $content = file_get_contents($api_query);
                         
                }else{
 //                        $clinical_trial_id=$UrlExist->_id;
-                        $ClinicalTrialModel->ClinicalTrialUpdate($rss_feed_id,$nct_id,$title,$collaborator_name,$phase,$intervention_implode,
+                        $ClinicalTrialModel->ClinicalTrialUpdate($rss_feed_id,$nct_id,$title,$collaborator_name,$phase_id,$intervention_implode,
                         $status_id,$firstreceived_date,$lastchanged_date,$verification_date,$start_date,$study_completion_date,$primary_completion_date,$study_type,$study_design,$enrollment,
                         $primary_text1,$primary_text2,$primary_text3,$primary_res1,$primary_res2,$primary_res3,$url,$implode_serious_cnt,$implode_other_cnt,$serious_adv_val,$other_adv_val,
                         $official_title,$brief_title,$brief_summary,$detailed_description,$detailed_intervention,$primary_measure_def,$primary_measure_value,$detailed_outcome_measure,$drug_id,$condition_id,
@@ -399,10 +419,9 @@ $content = file_get_contents($api_query);
        $exp_array =explode("<br/>",preg_replace('#\x{00a0}#','<br/>', utf8_decode(preg_replace("/\s/",'',preg_replace("&# participants affected / at risk&","", strip_tags($implode_val_array))))));
        
        $explode_val_array= array_values(array_filter($exp_array, function($val) {return $val!=='';}));
-//        echo "<pre>";var_dump($explode_val_array);echo "</pre>";
-//       exit();
+       //echo "<pre>";var_dump($explode_val_array);echo "</pre>";
        $odd = array();
-        $even = array();
+       $even = array();
         foreach ($explode_val_array as $k => $v) {
             if ($k % 2 == 0) {
                 $even[] = $v;
@@ -411,17 +430,18 @@ $content = file_get_contents($api_query);
                 $odd[] = $v;
             }
         }
+//        echo "<pre>";var_dump($even);echo "</pre>";
+//        echo "<pre>";var_dump($odd);echo "</pre>";
         $second_elm_val=array();
-        for ($index = 0; $index < count($even); $index++) {
-            $adverse_val=$even[$index].$odd[$index];
-            $second_elm_val[]=preg_match_all('#((.*?))#', $adverse_val, $matches);
+        for ($index = 0; $index < count($odd); $index++) {
+            $adverse_val=$odd[$index];
+            $second_elm_val[]=preg_replace('/%/','',str_replace(")","",str_replace("(","",$adverse_val)));
         }
         
         $two_array=array($explode_array,$second_elm_val);
-//        var_dump($two_array);
-//exit();
         return $two_array;
    }
+   
    
    public function DOM($html){
        if(!empty($html)) {
@@ -476,5 +496,6 @@ $content = file_get_contents($api_query);
        return $html;
        } 
        else { return null; }
-    }  
+    }
+      
 }

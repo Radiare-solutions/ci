@@ -8,7 +8,8 @@ class ClinicalTrialModel extends Eloquent {
 
     protected $collection = 'ci_clinical_trial';
     protected $sponsor = array();
-    protected $fillable = array('rss_feed_id', 'identifier', 'clinical_title', 'collaborator', 'phase', 'intervention', 'status_id', 'first_received_date',
+    protected $status = array();
+    protected $fillable = array('rss_feed_id', 'identifier', 'clinical_title', 'collaborator', 'phase_id', 'intervention', 'status_id', 'first_received_date',
         'last_updated_date', 'last_verified_date', 'study_start_date', 'study_completion_date', 'primary_completion_date', 'study_type',
         'study_design', 'enrollment', 'primary_outcome_text1', 'primary_outcome_text2', 'primary_outcome_text3', 'primary_outcome_res1', 'primary_outcome_res2',
         'primary_outcome_res3', 'clinical_url', 'serious_adv_event_val', 'other_adv_event_val', 'detailed_serious_adverse', 'detailed_other_adverse',
@@ -16,13 +17,13 @@ class ClinicalTrialModel extends Eloquent {
         'detailed_outcome_measure', 'drug_id', 'condition_id', 'sponsor_id', 'secondary_measure_def', 'eligibility_criteria', 'age', 'eligibility_gender', 'healthy_volunteers', 'location_country', 'isActive');
 
     public function ClinicalTrialInsert(
-    $rss_feed_id, $nct_id, $title, $collaborator_name, $phase, $intervention_implode, $status_id, $firstreceived_date, $lastchanged_date, $verification_date, $start_date, $study_completion_date, $primary_completion_date, $study_type, $study_design, $enrollment, $primary_text1, $primary_text2, $primary_text3, $primary_res1, $primary_res2, $primary_res3, $url, $implode_serious_cnt, $implode_other_cnt, $serious_adv_val, $other_adv_val, $official_title, $brief_title, $brief_summary, $detailed_description, $detailed_intervention, $primary_measure_def, $primary_measure_value, $detailed_outcome_measure, $drug_id, $condition_id, $sponsor_id, $secondary_measure_def, $eligibility_criteria, $age, $eligibility_gender, $healthy_volunteers, $location_country) {
+    $rss_feed_id, $nct_id, $title, $collaborator_name, $phase_id, $intervention_implode, $status_id, $firstreceived_date, $lastchanged_date, $verification_date, $start_date, $study_completion_date, $primary_completion_date, $study_type, $study_design, $enrollment, $primary_text1, $primary_text2, $primary_text3, $primary_res1, $primary_res2, $primary_res3, $url, $implode_serious_cnt, $implode_other_cnt, $serious_adv_val, $other_adv_val, $official_title, $brief_title, $brief_summary, $detailed_description, $detailed_intervention, $primary_measure_def, $primary_measure_value, $detailed_outcome_measure, $drug_id, $condition_id, $sponsor_id, $secondary_measure_def, $eligibility_criteria, $age, $eligibility_gender, $healthy_volunteers, $location_country) {
 
         $clinicalTrialarray = array('rss_feed_id' => $rss_feed_id,
             'identifier' => $nct_id,
             'clinical_title' => $title,
             'collaborator' => $collaborator_name,
-            'phase' => $phase,
+            'phase_id' => $phase_id,
             'intervention' => $intervention_implode,
             'status_id' => $status_id,
             'first_received_date' => $firstreceived_date,
@@ -68,13 +69,13 @@ class ClinicalTrialModel extends Eloquent {
         ClinicalTrialModel::create($clinicalTrialarray);
     }
 
-    public function ClinicalTrialUpdate($rss_feed_id, $nct_id, $title, $collaborator_name, $phase, $intervention_implode, $status_id, $firstreceived_date, $lastchanged_date, $verification_date, $start_date, $study_completion_date, $primary_completion_date, $study_type, $study_design, $enrollment, $primary_text1, $primary_text2, $primary_text3, $primary_res1, $primary_res2, $primary_res3, $url, $implode_serious_cnt, $implode_other_cnt, $serious_adv_val, $other_adv_val, $official_title, $brief_title, $brief_summary, $detailed_description, $detailed_intervention, $primary_measure_def, $primary_measure_value, $detailed_outcome_measure, $drug_id, $condition_id, $sponsor_id, $secondary_measure_def, $eligibility_criteria, $age, $eligibility_gender, $healthy_volunteers, $location_country) {
+    public function ClinicalTrialUpdate($rss_feed_id, $nct_id, $title, $collaborator_name, $phase_id, $intervention_implode, $status_id, $firstreceived_date, $lastchanged_date, $verification_date, $start_date, $study_completion_date, $primary_completion_date, $study_type, $study_design, $enrollment, $primary_text1, $primary_text2, $primary_text3, $primary_res1, $primary_res2, $primary_res3, $url, $implode_serious_cnt, $implode_other_cnt, $serious_adv_val, $other_adv_val, $official_title, $brief_title, $brief_summary, $detailed_description, $detailed_intervention, $primary_measure_def, $primary_measure_value, $detailed_outcome_measure, $drug_id, $condition_id, $sponsor_id, $secondary_measure_def, $eligibility_criteria, $age, $eligibility_gender, $healthy_volunteers, $location_country) {
 
         $clinicalTrialarray = array('rss_feed_id' => $rss_feed_id,
             'identifier' => $nct_id,
             'clinical_title' => $title,
             'collaborator' => $collaborator_name,
-            'phase' => $phase,
+            'phase_id' => $phase_id,
             'intervention' => $intervention_implode,
             'status_id' => $status_id,
             'first_received_date' => $firstreceived_date,
@@ -124,77 +125,162 @@ class ClinicalTrialModel extends Eloquent {
         return $ClinicalTrialModel;
     }
 
-    public function getFilteredResults($request, $page=0, $field='clinical_title', $order='asc') {
+    public function getFilteredResults($request, $page = 0, $field = 'clinical_title', $order = 'asc') {
         $this->field = $field;
         $this->order = $order;
         $this->page = $page;
-        if($this->order == 'asc')
+        if ($this->order == 'asc')
             $this->order = -1;
-        else 
+        else
             $this->order = 1;
+        if (!empty($request->status)) {
+            foreach ($request->status as $statusValue) {
+                array_push($this->status, new \MongoDB\BSON\ObjectId($statusValue));
+            }
+        }
         if (!empty($request->sponsor)) {
             foreach ($request->sponsor as $sponsorValue) {
                 array_push($this->sponsor, new \MongoDB\BSON\ObjectId($sponsorValue));
             }
-            $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
-                return $collection->aggregate(array(
-                            array(
-                                '$match' => array(
-                                    '$or' => array(
-                                        array('sponsor_id' => array('$in' => ($this->sponsor))),
-                                    ),
+        }
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$or' => array(
+                                    array('sponsor_id' => array('$in' => ($this->sponsor))),
+                                    array('status_id' => array('$in' => ($this->status))),
                                 ),
                             ),
-                            array('$project' => array(
-                                    '_id' => 1,
-                                    'clinical_title' => 1,
-                                    'phase' => 1,
-                                    'status_id' => 1,
-                                    'condition_id' => 1,
-                                    'intervention' => 1,
-                                )),       
-                            array('$skip' => ($this->page * 5)),
-                            array('$limit' => 5),
-                            array('$sort' => array($this->field => $this->order))
-                ));
-            });
-            $details = array();
-            foreach ($result as $query) {
-                $temp['id'] = (string) $query['_id'];
-                $temp['title'] = $query['clinical_title'];
-                $temp['phase'] = $query['phase'];
-                $conditionObj = ConditionModel::find($query['condition_id']);
-                $temp['condition_name'] = $conditionObj['attributes']['condition_name'];
-                $statusObj = StatusModel::find($query['status_id']);
-                $temp['status_name'] = $statusObj['attributes']['status_name'];
-                $temp['intervention'] = $query['intervention'];
-                array_push($details, $temp);
-            }
-            $details['total'] = $this->getTotalFilteredResults($this->sponsor);
-            return $details;
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                'clinical_title' => 1,
+                                'phase_id' => 1,
+                                'status_id' => 1,
+                                'condition_id' => 1,
+                                'intervention' => 1,
+                            )),
+                        array('$skip' => ($this->page * 5)),
+                        array('$limit' => 5),
+                        array('$sort' => array($this->field => $this->order))
+            ));
+        });
+        $details = array();
+        foreach ($result as $query) {
+            $temp['id'] = (string) $query['_id'];
+            $temp['title'] = $query['clinical_title'];
+            $conditionObj = ConditionModel::find($query['condition_id']);
+            $temp['condition_name'] = $conditionObj['attributes']['condition_name'];
+            $statusObj = StatusModel::find($query['status_id']);
+            $temp['status_name'] = $statusObj['attributes']['status_name'];
+            $phaseObj = PhaseModel::find($query['phase_id']);
+            $temp['phase_name'] = $phaseObj['attributes']['phase_name'];
+            $temp['intervention'] = $query['intervention'];
+            array_push($details, $temp);
         }
+        $details['total'] = $this->getTotalFilteredResults($this->sponsor);
+        return $details;
+        //}
     }
 
-    public function getTotalFilteredResults($request) {        
-            $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
-                return $collection->aggregate(array(
-                            array(
-                                '$match' => array(
-                                    '$or' => array(
-                                        array('sponsor_id' => array('$in' => ($this->sponsor))),
-                                    ),
+    public function getTotalFilteredResults($request) {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$or' => array(
+                                    array('sponsor_id' => array('$in' => ($this->sponsor))),
+                                    array('status_id' => array('$in' => ($this->status))),
                                 ),
                             ),
-                            array('$project' => array(
-                                    '_id' => 1,
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
                             )),
-                ));
-            });
-            $details = array();
-            foreach ($result as $query) {
-                $temp['id'] = (string) $query['_id'];
-                array_push($details, $temp);
-            }
-            return sizeof($details);
+            ));
+        });
+        $details = array();
+        foreach ($result as $query) {
+            $temp['id'] = (string) $query['_id'];
+            array_push($details, $temp);
         }
+        return sizeof($details);
+    }
+
+    public function getSponsorDashboardResults() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                ),
+                            ),
+                        ),
+                        array(
+                            '$group' => array(
+                                '_id' => '$sponsor_id',                                
+                                'count' => array( '$sum' => 1),
+                            ),
+                        ),                        
+                        array('$project' => array(
+                                '_id' => 1,
+                                'sponsor_id' => '$_id',
+                                'count' => 1,
+                            )),
+                        array('$sort' => array('count' => -1)),
+                        array('$limit' => 10),
+            ));
+        });
+        $details = array();        
+        foreach ($result as $query) {
+            $temp['url'] = (string) $query['_id'];
+            $sponsorObj = SponsorModel::find($query['sponsor_id']);
+            $temp['y'] = $sponsorObj['attributes']['sponsor_name'];
+            $temp['a'] = $query['count'];
+            $test = array('y'=> $temp['y'], 'a'=> $temp['a'], 'url' => $temp['url']);
+            array_push($details, $test );
+        }
+        return $details;
+    }
+    
+    public function getPhaseDashboardResults() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                ),
+                            ),
+                        ),
+                        array(
+                            '$group' => array(
+                                '_id' => '$phase_id',                                
+                                'count' => array( '$sum' => 1),
+                            ),
+                        ),                        
+                        array('$project' => array(
+                                '_id' => 1,
+                                'phase_id' => '$_id',
+                                'count' => 1,
+                            )),
+                        array('$sort' => array('count' => -1)),
+                        array('$limit' => 5),
+            ));
+        });
+        $details = array();        
+        foreach ($result as $query) {
+            $temp['url'] = (string) $query['_id'];
+            $phaseObj = PhaseModel::find($query['phase_id']);
+            $temp['y'] = $phaseObj['attributes']['phase_name'];
+            $temp['a'] = $query['count'];
+            $test = array('y'=> $temp['y'], 'a'=> $temp['a'], 'url' => $temp['url']);
+            array_push($details, $test );
+        }
+        return $details;
+    }
+    
+
 }

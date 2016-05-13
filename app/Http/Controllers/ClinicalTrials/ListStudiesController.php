@@ -16,9 +16,13 @@ use App\Models\StatusModel;
 class ListStudiesController extends Controller {
 
     public function loadStudyList() {
+        $statusData = $this->statusData();
         $sponsorData = $this->sponsorData();
 
-        return view('clinical_trails\list_studies', array('sponsorData' => $sponsorData));
+        return view('clinical_trails\list_studies', array(
+            'statusData' => $statusData,
+            'sponsorData' => $sponsorData
+                ));
     }
 
     public function filterStudies(Request $request, $page = 0, $field='clinical_title', $order='asc') {
@@ -31,6 +35,20 @@ class ListStudiesController extends Controller {
                     'total' => $details['total'],
                         ], 200);
     }
+    
+    public function statusData($field = 'status_name', $order = 1) {
+        $ob = StatusModel::where('isActive', 1)->orderBy($field, $order)->get();
+        $arr = array();
+        foreach ($ob as $detail) {
+            $attr = $detail['attributes'];
+            $details['id'] = (string) $attr['_id'];
+            $details['status_name'] = $attr['status_name'];
+            $count = ClinicalTrialModel::where('status_id', $attr['_id'])->count();
+            $details['total'] = $count;
+            array_push($arr, $details);
+        }
+        return $arr;
+    }    
 
     public function sponsorData() {
         $ob = SponsorModel::where('isActive', 1)->get();

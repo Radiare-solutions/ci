@@ -2049,7 +2049,7 @@ function add_client_setup() {
                 dataType: 'json',
                 jsonp:false,
                 success: function (data) {
-                    window.location.href="feeds.html";
+                   window.location.href="feeds.html";
                 },
                 error: function (data) {
                 }

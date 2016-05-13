@@ -95,116 +95,24 @@ array(
                     <div class="small-padding ">
                         <h4 class="text-normal text-xl">Study Status</h4>
                         <ul class="nav nav-pills nav-stacked nav-transparent">
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox" checked>
-                                        <span>
-                                            Completed
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">155</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Terminated
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">45</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Recruiting
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">20</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Unknown
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">48</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Active, not recruiting
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">56</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Not yet recruiting
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">88</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Enrolling by invitation
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">78</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Withdrawn
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">20</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Approved for marketing
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">66</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Suspended
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">20</span>
-                                </div>
-                            </li>
+                            <?php
+                            foreach($statusData as $status_data)
+                            {
+                            ?>
+                                <li>
+                                    <div class="checkbox checkbox-styled tile-text">
+                                        <label>
+                                            <input type="checkbox" value="<?php echo $status_data['id'];?>" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
+                                            <span>
+                                                <?php echo $status_data['status_name'];?>
+                                            </span>
+                                        </label>
+                                        <span class="badge pull-right"><?php echo $status_data['total'];?></span>
+                                    </div>
+                                </li>
+                            <?php
+                            }
+                            ?>                                                                                                                                                                                                                                                                                                                       
                         </ul>
 
 

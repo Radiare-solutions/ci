@@ -147,6 +147,7 @@ Route::post('add_client_setup', 'Client\ClientSetupController@store');
 /* start of clinical trial codes */
 Route::get('study_summary', 'ClinicalTrials\StudySummaryController@loadStudySummary');
 
+Route::get('dashboard', 'ClinicalTrials\DashboardController@index');
 Route::get('list_studies', 'ClinicalTrials\ListStudiesController@loadStudyList');
 Route::post('filter_studies/{page}/{sort_field}/{order}', 'ClinicalTrials\ListStudiesController@filterStudies');
 /* end of clinical trial codes */

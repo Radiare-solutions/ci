@@ -25,7 +25,7 @@ if (count($details) > 0) {
     </p>
     <div class="col-md-10">
         <div class="col-md-4">
-            <b>Phase : </b> ' . $detail["phase"] . '
+            <b>Phase : </b> ' . $detail["phase_name"] . '
         </div>
         <div class="col-md-6">
             <b>Condition : </b> ' . $detail["condition_name"] . '
