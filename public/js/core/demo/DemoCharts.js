@@ -36,48 +36,48 @@
             return;
         }
 
-        var sampleDataYear = [
-            {x: '2010', y: 10, url: "results-text.html"},
-            {x: '2011', y: 30, url: "results-text.html"},
-            {x: '2012', y: 20, url: "results-text.html"},
-            {x: '2013', y: 25, url: "results-text.html"},
-            {x: '2014', y: 55, url: "results-text.html"},
-            {x: '2015', y: 14, url: "results-text.html"},
-            {x: '2016', y: 34, url: "http://www.google.com"},
-        ];
-
-
-
-        // Morris Area demo
-        if ($('#morris-area-graph').length > 0) {
-            var labelColor = $('#morris-area-graph').css('color');
-            Morris.Area({
-                element: 'morris-area-graph',
-                behaveLikeLine: true,
-                data: sampleDataYear,
-                xkey: 'x',
-                ykeys: ['y'],
-                labels: ['Studies'],
-                gridTextColor: labelColor,
-                lineColors: $('#morris-area-graph').data('colors').split(',')
-            });
-        }
-
-        $("#morris-area-graph").click(function () {
-            var newValue;
-            var newValue = $(this).find("div.morris-hover-row-label").text();
-
-            console.log(newValue);
-            for (var index = 0; index < sampleDataYear.length; index++)
-            {
-//     console.log(arr[index]);
-                if (sampleDataYear[index].x == newValue)
-                {
-                    window.location = sampleDataYear[index].url;
-                }
-            }
-// console.log(sampleDataYear[0].x);
-        });
+//        var sampleDataYear = [
+//            {x: '2010', y: 10, url: "results-text.html"},
+//            {x: '2011', y: 30, url: "results-text.html"},
+//            {x: '2012', y: 20, url: "results-text.html"},
+//            {x: '2013', y: 25, url: "results-text.html"},
+//            {x: '2014', y: 55, url: "results-text.html"},
+//            {x: '2015', y: 14, url: "results-text.html"},
+//            {x: '2016', y: 34, url: "http://www.google.com"},
+//        ];
+//
+//
+//
+//        // Morris Area demo
+//        if ($('#morris-area-graph').length > 0) {
+//            var labelColor = $('#morris-area-graph').css('color');
+//            Morris.Area({
+//                element: 'morris-area-graph',
+//                behaveLikeLine: true,
+//                data: sampleDataYear,
+//                xkey: 'x',
+//                ykeys: ['y'],
+//                labels: ['Studies'],
+//                gridTextColor: labelColor,
+//                lineColors: $('#morris-area-graph').data('colors').split(',')
+//            });
+//        }
+//
+//        $("#morris-area-graph").click(function () {
+//            var newValue;
+//            var newValue = $(this).find("div.morris-hover-row-label").text();
+//
+//            console.log(newValue);
+//            for (var index = 0; index < sampleDataYear.length; index++)
+//            {
+////     console.log(arr[index]);
+//                if (sampleDataYear[index].x == newValue)
+//                {
+//                    window.location = sampleDataYear[index].url;
+//                }
+//            }
+//// console.log(sampleDataYear[0].x);
+//        });
 
 
 

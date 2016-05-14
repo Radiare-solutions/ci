@@ -9,6 +9,8 @@ class ClinicalTrialModel extends Eloquent {
     protected $collection = 'ci_clinical_trial';
     protected $sponsor = array();
     protected $status = array();
+    protected $status_id = array();
+    protected $value = array();
     protected $fillable = array('rss_feed_id', 'identifier', 'clinical_title', 'collaborator', 'phase_id', 'intervention', 'status_id', 'first_received_date',
         'last_updated_date', 'last_verified_date', 'study_start_date', 'study_completion_date', 'primary_completion_date', 'study_type',
         'study_design', 'enrollment', 'primary_outcome_text1', 'primary_outcome_text2', 'primary_outcome_text3', 'primary_outcome_res1', 'primary_outcome_res2',
@@ -135,7 +137,17 @@ class ClinicalTrialModel extends Eloquent {
             $this->order = 1;
         if (!empty($request->status)) {
             foreach ($request->status as $statusValue) {
-                array_push($this->status, new \MongoDB\BSON\ObjectId($statusValue));
+                if ($statusValue == "all") {
+                    array_push($this->status, ($statusValue));
+                    $this->pipeline = '$ne';
+                    break;
+                } else {
+                    array_push($this->status, new \MongoDB\BSON\ObjectId($statusValue));
+                    $this->pipeline = '$in';
+                }
+
+                if (in_array("all", $request->status))
+                    $this->status = "all";
             }
         }
         if (!empty($request->sponsor)) {
@@ -148,8 +160,8 @@ class ClinicalTrialModel extends Eloquent {
                         array(
                             '$match' => array(
                                 '$or' => array(
-                                    array('sponsor_id' => array('$in' => ($this->sponsor))),
-                                    array('status_id' => array('$in' => ($this->status))),
+                                    //array('sponsor_id' => array('$in' => ($this->sponsor))),
+                                    array('status_id' => array($this->pipeline => ($this->status))),
                                 ),
                             ),
                         ),
@@ -179,19 +191,123 @@ class ClinicalTrialModel extends Eloquent {
             $temp['intervention'] = $query['intervention'];
             array_push($details, $temp);
         }
-        $details['total'] = $this->getTotalFilteredResults($this->sponsor);
-        return $details;
+        $details['total'] = $this->getTotalFilteredResults($request);
+        $datas = $this->getFilterValuesByFilter($request);
+        
+       // $details['phaseData'] = $datas['phaseData'];
+        // array_push($details['phaseData'], $datas['phaseData']);
+        return array(
+                'details' => $details,
+                // $details,
+                'total' => $details['total'],
+                'phaseData' => $datas['phaseData'],
+                'conditionData' => $datas['conditionData'],
+                );
         //}
-    }
+    }     
+        
+    public function getFilterValuesByFilter($request, $page = 0, $field = 'clinical_title', $order = 'asc') {
+//        $this->field = $field;
+//        $this->order = $order;
+//        $this->page = $page;
+//        if ($this->order == 'asc')
+//            $this->order = -1;
+//        else
+//            $this->order = 1;
+        if (!empty($request->status)) {
+            foreach ($request->status as $statusValue) {
+                if ($statusValue == "all") {
+                    array_push($this->status, ($statusValue));
+                    $this->pipeline = '$ne';
+                    break;
+                } else {
+                    array_push($this->status, new \MongoDB\BSON\ObjectId($statusValue));
+                    $this->pipeline = '$in';
+                }
 
-    public function getTotalFilteredResults($request) {
+                if (in_array("all", $request->status))
+                    $this->status = "all";
+            }
+        }
+        if (!empty($request->sponsor)) {
+            foreach ($request->sponsor as $sponsorValue) {
+                array_push($this->sponsor, new \MongoDB\BSON\ObjectId($sponsorValue));
+            }
+        }
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array(
                             '$match' => array(
                                 '$or' => array(
-                                    array('sponsor_id' => array('$in' => ($this->sponsor))),
-                                    array('status_id' => array('$in' => ($this->status))),
+                                    //array('sponsor_id' => array('$in' => ($this->sponsor))),
+                                    array('status_id' => array($this->pipeline => ($this->status))),
+                                ),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                'phase_id' => 1,
+                                'status_id' => 1,
+                                'condition_id' => 1,
+                            )),                        
+            ));
+        });
+        $details = array();
+        $phase = array();
+        $condition = array();
+        foreach ($result as $query) {
+            // $temp['phase_id'] = (string) $query['phase_id'];
+            array_push($phase, (string) $query['phase_id']);
+            array_push($condition, (string) $query['condition_id']);
+        }
+        $phase = array_count_values($phase);
+        $tempPhase = array();
+        foreach ($phase as $key => $value) {
+            $phase['phase_id'] = (string) $key;
+            $phase['phase_count'] = $value;
+            $phaseObj = PhaseModel::find(new \MongoDB\BSON\ObjectId($key));
+            $phase['phase_name'] = $phaseObj['phase_name'];
+            array_push($tempPhase, $phase);
+        }
+        $condition = array_count_values($condition);
+        $tempCondition = array();
+        foreach ($condition as $key => $value) {
+            $condition['condition_id'] = (string) $key;
+            $condition['condition_count'] = $value;
+            $conditionObj = ConditionModel::find(new \MongoDB\BSON\ObjectId($key));
+            $condition['condition_name'] = $conditionObj['condition_name'];
+            array_push($tempCondition, $condition);
+        }        
+        return array(
+                'phaseData' => json_encode($tempPhase),
+                'conditionData' => json_encode($tempCondition),
+            );
+    }   
+                                    
+    public function getTotalFilteredResults($request) {
+        if (!empty($request->status)) {
+            foreach ($request->status as $statusValue) {
+                if ($statusValue == "all") {
+                    array_push($this->status, ($statusValue));
+                    $this->pipeline = '$ne';
+
+                    break;
+                } else {
+                    array_push($this->status, new \MongoDB\BSON\ObjectId($statusValue));
+                    $this->pipeline = '$in';
+                }
+
+                if (in_array("all", $request->status))
+                    $this->status = "all";
+            }
+        }
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$or' => array(
+                                    // array('sponsor_id' => array('$in' => ($this->sponsor))),
+                                    array('status_id' => array($this->pipeline => ($this->status))),
                                 ),
                             ),
                         ),
@@ -220,10 +336,10 @@ class ClinicalTrialModel extends Eloquent {
                         ),
                         array(
                             '$group' => array(
-                                '_id' => '$sponsor_id',                                
-                                'count' => array( '$sum' => 1),
+                                '_id' => '$sponsor_id',
+                                'count' => array('$sum' => 1),
                             ),
-                        ),                        
+                        ),
                         array('$project' => array(
                                 '_id' => 1,
                                 'sponsor_id' => '$_id',
@@ -233,18 +349,18 @@ class ClinicalTrialModel extends Eloquent {
                         array('$limit' => 10),
             ));
         });
-        $details = array();        
+        $details = array();
         foreach ($result as $query) {
             $temp['url'] = (string) $query['_id'];
             $sponsorObj = SponsorModel::find($query['sponsor_id']);
             $temp['y'] = $sponsorObj['attributes']['sponsor_name'];
             $temp['a'] = $query['count'];
-            $test = array('y'=> $temp['y'], 'a'=> $temp['a'], 'url' => $temp['url']);
-            array_push($details, $test );
+            $test = array('y' => $temp['y'], 'a' => $temp['a'], 'url' => $temp['url']);
+            array_push($details, $test);
         }
         return $details;
     }
-    
+
     public function getPhaseDashboardResults() {
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
@@ -257,10 +373,10 @@ class ClinicalTrialModel extends Eloquent {
                         ),
                         array(
                             '$group' => array(
-                                '_id' => '$phase_id',                                
-                                'count' => array( '$sum' => 1),
+                                '_id' => '$phase_id',
+                                'count' => array('$sum' => 1),
                             ),
-                        ),                        
+                        ),
                         array('$project' => array(
                                 '_id' => 1,
                                 'phase_id' => '$_id',
@@ -270,17 +386,323 @@ class ClinicalTrialModel extends Eloquent {
                         array('$limit' => 5),
             ));
         });
-        $details = array();        
+        $details = array();
         foreach ($result as $query) {
             $temp['url'] = (string) $query['_id'];
             $phaseObj = PhaseModel::find($query['phase_id']);
             $temp['y'] = $phaseObj['attributes']['phase_name'];
             $temp['a'] = $query['count'];
-            $test = array('y'=> $temp['y'], 'a'=> $temp['a'], 'url' => $temp['url']);
-            array_push($details, $test );
+            $test = array($temp['y'], $temp['a'], $temp['url']);
+            array_push($details, $test);
         }
         return $details;
     }
+
+    public function getStatusDashboardResults() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                ),
+                            ),
+                        ),
+                        array(
+                            '$group' => array(
+                                '_id' => '$status_id',
+                                'count' => array('$sum' => 1),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                'status_id' => '$_id',
+                                'count' => 1,
+                            )),
+                        array('$sort' => array('count' => -1)),
+                            // array('$limit' => 5),
+            ));
+        });
+        $details = array();
+        $totalStatusRecords = 0;
+        foreach ($result as $query) {
+            $temp['url'] = "list_studies/status_id/" . (string) $query['_id'];
+            $statusObj = StatusModel::find($query['status_id']);
+            $temp['name'] = $statusObj['attributes']['status_name'];
+            $temp['value'] = $query['count'];
+            array_push($details, $temp);
+        }
+        return array('details' => $details, 'totalStatusRecords' => $totalStatusRecords);
+    }
+
+    public function getConditionDashboardResults() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                ),
+                            ),
+                        ),
+                        array(
+                            '$group' => array(
+                                '_id' => '$condition_id',
+                                'count' => array('$sum' => 1),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                'condition_id' => '$_id',
+                                'count' => 1,
+                            )),
+                        array('$sort' => array('count' => -1)),
+                        array('$limit' => 5),
+            ));
+        });
+        $details = array();
+        foreach ($result as $query) {
+            $temp['link'] = "list_studies/condition_id/" . (string) $query['_id'];
+            $conditionObj = ConditionModel::find($query['condition_id']);
+            $temp['text'] = $conditionObj['attributes']['condition_name'];
+            $temp['weight'] = $query['count'];
+            array_push($details, $temp);
+        }
+        return $details;
+    }
+
+    public function getDrugDashboardResults() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                ),
+                            ),
+                        ),
+                        array(
+                            '$group' => array(
+                                '_id' => '$drug_id',
+                                'count' => array('$sum' => 1),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                'drug_id' => '$_id',
+                                'count' => 1,
+                            )),
+                        array('$sort' => array('count' => -1)),
+                        array('$limit' => 10),
+            ));
+        });
+        $details = array();
+        foreach ($result as $query) {
+            $temp['url'] = (string) $query['_id'];
+            $drugObj = DrugModel::find($query['drug_id']);
+            $temp['name'] = $drugObj['attributes']['drug_name'];
+            $temp['value'] = $query['count'];
+            array_push($details, $temp);
+        }
+        return $details;
+    }
+
+    public function getEstimatedCompletionDashboardResults() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                    array('study_completion_date' => array('$ne' => '')),
+                                ),
+                            ),
+                        ),
+                        array(
+                            '$group' => array(
+                                '_id' => array('$substr' => array('$study_completion_date', 4, -1)),
+                                'count' => array('$sum' => 1),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                'study_completion_date' => '$_id',
+                                'count' => 1,
+                            )),
+                        array('$sort' => array('study_completion_date' => 1)),
+                        array('$limit' => 7),
+            ));
+        });
+        $details = array();
+        foreach ($result as $query) {
+            $temp['url'] = (string) $query['_id'];
+            $temp['x'] = $query['study_completion_date'];
+            $temp['y'] = $query['count'];
+            array_push($details, $temp);
+        }
+        return $details;
+    }
+
+    public function displayFilter($field, $values, $page = 0) {
+        $this->page = $page;
+        $this->field = $field;
+        if ($values == "all") {
+            $this->value = "";
+        } else {
+            $this->value = new \MongoDB\BSON\ObjectId($values);
+        }
+        if ($this->page != 0)
+            $this->page = $page;
+        else
+            $this->page = 0;
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                    array($this->field => array('$in' => array($this->value))),
+                                ),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                $this->field => '$_id',
+                                'count' => 1,
+                                'clinical_title' => 1,
+                                'phase_id' => 1,
+                                'status_id' => 1,
+                                'condition_id' => 1,
+                                'intervention' => 1,
+                            )),
+                        array('$skip' => $this->page),
+                        // array('$sort' => array($this->field => 1)),
+                        array('$limit' => 5),
+            ));
+        });
+        $details = array();
+        $phase = array();
+        $condition = array();
+        foreach ($result as $query) {
+            $temp['url'] = (string) $query['_id'];
+            array_push($phase, (string) $query['phase_id']);
+            array_push($condition, (string) $query['condition_id']);
+            $temp['title'] = $query['clinical_title'];
+            $conditionObj = ConditionModel::find($query['condition_id']);
+            $temp['condition_name'] = $conditionObj['attributes']['condition_name'];
+            $statusObj = StatusModel::find($query['status_id']);
+            $temp['status_name'] = $statusObj['attributes']['status_name'];
+            $phaseObj = PhaseModel::find($query['phase_id']);
+            $temp['phase_name'] = $phaseObj['attributes']['phase_name'];
+            $temp['intervention'] = $query['intervention'];
+            array_push($details, $temp);
+        }
+        $phase = array_count_values($phase);
+        $tempPhase = array();
+        foreach ($phase as $key => $value) {
+            $phase['phase_id'] = $key;
+            $phase['phase_count'] = $value;
+            $phaseObj = PhaseModel::find(new \MongoDB\BSON\ObjectId($key));
+            $phase['phase_name'] = $phaseObj['phase_name'];
+            array_push($tempPhase, $phase);
+        }
+        $condition = array_count_values($condition);
+        $tempCondition = array();
+        foreach ($condition as $key => $value) {
+            $condition['condition_id'] = $key;
+            $condition['condition_count'] = $value;
+            $conditionObj = ConditionModel::find(new \MongoDB\BSON\ObjectId($key));
+            $condition['condition_name'] = $conditionObj['condition_name'];
+            array_push($tempCondition, $condition);
+        }
+        $datas = $this->generateFilterValues();
+        return array(
+            'phase' => $datas['phase'],
+            'condition' => $datas['condition'],
+            'details' => $details,
+            'totalRecords' => $this->displayTotalRecordsFilter($field, $values, '$in', 0),
+        ); //$details;
+    }
     
+    public function generateFilterValues() {
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                    array($this->field => array('$in' => array($this->value))),
+                                ),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                $this->field => '$_id',
+                                'phase_id' => 1,
+                                'status_id' => 1,
+                                'condition_id' => 1,
+                            )),
+            ));
+        });
+        $details = array();
+        $phase = array();
+        $condition = array();
+        foreach ($result as $query) {
+            array_push($phase, (string) $query['phase_id']);
+            array_push($condition, (string) $query['condition_id']);
+        }
+        $phase = array_count_values($phase);
+        $tempPhase = array();
+        foreach ($phase as $key => $value) {
+            $phase['phase_id'] = $key;
+            $phase['phase_count'] = $value;
+            $phaseObj = PhaseModel::find(new \MongoDB\BSON\ObjectId($key));
+            $phase['phase_name'] = $phaseObj['phase_name'];
+            array_push($tempPhase, $phase);
+        }
+        $condition = array_count_values($condition);
+        $tempCondition = array();
+        foreach ($condition as $key => $value) {
+            $condition['condition_id'] = $key;
+            $condition['condition_count'] = $value;
+            $conditionObj = ConditionModel::find(new \MongoDB\BSON\ObjectId($key));
+            $condition['condition_name'] = $conditionObj['condition_name'];
+            array_push($tempCondition, $condition);
+        }
+        return array(
+            'phase' => json_encode($tempPhase),
+            'condition' => json_encode($tempCondition),
+            'details' => $details,
+            // 'totalRecords' => $this->displayTotalRecordsFilter($field, $values, '$in', 0),
+        ); //$details;
+    }
+
+    public function displayTotalRecordsFilter($field, $values, $pipeline = '$in', $page = 0) {
+        $this->field = $field;
+        $this->value = new \MongoDB\BSON\ObjectId($values);
+        $this->pipeline = $pipeline;
+        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+            return $collection->aggregate(array(
+                        array(
+                            '$match' => array(
+                                '$and' => array(
+                                    array('isActive' => 1),
+                                    array($this->field => array($this->pipeline => array($this->value))),
+                                ),
+                            ),
+                        ),
+                        array('$project' => array(
+                                '_id' => 1,
+                                $this->field => '$_id',
+                            )),
+            ));
+        });
+        $details = array();
+        $phase = array();
+        foreach ($result as $query) {
+            array_push($details, $query['_id']);
+        }
+        return sizeof($details);
+    }
 
 }

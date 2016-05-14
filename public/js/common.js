@@ -2092,7 +2092,7 @@ function load_studies_by_filter(type, page, field, order) {
     field = $("#field").val();
     order = $("#order").val();
     console.log("fields : " + page + " - " + field + " - " + order);
-    var url = "filter_studies/"+page+"/"+field+"/"+order;
+    var url = "/filter_studies/"+page+"/"+field+"/"+order;
     // var data = $('#edit_condition').serialize();
     $.ajax({
         type: 'post',
@@ -2107,6 +2107,8 @@ function load_studies_by_filter(type, page, field, order) {
                 $("#field").val('clinical_name');
                 $("#order").val('asc');            
             }
+            $('#web2').html(data.phaseFilter);
+            $('#web4').html(data.conditionFilter);
             $(".list-results").html(data.message);
         },
         error: function (data) {

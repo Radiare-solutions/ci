@@ -17,13 +17,21 @@ class DashboardController extends Controller {
 
     public function index() {
         $obData = new ClinicalTrialModel();
+        $statusData = $obData->getStatusDashboardResults();
+        $conditionData = $obData->getConditionDashboardResults();
+        $estimatedCompletionData = $obData->getEstimatedCompletionDashboardResults();
+        $drugData = $obData->getDrugDashboardResults();
         $sponsorData = $obData->getSponsorDashboardResults();
         $phaseData = $obData->getPhaseDashboardResults();
 //        echo '<pre>';
-//        print_r($sponsorData);
+//        print_r($estimatedCompletionData);
 //        exit;
         return view('clinical_trails\dashboard', array(
+            'statusData' => $statusData,
             'phaseData' => $phaseData,
+            'estimatedCompletionData' => $estimatedCompletionData,
+            'drugData' => $drugData,
+            'conditionData' => $conditionData,
             'sponsorData' => $sponsorData
         ));
     }

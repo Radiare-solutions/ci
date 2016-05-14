@@ -1,4 +1,3 @@
-
 @extends('layouts.clinical_trail', 
 array(
 'test' => 'hello world'
@@ -6,6 +5,10 @@ array(
 )
 
 @section('content')
+<?php
+$phaseData = json_decode($phaseData);
+$conditionData = json_decode($conditionData);
+?>
 <section class="no-margin no-padding">
     <div class="section-body no-margin">
 
@@ -46,7 +49,7 @@ array(
                 -->
                 <div class="col-md-2">
                     <div class="tools pull-left small-padding">
-                        <a href="index.html" class="btn btn-flat hidden-xs"><span class="glyphicon glyphicon-arrow-left"></span> &nbsp;Back to Dashboard</a>
+                        <a href="/dashboard" class="btn btn-flat hidden-xs"><span class="glyphicon glyphicon-arrow-left"></span> &nbsp;Back to Dashboard</a>
                     </div>
 
                 </div>
@@ -81,139 +84,94 @@ array(
                 <!-- <h1 class="no-y-padding">Category</h1> -->
                 <h4 class="text-xl text-normal small-padding">Category</h4>
 
-                <li class="active"><a href="#web1">Study Status</a></li>
+                <li <?php if($type == "status_id") echo "class=active";?> ><a href="#web1">Study Status</a></li>
                 <li ><a href="#web2">Phase</a></li>
-                <li><a href="#web1">Drug</a></li>
-                <li><a href="#web1">Condition</a></li>
+                <li><a href="#web3">Drug</a></li>
+                <li <?php if($type == "condition_id") echo "class=active";?> ><a href="#web4">Condition</a></li>
                 <li><a href="#web5">Sponsor</a></li>
             </ul> 
 
 
             <form name="filter_data" id="filter_data">
-            <div class="col-sm-3 no-padding tab-content ">
-                <div class="tab-pane active" id="web1">
-                    <div class="small-padding ">
-                        <h4 class="text-normal text-xl">Study Status</h4>
-                        <ul class="nav nav-pills nav-stacked nav-transparent">
-                            <?php
-                            foreach($statusData as $status_data)
-                            {
-                            ?>
+                <div class="col-sm-3 no-padding tab-content ">
+                    <div class="tab-pane active" id="web1">
+                        <div class="small-padding ">
+                            <h4 class="text-normal text-xl">Study Status</h4>
+                            <ul class="nav nav-pills nav-stacked nav-transparent">
                                 <li>
                                     <div class="checkbox checkbox-styled tile-text">
                                         <label>
-                                            <input type="checkbox" value="<?php echo $status_data['id'];?>" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
+                                            <input type="checkbox" value="all" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
                                             <span>
-                                                <?php echo $status_data['status_name'];?>
+                                                Select All
                                             </span>
                                         </label>
-                                        <span class="badge pull-right"><?php echo $status_data['total'];?></span>
+                                        <span class="badge pull-right"><?php echo $totalStatusCount; ?></span>
                                     </div>
                                 </li>
-                            <?php
-                            }
-                            ?>                                                                                                                                                                                                                                                                                                                       
-                        </ul>
+                                <?php
+                                foreach ($statusData as $status_data) {
+                                    $statusChecked = "";
+                                    if (($type == "status_id") && ($status_data['id'] == $value))
+                                        $statusChecked = "checked";
+                                    ?>
+                                    <li>
+                                        <div class="checkbox checkbox-styled tile-text">
+                                            <label>
+                                                <input type="checkbox" <?php echo $statusChecked; ?> value="<?php echo $status_data['id']; ?>" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
+                                                <span>
+                                                    <?php echo $status_data['status_name']; ?>
+                                                </span>
+                                            </label>
+                                            <span class="badge pull-right"><?php echo $status_data['total']; ?></span>
+                                        </div>
+                                    </li>
+                                    <?php
+                                }
+                                ?>                                                                                                                                                                                                                                                                                                                       
+                            </ul>
 
 
+                        </div>
                     </div>
-                </div>
 
-
-                <div class="tab-pane" id="web2">
-                    <div class="small-padding  ">
-                        <h4 class="text-normal text-xl">Study Phase</h4>
-                        <ul class="nav nav-pills nav-stacked nav-transparent">
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox" checked>
-                                        <span>
-                                            Phase 1
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">155</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Phase 2
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">45</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Phase 3
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">20</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Phase 4
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">48</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox">
-                                        <span>
-                                            Phase 5
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right">56</span>
-                                </div>
-                            </li>										
-                        </ul>
-
-
+                    <div class="tab-pane" id="web2">
+                        <?php echo View::make('clinical_trails\filter_phase', array('phaseData' => $phaseData))->render(); ?>
                     </div>
-                </div>
-                
-                                <div class="tab-pane" id="web5">
-                    <div class="small-padding  ">
-                        <h4 class="text-normal text-xl"></h4>
-                        <ul class="nav nav-pills nav-stacked nav-transparent">
-                            <?php
-                            foreach($sponsorData as $sponsor_data) {
-                            ?>
-                            <li>
-                                <div class="checkbox checkbox-styled tile-text">
-                                    <label>
-                                        <input type="checkbox" value="<?php echo $sponsor_data['id'];?>" name="sponsor[]" id="sponsor" onclick="load_studies_by_filter('sponsor', 0, 'clinical_trial', 'asc');">
-                                        <span>
-                                            <?php echo $sponsor_data['sponsor_name'];?>
-                                        </span>
-                                    </label>
-                                    <span class="badge pull-right"><?php echo $sponsor_data['total'];?></span>
-                                </div>
-                            </li>
-                            <?php } ?>								
-                        </ul>
-                    </div>
-                </div>
-                
-            </div>
-        </form>
+                    
+                    <div class="tab-pane" id="web4">
+                        <?php echo View::make('clinical_trails\filter_condition', array('conditionData' => $conditionData))->render(); ?>
+                    </div>                    
 
-<input type="hidden" name="page" id="page" value="0">
-<input type="hidden" name="field" id="field" value="clinical_name">
-<input type="hidden" name="order" id="order" value="asc">
+                    <div class="tab-pane" id="web5">
+                        <div class="small-padding  ">
+                            <h4 class="text-normal text-xl"></h4>
+                            <ul class="nav nav-pills nav-stacked nav-transparent">
+                                <?php
+//foreach($sponsorData as $sponsor_data) {
+                                ?>
+                                <li>
+                                    <div class="checkbox checkbox-styled tile-text">
+                                        <label>
+                                            <input type="checkbox" value="<?php //echo $sponsor_data['id'];  ?>" name="sponsor[]" id="sponsor" onclick="load_studies_by_filter('sponsor', 0, 'clinical_trial', 'asc');">
+                                            <span>
+                                                <?php //echo $sponsor_data['sponsor_name']; ?>
+                                            </span>
+                                        </label>
+                                        <span class="badge pull-right"><?php //echo $sponsor_data['total'];  ?></span>
+                                    </div>
+                                </li>
+                                <?php // }  ?>								
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <input type="hidden" name="page" id="page" value="0">
+            <input type="hidden" name="field" id="field" value="clinical_name">
+            <input type="hidden" name="order" id="order" value="asc">
             <!-- BEGIN TAB CONTENT -->
             <div class="card-body tab-content style-default-bright" style="border-left:1px solid #C4C4C4;">
                 <div class="">
@@ -222,7 +180,7 @@ array(
 
                             <!-- BEGIN PAGE HEADER -->
                             <div class="margin-bottom-xxl">
-                                <span class="text-light text-lg">Search results: <strong id="total">0</strong></span>
+                                <span class="text-light text-lg">Search results: <strong id="total"><?php echo $totalRecords; ?></strong></span>
                                 <div class="btn-group btn-group-sm pull-right">
                                     <button type="button" class="btn btn-default-light dropdown-toggle" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-arrow-down"></span> Sort
@@ -239,20 +197,20 @@ array(
 
                             <!-- BEGIN RESULT LIST -->
                             <div class="list-results list-results-underlined">
-                                
+                                <?php echo View::make('clinical_trails\resultPartial', array('details' => $details, 'totalRecords' => $totalRecords))->render(); ?>
                             </div><!--end .list-results -->
                             <!-- END RESULTS LIST -->
 
                             <!-- BEGIN PAGING -->
-<!--                            <ul class="pagination">
-                                <li class="disabled"><a href="#">«</a></li>                                
-                                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">»</a></li>
-                            </ul>-->
+                            <!--                            <ul class="pagination">
+                                                            <li class="disabled"><a href="#">«</a></li>                                
+                                                            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                                                            <li><a href="#">2</a></li>
+                                                            <li><a href="#">3</a></li>
+                                                            <li><a href="#">4</a></li>
+                                                            <li><a href="#">5</a></li>
+                                                            <li><a href="#">»</a></li>
+                                                        </ul>-->
                             <!-- END PAGING -->
 
 

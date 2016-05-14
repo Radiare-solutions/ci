@@ -478,7 +478,7 @@
         <script src="{{ URL::asset("dist/jqcloud.js") }}"></script>
         <!--<script src="dist/core_tests.js"></script>-->
         <script>
-        var words = [
+        /*var words = [
             {text: "FDA", weight: 1, link: 'results-text.html'},
             {text: "New Launch", weight: 2, link: 'results-text.html'},
             {text: "Clinical Trial", weight: 3, link: 'results-text.html'},
@@ -492,7 +492,8 @@
             {text: "Fezakinumab", weight: 5, link: 'results-text.html'},
             {text: "Guselkumab", weight: 5.8, link: 'results-text.html'},
             {text: "Ustekinumab", weight: 6.5, link: 'results-text.html'},
-        ];
+        ]; */
+        var words = <?php echo ($conditionData); ?>;
 
         var colors = ['#4f649b', '#daf252', '#56a55b', '#17becf', '#bf6565', '#e377c2', '#9fdf8a', '#d62728', '#ff9896', '#47315b', '#aa0f3b', '#c49c94', '#5d6b06', '#0d4b77', '#c69345', '#1a4dce', '#d3935b', '#d66119', '#466b40', '#123d36'];
 
@@ -639,7 +640,8 @@
         <script src="{{ URL::asset("js/d3plus.js") }}"></script>
 
         <script>
-        var sample_data = [
+            var sample_data = <?php echo ($statusData); ?>;
+        /*var sample_data = [
             {"value": 300, "name": "Completed", "url": "results-text.html"},
             {"value": 10, "name": "Terminated", "url": "results-text.html"},
             {"value": 100, "name": "Recruiting", "url": "results-text.html"},
@@ -650,7 +652,7 @@
             {"value": 54, "name": "Withdrawn", "url": "results-text.html"},
             {"value": 20, "name": "Approved for marketing", "url": "results-text.html"},
             {"value": 70, "name": "Suspended", "url": "results-text.html"}
-        ]
+        ] */
         var visualization = d3plus.viz()
                 .container("#viz")
                 .data(sample_data)
@@ -675,7 +677,7 @@
                 // .labels({"align": "left", "valign": "top"})          
                 .draw()
 
-        var sample_data1 = [
+        /*var sample_data1 = [
             {"value": 330, "name": "Double-blind Placebo", "url": "results-text.html"},
             {"value": 200, "name": "Placebo", "url": "results-text.html"},
             {"value": 45, "name": "Adalimumab", "url": "results-text.html"},
@@ -688,7 +690,8 @@
             {"value": 55, "name": "TNF inhibitors", "url": "results-text.html"},
             {"value": 450, "name": "NSAIDs and sulfasalazine", "url": "results-text.html"}
 
-        ]
+        ]*/
+     var sample_data1 = <?php echo ($drugData); ?>;
         var visualization = d3plus.viz()
                 .container("#viz1")
                 .data(sample_data1)
@@ -788,6 +791,52 @@
             }
         // console.log(sampleDataYear[0].x);
         });
+        
+        
+        var sampleDataYear = <?php echo $estimatedCompletionData;?>;
+        /*var sampleDataYear = [
+            {x: '2010', y: 10, url: "results-text.html"},
+            {x: '2011', y: 30, url: "results-text.html"},
+            {x: '2012', y: 20, url: "results-text.html"},
+            {x: '2013', y: 25, url: "results-text.html"},
+            {x: '2014', y: 55, url: "results-text.html"},
+            {x: '2015', y: 14, url: "results-text.html"},
+            {x: '2016', y: 34, url: "http://www.google.com"},
+        ];*/
+
+
+
+        // Morris Area demo
+        if ($('#morris-area-graph').length > 0) {
+            var labelColor = $('#morris-area-graph').css('color');
+            Morris.Area({
+                element: 'morris-area-graph',
+                behaveLikeLine: true,
+                data: sampleDataYear,
+                xkey: 'x',
+                ykeys: ['y'],
+                labels: ['Studies'],
+                gridTextColor: labelColor,
+                lineColors: $('#morris-area-graph').data('colors').split(',')
+            });
+        }
+
+        $("#morris-area-graph").click(function () {
+            var newValue;
+            var newValue = $(this).find("div.morris-hover-row-label").text();
+
+            console.log(newValue);
+            for (var index = 0; index < sampleDataYear.length; index++)
+            {
+//     console.log(arr[index]);
+                if (sampleDataYear[index].x == newValue)
+                {
+                    window.location = sampleDataYear[index].url;
+                }
+            }
+// console.log(sampleDataYear[0].x);
+        });
+
 
         </script>
 

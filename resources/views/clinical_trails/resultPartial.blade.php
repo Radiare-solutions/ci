@@ -1,11 +1,17 @@
 <?php
 
 $recordsPerPage = 5;
+if(isset($page))
+    $page = $page;
+else
+    $page = 0;
 $i = ($page * $recordsPerPage) + 1;
+//$i = 1;
 $str = '';
 $total = 1;
 if (count($details) > 0) {
-    $total = $details['total'];
+    $total = $totalRecords;
+
     foreach ($details as $detail) {
         $clas = "";
         if ($detail['status_name'] == 'Completed')
@@ -56,7 +62,7 @@ if (count($details) > 0) {
         {
             $pageStartLink = $page-1;
         }
-        $str.='<ul class="pagination"><li class="' . $disableStart . '"><a href="javascript:void(0);" onclick="load_result_pager('.($pageStartLink).')">«</a></li>';
+        $str.='<ul class="pagination"><li class="' . $disableStart . '"'.$totalRecords.'"><a href="javascript:void(0);" onclick="load_result_pager('.($pageStartLink).')">«</a></li>';
         $pages = ceil($total / $recordsPerPage);
         for ($j = 0; $j < $pages; $j++) {
             $active = "";
