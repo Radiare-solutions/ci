@@ -30,13 +30,14 @@ class ClinicalController extends Controller
      * return value - none
      *  null - if no match found
      */
-   public function Extract(Request $request){
+   //public function Extract(Request $request){
+    public function Extract() {
        set_time_limit(0);
        ini_set('max_execution_time', 0);
-       $molecule_or_indication=urlencode("adalimumab");
+       $molecule_or_indication=urlencode("phosphate");
        
-       // $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
-       $api_query = $request->trial;
+       $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       //$api_query = $request->trial;
        
        $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
@@ -237,6 +238,14 @@ class ClinicalController extends Controller
                         $res_pri2=explode(":",trim($second_array[1]));
                         $primary_text3=$res_pri2[0];
                         $primary_res3=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $res_pri2[1])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $res_pri2[1])));
+                        }
+                        else {
+                            $primary_text1 = "";
+                            $primary_text2 = "";
+                            $primary_text3 = "";
+                            $primary_res1 = "";
+                            $primary_res2 = "";
+                            $primary_res3 = "";
                         }
                         }
                         

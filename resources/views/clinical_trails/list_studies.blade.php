@@ -6,8 +6,11 @@ array(
 
 @section('content')
 <?php
-$phaseData = json_decode($phaseData);
-$conditionData = json_decode($conditionData);
+$phaseData = ($phaseData);
+$conditionData = ($conditionData);
+$sponsorData = ($sponsorData);
+$drugData = ($drugData);
+$statusData = ($statusData);
 ?>
 <section class="no-margin no-padding">
     <div class="section-body no-margin">
@@ -85,85 +88,33 @@ $conditionData = json_decode($conditionData);
                 <h4 class="text-xl text-normal small-padding">Category</h4>
 
                 <li <?php if($type == "status_id") echo "class=active";?> ><a href="#web1">Study Status</a></li>
-                <li ><a href="#web2">Phase</a></li>
-                <li><a href="#web3">Drug</a></li>
+                <li <?php if($type == "phase_id") echo "class=active";?> ><a href="#web2">Phase</a></li>
+                <li <?php if($type == "drug_id") echo "class=active";?> ><a href="#web3">Drug</a></li>
                 <li <?php if($type == "condition_id") echo "class=active";?> ><a href="#web4">Condition</a></li>
-                <li><a href="#web5">Sponsor</a></li>
+                <li <?php if($type == "sponsor_id") echo "class=active";?> ><a href="#web5">Sponsor</a></li>
             </ul> 
 
 
             <form name="filter_data" id="filter_data">
                 <div class="col-sm-3 no-padding tab-content ">
-                    <div class="tab-pane active" id="web1">
-                        <div class="small-padding ">
-                            <h4 class="text-normal text-xl">Study Status</h4>
-                            <ul class="nav nav-pills nav-stacked nav-transparent">
-                                <li>
-                                    <div class="checkbox checkbox-styled tile-text">
-                                        <label>
-                                            <input type="checkbox" value="all" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
-                                            <span>
-                                                Select All
-                                            </span>
-                                        </label>
-                                        <span class="badge pull-right"><?php echo $totalStatusCount; ?></span>
-                                    </div>
-                                </li>
-                                <?php
-                                foreach ($statusData as $status_data) {
-                                    $statusChecked = "";
-                                    if (($type == "status_id") && ($status_data['id'] == $value))
-                                        $statusChecked = "checked";
-                                    ?>
-                                    <li>
-                                        <div class="checkbox checkbox-styled tile-text">
-                                            <label>
-                                                <input type="checkbox" <?php echo $statusChecked; ?> value="<?php echo $status_data['id']; ?>" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
-                                                <span>
-                                                    <?php echo $status_data['status_name']; ?>
-                                                </span>
-                                            </label>
-                                            <span class="badge pull-right"><?php echo $status_data['total']; ?></span>
-                                        </div>
-                                    </li>
-                                    <?php
-                                }
-                                ?>                                                                                                                                                                                                                                                                                                                       
-                            </ul>
-
-
-                        </div>
+                    <div class="tab-pane <?php if($type == "status_id") echo "class=active";?> " id="web1">
+                        <?php echo View::make('clinical_trails\filter_status', array('statusData' => $statusData, 'type' => $type, 'value' => $value, 'totalStatusCount' => $totalStatusCount))->render(); ?>
                     </div>
 
-                    <div class="tab-pane" id="web2">
-                        <?php echo View::make('clinical_trails\filter_phase', array('phaseData' => $phaseData))->render(); ?>
+                    <div class="tab-pane <?php if($type == "phase_id") echo "class=active";?> " id="web2">
+                        <?php echo View::make('clinical_trails\filter_phase', array('phaseData' => $phaseData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>
                     
-                    <div class="tab-pane" id="web4">
-                        <?php echo View::make('clinical_trails\filter_condition', array('conditionData' => $conditionData))->render(); ?>
+                    <div class="tab-pane <?php if($type == "drug_id") echo "class=active";?> " id="web3">
+                        <?php // echo View::make('clinical_trails\filter_drug', array('drugData' => $drugData))->render(); ?>
+                    </div>
+                    
+                    <div class="tab-pane <?php if($type == "condition_id") echo "class=active";?> " id="web4">
+                        <?php echo View::make('clinical_trails\filter_condition', array('conditionData' => $conditionData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>                    
 
-                    <div class="tab-pane" id="web5">
-                        <div class="small-padding  ">
-                            <h4 class="text-normal text-xl"></h4>
-                            <ul class="nav nav-pills nav-stacked nav-transparent">
-                                <?php
-//foreach($sponsorData as $sponsor_data) {
-                                ?>
-                                <li>
-                                    <div class="checkbox checkbox-styled tile-text">
-                                        <label>
-                                            <input type="checkbox" value="<?php //echo $sponsor_data['id'];  ?>" name="sponsor[]" id="sponsor" onclick="load_studies_by_filter('sponsor', 0, 'clinical_trial', 'asc');">
-                                            <span>
-                                                <?php //echo $sponsor_data['sponsor_name']; ?>
-                                            </span>
-                                        </label>
-                                        <span class="badge pull-right"><?php //echo $sponsor_data['total'];  ?></span>
-                                    </div>
-                                </li>
-                                <?php // }  ?>								
-                            </ul>
-                        </div>
+                    <div class="tab-pane <?php if($type == "sponsor_id") echo "class=active";?> " id="web5">
+                        <?php echo View::make('clinical_trails\filter_sponsor', array('sponsorData' => $sponsorData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>
 
                 </div>
