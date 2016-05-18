@@ -30,7 +30,8 @@ class ListStudiesController extends Controller {
         $tempSponsor = $this->displayDefaultFilters('sponsor', $arr);
         $tempCondition = $this->displayDefaultFilters('condition', $arr);
         return view('clinical_trails\list_studies', array(
-            'statusData' => $statusData['arr'],
+            // 'statusData' => $statusData['arr'],
+            'statusData' => ($tempStatus),
             'totalStatusCount' => $statusData['totalStatusCount'],
             'phaseData' => ($tempPhase),
             'conditionData' => ($tempCondition),

@@ -560,6 +560,7 @@ class ClinicalTrialModel extends Eloquent {
             $statusObj = StatusModel::find($query['status_id']);
             $temp['name'] = $statusObj['attributes']['status_name'];
             $temp['value'] = $query['count'];
+            $totalStatusRecords+=$temp['value'];
             array_push($details, $temp);
         }
         return array('details' => $details, 'totalStatusRecords' => $totalStatusRecords);

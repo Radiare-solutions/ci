@@ -16,7 +16,7 @@
 
         <div class="row" >
             <?php
-            echo View::make('clinical_trails\dashboard_statusPartial')->render();
+            echo View::make('clinical_trails\dashboard_statusPartial', array('totalStatusRecords' => $statusData['totalStatusRecords']))->render();
             ?>
 
             <?php

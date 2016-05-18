@@ -97,23 +97,23 @@ $statusData = ($statusData);
 
             <form name="filter_data" id="filter_data">
                 <div class="col-sm-3 no-padding tab-content ">
-                    <div class="tab-pane <?php if($type == "status_id") echo "class=active";?> " id="web1">
+                    <div class="tab-pane <?php if($type == "status_id") echo "active";?> " id="web1">
                         <?php echo View::make('clinical_trails\filter_status', array('statusData' => $statusData, 'type' => $type, 'value' => $value, 'totalStatusCount' => $totalStatusCount))->render(); ?>
                     </div>
 
-                    <div class="tab-pane <?php if($type == "phase_id") echo "class=active";?> " id="web2">
+                    <div class="tab-pane <?php if($type == "phase_id") echo "active";?> " id="web2">
                         <?php echo View::make('clinical_trails\filter_phase', array('phaseData' => $phaseData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>
                     
-                    <div class="tab-pane <?php if($type == "drug_id") echo "class=active";?> " id="web3">
+                    <div class="tab-pane <?php if($type == "drug_id") echo "active";?> " id="web3">
                         <?php // echo View::make('clinical_trails\filter_drug', array('drugData' => $drugData))->render(); ?>
                     </div>
                     
-                    <div class="tab-pane <?php if($type == "condition_id") echo "class=active";?> " id="web4">
+                    <div class="tab-pane <?php if($type == "condition_id") echo "active";?> " id="web4">
                         <?php echo View::make('clinical_trails\filter_condition', array('conditionData' => $conditionData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>                    
 
-                    <div class="tab-pane <?php if($type == "sponsor_id") echo "class=active";?> " id="web5">
+                    <div class="tab-pane <?php if($type == "sponsor_id") echo "active";?> " id="web5">
                         <?php echo View::make('clinical_trails\filter_sponsor', array('sponsorData' => $sponsorData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>
 

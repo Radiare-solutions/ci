@@ -19,7 +19,7 @@
                     <div class="card-body no-padding">
                         <div class="alert no-margin small-padding-s">
                             <h2 class="pull-right text-xxl text-success no-margin"><i class="md fa-lg md-school"></i></h2>
-                            <strong class="text-xl">477</strong>
+                            <strong class="text-xl"><?php echo $totalStatusRecords;?></strong>
                             <span class="text">Total Studies</span>
                         </div>
                     </div>
