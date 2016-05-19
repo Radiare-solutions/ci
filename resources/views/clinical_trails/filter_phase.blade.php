@@ -10,11 +10,11 @@
                         Select All
                     </span>
                 </label>
-                <span class="badge pull-right"><?php echo $phaseData['total']; ?></span>
+                <span class="badge pull-right"><?php echo $phaseTotal; ?></span>
             </div>
         </li>
         <?php
-        foreach ($phaseData['data'] as $phase_data) {
+        foreach ($phaseData as $phase_data) {
             $phaseChecked = "";
             if (($type == "phase_id") && ($phase_data['phase_id'] == $value))
                 $phaseChecked = "checked";
