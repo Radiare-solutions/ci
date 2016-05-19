@@ -30,14 +30,12 @@ class ClinicalController extends Controller
      * return value - none
      *  null - if no match found
      */
-   //public function Extract(Request $request){
-    public function Extract() {
+   public function Extract(){
        set_time_limit(0);
        ini_set('max_execution_time', 0);
-       $molecule_or_indication=urlencode("phosphate");
+       $molecule_or_indication=urlencode("adalimumab");
        
        $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
-       //$api_query = $request->trial;
        
        $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);
@@ -239,14 +237,6 @@ class ClinicalController extends Controller
                         $primary_text3=$res_pri2[0];
                         $primary_res3=iconv(mb_detect_encoding(trim(preg_replace('/\s+/', ' ', $res_pri2[1])), mb_detect_order(), true), "UTF-8", trim(preg_replace('/\s+/', ' ', $res_pri2[1])));
                         }
-                        else {
-                            $primary_text1 = "";
-                            $primary_text2 = "";
-                            $primary_text3 = "";
-                            $primary_res1 = "";
-                            $primary_res2 = "";
-                            $primary_res3 = "";
-                        }
                         }
                         
                         $implode_primary=implode("", $this->saveHTML($html_extraction,"indent1",2));
@@ -332,11 +322,15 @@ class ClinicalController extends Controller
                          }else{
                            $drug_id_arr[]=$drug_name_id['_id'];    
                          }
-                         
                          }
-                         
-                        $drug_id=  implode(",", $drug_id_arr);
-                        
+                         $drug_id=array();
+                         foreach ($drug_id_arr as $value) {
+                           $drug_id[]=array("_id"=>$value,"isActive"=>1);
+                         }
+//                         echo "<pre>";
+//                        var_dump($drug_id);
+//                        echo "</pre>";
+//                        exit();
                         $ConditionModel= new ConditionModel();
                         $condition_name=preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $condition_name);
                         $condition_name=ucfirst(strtolower($condition_name));
@@ -381,6 +375,7 @@ class ClinicalController extends Controller
                         $sponsor_id,$secondary_measure_def,$eligibility_criteria,$age,$eligibility_gender,$healthy_volunteers,$location_country);
                           
                }
+               //exit();
                }
             }
            
@@ -397,11 +392,11 @@ class ClinicalController extends Controller
        $adverse_current_div= $adverse_table_spans->item(0);
        if(isset($adverse_current_div->parentNode->parentNode->firstChild)) {
        $ad_nextelement = $adverse_current_div->parentNode->parentNode->firstChild;
-       $ad_result_next[]=$ad_nextelement->nodeValue;
+       $ad_result_next[]=preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "", $ad_nextelement->nodeValue);
        }
 
        $implode_array=implode("<br/>", $ad_result_next);
-       $exp_array =explode("<br/>",preg_replace('#\x{00a0}#','<br/>', utf8_decode(preg_replace("/\s/",'',$implode_array))));
+       $exp_array =explode("<br/>",preg_replace('#\x{00a0}#','<br/>', utf8_decode(preg_replace("/\s/",' ',$implode_array))));
        
        $explode_array=  array_values(array_filter($exp_array, function($val) {return $val!=='';}));  
  

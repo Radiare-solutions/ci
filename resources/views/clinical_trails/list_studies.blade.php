@@ -7,10 +7,12 @@ array(
 @section('content')
 <?php
 $phaseData = ($phaseData);
+$statusData = ($statusData);
+/*
 $conditionData = ($conditionData);
 $sponsorData = ($sponsorData);
 $drugData = ($drugData);
-$statusData = ($statusData);
+*/
 ?>
 <section class="no-margin no-padding">
     <div class="section-body no-margin">
@@ -98,7 +100,7 @@ $statusData = ($statusData);
             <form name="filter_data" id="filter_data">
                 <div class="col-sm-3 no-padding tab-content ">
                     <div class="tab-pane <?php if($type == "status_id") echo "active";?> " id="web1">
-                        <?php echo View::make('clinical_trails\filter_status', array('statusData' => $statusData, 'type' => $type, 'value' => $value, 'totalStatusCount' => $totalStatusCount))->render(); ?>
+                        <?php echo View::make('clinical_trails\filter_status', array('statusData' => $statusData, 'type' => $type, 'value' => $value, 'totalStatusCount' => 1))->render(); ?>
                     </div>
 
                     <div class="tab-pane <?php if($type == "phase_id") echo "active";?> " id="web2">
@@ -110,11 +112,11 @@ $statusData = ($statusData);
                     </div>
                     
                     <div class="tab-pane <?php if($type == "condition_id") echo "active";?> " id="web4">
-                        <?php echo View::make('clinical_trails\filter_condition', array('conditionData' => $conditionData, 'type' => $type, 'value' => $value))->render(); ?>
+                        <?php // echo View::make('clinical_trails\filter_condition', array('conditionData' => $conditionData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>                    
 
                     <div class="tab-pane <?php if($type == "sponsor_id") echo "active";?> " id="web5">
-                        <?php echo View::make('clinical_trails\filter_sponsor', array('sponsorData' => $sponsorData, 'type' => $type, 'value' => $value))->render(); ?>
+                        <?php // echo View::make('clinical_trails\filter_sponsor', array('sponsorData' => $sponsorData, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>
 
                 </div>

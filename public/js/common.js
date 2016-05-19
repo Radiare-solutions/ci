@@ -2109,15 +2109,15 @@ function load_studies_by_filter(type, page, field, order) {
             }
             if(type == "phase") {
                 $('#web1').html(data.statusFilter);
-                $('#web3').html(data.drugFilter);
-                $('#web4').html(data.conditionFilter);
-                $('#web5').html(data.sponsorFilter);
+                // $('#web3').html(data.drugFilter);
+                // $('#web4').html(data.conditionFilter);
+                // $('#web5').html(data.sponsorFilter);
             }
             if(type == "status") {
                 $('#web2').html(data.phaseFilter);
-                $('#web3').html(data.drugFilter);
-                $('#web4').html(data.conditionFilter);
-                $('#web5').html(data.sponsorFilter);
+                // $('#web3').html(data.drugFilter);
+                // $('#web4').html(data.conditionFilter);
+                // $('#web5').html(data.sponsorFilter);
             }
             if(type == "sponsor") {
                 $('#web1').html(data.statusFilter);

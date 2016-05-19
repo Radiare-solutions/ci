@@ -1,3 +1,6 @@
+<?php
+    $statusData = json_decode($statusData);
+    ?>
 <div class="small-padding ">
     <h4 class="text-normal text-xl">Study Status</h4>
     <ul class="nav nav-pills nav-stacked nav-transparent">
@@ -9,14 +12,13 @@
                         Select All
                     </span>
                 </label>
-                <span class="badge pull-right"><?php echo $totalStatusCount; ?></span>
+                <span class="badge pull-right"><?php echo $statusData->total; ?></span>
             </div>
         </li>
         <?php
-        $statusData = json_decode($statusData);
-        foreach ($statusData as $status_data) {
+        foreach ($statusData->data as $status_data) {               
             $statusChecked = "";
-            if (($type == "status_id") && ($status_data->id == $value))
+            if (($type == "status_id") && ($status_data->status_id == $value))
                 $statusChecked = "checked";
             ?>
             <li>
@@ -31,7 +33,7 @@
                 </div>
             </li>
             <?php
-        }
+            }
         ?>                                                                                                                                                                                                                                                                                                                       
     </ul>
 
