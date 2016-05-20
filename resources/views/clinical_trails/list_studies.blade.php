@@ -100,11 +100,11 @@ $drugData = ($drugData);
             <form name="filter_data" id="filter_data">
                 <div class="col-sm-3 no-padding tab-content ">
                     <div class="tab-pane <?php if($type == "status_id") echo "active";?> " id="web1">
-                        <?php echo View::make('clinical_trails\filter_status', array('statusData' => $statusData, 'type' => $type, 'value' => $value, 'statusTotal' => $statusTotal))->render(); ?>
+                        <?php echo View::make('clinical_trails\filter_status', array('statusData' => $statusData, 'statusAllValue' => ($statusAllValue), 'type' => $type, 'value' => $value, 'statusTotal' => $statusTotal))->render(); ?>
                     </div>
 
                     <div class="tab-pane <?php if($type == "phase_id") echo "active";?> " id="web2">
-                        <?php echo View::make('clinical_trails\filter_phase', array('phaseData' => $phaseData, 'phaseTotal'=> $phaseTotal, 'type' => $type, 'value' => $value))->render(); ?>
+                        <?php echo View::make('clinical_trails\filter_phase', array('phaseData' => $phaseData, 'phaseAllValue' => ($phaseAllValue), 'phaseTotal'=> $phaseTotal, 'type' => $type, 'value' => $value))->render(); ?>
                     </div>
                     
                     <div class="tab-pane <?php if($type == "drug_id") echo "active";?> " id="web3">

@@ -1,11 +1,16 @@
-
+<?php //
+//$allValues = $phaseAllValue;
+//echo '<pre>';
+//print_r($allValues);
+//exit;
+?>
 <div class="small-padding  ">
     <h4 class="text-normal text-xl">Study Phase</h4>
     <ul class="nav nav-pills nav-stacked nav-transparent">
         <li>
             <div class="checkbox checkbox-styled tile-text">
                 <label>
-                    <input type="checkbox" value="all" name="phase[]" id="phase" onclick="load_studies_by_filter('phase', 0, '', '');">
+                    <input type="checkbox" value="<?php echo implode(",", $phaseAllValue);?>" name="phase[]" id="phase" onclick="load_studies_by_filter('phase', 0, '', '');">
                     <span>
                         Select All
                     </span>

@@ -29,9 +29,10 @@ class ListStudiesController extends Controller {
         $tempStatus = $this->displayDefaultFilters('status', $arr);
         // $tempStatus = json_decode($tempStatus);
         // $tempPhase = json_decode($tempPhase);
-//        echo '<pre>';
-//        print_r($tempStatus);
-//        print_r($tempPhase);
+   //     echo '<pre>';
+//       print_r($tempStatus);
+//           print_r($arr);
+//     print_r($tempPhase);
 //        exit;
 //        // $tempSponsor = $this->displayDefaultFilters('sponsor', $arr);
         // $tempCondition = $this->displayDefaultFilters('condition', $arr);
@@ -40,7 +41,9 @@ class ListStudiesController extends Controller {
             'statusData' => ($tempStatus['data']),
             'phaseData' => ($tempPhase['data']),
             'phaseTotal' => $tempPhase['phaseTotal'],
-            'statusTotal' => $tempStatus['total'],
+            'statusTotal' => $tempStatus['statusTotal'],
+            'phaseAllValue' => ($arr['phaseAllValue']),
+            'statusAllValue' => ($arr['statusAllValue']),
            // 'conditionData' => ($tempCondition),
            // 'sponsorData' => ($tempSponsor),
            // 'drugData' => $arr['drug'],
@@ -64,16 +67,16 @@ class ListStudiesController extends Controller {
     public function filterStudies(Request $request, $page = 0, $field = 'clinical_title', $order = 'asc') {
         $ob = new ClinicalTrialModel();
         $details = $ob->getFilteredResults($request, $page, $field, $order);
-//        echo '<pre>';
-//        print_r($details);
-//        exit;
+        // echo '<pre>';
+        // print_r($details);
+        // exit;
         //$details = json_encode($details);
         
         return response()->json([
                     'success' => true,
                     'message' => \View::make('clinical_trails\resultPartial', array('details' => $details['details'], 'page' => $page, 'totalRecords' => $details['total']))->render(),
-                    'phaseFilter' => \View::make('clinical_trails\filter_phase', array('phaseData' => ($details['phaseData']), 'phaseTotal' => $details['phaseTotal'], 'type' => $this->type, 'value' => $this->value))->render(),
-                    'statusFilter' => \View::make('clinical_trails\filter_status', array('statusData' => ($details['statusData']), 'statusTotal' => $details['statusTotal'], 'type' => $this->type, 'value' => $this->value, 'totalStatusCount' => 1))->render(),
+                    'phaseFilter' => \View::make('clinical_trails\filter_phase', array('phaseData' => ($details['phaseData']), 'phaseTotal' => $details['phaseTotal'], 'type' => $this->type, 'value' => $this->value, 'phaseAllValue' => json_decode($details['phaseAllValue'])))->render(),
+                    'statusFilter' => \View::make('clinical_trails\filter_status', array('statusData' => ($details['statusData']), 'statusTotal' => $details['statusTotal'], 'statusAllValue' => json_decode($details['statusAllValue']), 'type' => $this->type, 'value' => $this->value, 'totalStatusCount' => 1))->render(),
                     // 'message' => \View::make('clinical_trails\resultPartial', array('details' => $details['details'], 'page' => $page, 'totalRecords' => $details['total']))->render(),
                     // 'phaseFilter' => \View::make('clinical_trails\filter_phase', array('phaseData' => ($details['phaseData']), 'phaseTotal' => $details['phaseTotal'], 'type' => $this->type, 'value' => $this->value))->render(),
                     // 'sponsorFilter' => \View::make('clinical_trails\filter_sponsor', array('sponsorData' => ($details['sponsorData']), 'type' => $this->type, 'value' => $this->value))->render(),
@@ -89,32 +92,36 @@ class ListStudiesController extends Controller {
         $ob = StatusModel::where('isActive', 1)->orderBy($field, $order)->get();
         $arr = array();
         $totalStatusCount = 0;
+        $statusAllValue = array();
         foreach ($ob as $detail) {
             $attr = $detail['attributes'];
             $details['status_id'] = (string) $attr['_id'];
             $details['status_name'] = $attr['status_name'];
+            array_push($statusAllValue, $attr['_id']);
             $count = ClinicalTrialModel::where('status_id', $attr['_id'])->count();
             $details['status_count'] = $count;
             $totalStatusCount = $totalStatusCount + $count;
             array_push($arr, $details);
         }
-        return array('data' => $arr, 'total' => $totalStatusCount);
+        return array('data' => $arr, 'statusTotal' => $totalStatusCount, 'statusAllValue' => ($statusAllValue));
     }
     
     public function phaseData() {
         $ob = PhaseModel::where('isActive', 1)->get();
         $arr = array();
         $totalPhaseCount = 0;
+        $phaseAllValue = array();
         foreach ($ob as $detail) {
             $attr = $detail['attributes'];
             $details['phase_id'] = (string) $attr['_id'];
             $details['phase_name'] = $attr['phase_name'];
+            array_push($phaseAllValue, $attr['_id']);
             $count = ClinicalTrialModel::where('phase_id', $attr['_id'])->count();
             $details['phase_count'] = $count;
             $totalPhaseCount = $totalPhaseCount+$count;
             array_push($arr, $details);
         }
-        return array('data' => $arr, 'phaseTotal' => $totalPhaseCount);
+        return array('data' => $arr, 'phaseTotal' => $totalPhaseCount, 'phaseAllValue' => ($phaseAllValue));
     }    
 
     public function sponsorData() {

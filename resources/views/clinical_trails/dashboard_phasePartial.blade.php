@@ -20,7 +20,7 @@
                                 <div class="card-body no-padding">
                                     <div class="alert no-margin small-padding-s">
                                         <h2 class="pull-right text-xxl text-success no-margin"><i class="md fa-lg md-layers"></i></h2>
-                                        <strong class="text-xl">340</strong>
+                                        <strong class="text-xl"><?php echo $phaseTop;?></strong>
                                         <span class="text">Total Phase Studies</span>
                                     </div>
 

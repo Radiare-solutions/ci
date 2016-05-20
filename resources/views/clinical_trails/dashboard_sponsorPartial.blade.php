@@ -23,7 +23,7 @@
                     <div class="card-body no-padding">
                         <div class="alert no-margin small-padding-s">
                             <h2 class="pull-right text-xxl text-success no-margin"><i class="fa fa-lg fa-building"></i></h2>
-                            <strong class="text-xl">5</strong>
+                            <strong class="text-xl"><?php echo $sponsorTotal;?></strong>
                             <span class="text">Total Sponsor</span>
                         </div>
 

@@ -20,7 +20,7 @@
             ?>
 
             <?php
-            echo View::make('clinical_trails\dashboard_phasePartial')->render();
+            echo View::make('clinical_trails\dashboard_phasePartial', array('phaseTop' => $phaseTop))->render();
             ?>
 
             <?php
@@ -28,15 +28,15 @@
             ?>
 
             <?php
-            echo View::make('clinical_trails\dashboard_drugPartial')->render();
+            echo View::make('clinical_trails\dashboard_drugPartial', array('drugTotal' => $drugTotal))->render();
             ?>  
 
             <?php
-            echo View::make('clinical_trails\dashboard_conditionPartial')->render();
+            echo View::make('clinical_trails\dashboard_conditionPartial', array('conditionTotal' => $conditionTotal))->render();
             ?>            
 
             <?php
-            echo View::make('clinical_trails\dashboard_sponsorPartial')->render();
+            echo View::make('clinical_trails\dashboard_sponsorPartial', array('sponsorTotal' => $sponsorTotal))->render();
             ?>
 
 

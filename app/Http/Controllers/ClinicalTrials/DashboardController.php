@@ -21,18 +21,28 @@ class DashboardController extends Controller {
         $conditionData = $obData->getConditionDashboardResults();
         $estimatedCompletionData = $obData->getEstimatedCompletionDashboardResults();
         $drugData = $obData->getDrugDashboardResults();
+        $drugTotal = DrugModel::where('isActive', 1)->count();        
+        $conditionTotal = ConditionModel::where('isActive', 1)->count();       
+        $sponsorTotal = SponsorModel::where('isActive', 1)->count();       
         $sponsorData = $obData->getSponsorDashboardResults();
         $phaseData = $obData->getPhaseDashboardResults();
+        
+        $phaseTop = $phaseData[0][1];
+        $estimatedCompletionTotal = $obData->getEstimatedCompletionForCurrentYear();
 //        echo '<pre>';
-//        print_r($estimatedCompletionData);
+//        print_r($estimatedCompletionTotal);
 //        exit;
         return view('clinical_trails\dashboard', array(
             'statusData' => $statusData,
             'phaseData' => $phaseData,
+            'phaseTop' => $phaseTop,
             'estimatedCompletionData' => $estimatedCompletionData,
             'drugData' => $drugData,
+            'drugTotal' => $drugTotal,
             'conditionData' => $conditionData,
-            'sponsorData' => $sponsorData
+            'conditionTotal' => $conditionTotal,
+            'sponsorData' => $sponsorData,
+            'sponsorTotal' => $sponsorTotal,
         ));
     }
 }

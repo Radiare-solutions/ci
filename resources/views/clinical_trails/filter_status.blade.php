@@ -7,7 +7,7 @@
         <li>
             <div class="checkbox checkbox-styled tile-text">
                 <label>
-                    <input type="checkbox" value="all" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
+                    <input type="checkbox" value="<?php echo implode(",", $statusAllValue);?>" name="status[]" id="status" onclick="load_studies_by_filter('status', 0, '', '');">
                     <span>
                         Select All
                     </span>
