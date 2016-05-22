@@ -248,7 +248,7 @@ class ClinicalTrialModel extends Eloquent {
             'status' => $datas['status'],
             'details' => $details,
             // 'total' => $datas['totalRecords'],
-            'total' => 123,
+            // 'total' => 123,
             //   'totalRecords' => $this->displayTotalRecordsFilter($field, $values, '$in', 0), 'totalRecords' => 2,
             'totalRecords' => $this->displayTotalRecordsFilter($field, $values, '$in', 0),
         ); //$details; */
@@ -360,6 +360,9 @@ class ClinicalTrialModel extends Eloquent {
           $drug['drug_name'] = "testing";
           array_push($tempDrug, $drug);
           } */
+        $totalRecords = 0;
+        if (!empty($this->value) && ($this->value != "all"))
+            $totalRecords = $this->displayTotalRecordsFilter($this->field, $this->value, '$in', 0);
         return array(
             'phase' => ($tempPhase),
             'phaseAllValues' => $phase,
@@ -370,7 +373,7 @@ class ClinicalTrialModel extends Eloquent {
 //            'drug' => json_encode($tempDrug),
             'status' => ($tempStatus),
             'details' => $details,
-            'totalRecords' => $this->displayTotalRecordsFilter($this->field, $this->value, '$in', 0),
+            'totalRecords' => $totalRecords,
         ); //$details;
     }
 
@@ -399,8 +402,7 @@ class ClinicalTrialModel extends Eloquent {
               $this->$field = "all";
               $this->$pipeline = '$ne';
               } */
-        }
-        else {
+        } else {
             $this->$field = "all";
             $this->$pipeline = '$ne';
         }
@@ -503,6 +505,7 @@ class ClinicalTrialModel extends Eloquent {
         $details = array();
         foreach ($result as $query) {
             $temp['id'] = (string) $query['_id'];
+            $temp['url'] = $temp['id'];
             $temp['title'] = $query['clinical_title'];
             $conditionObj = ConditionModel::find($query['condition_id']);
             $temp['condition_name'] = $conditionObj['attributes']['condition_name'];
@@ -536,9 +539,9 @@ class ClinicalTrialModel extends Eloquent {
         );
         //}
     }
-    
+
     public function getTotalFilterResults($request) {
-         $statusCondition = $this->generateFilterCondition($request, 'status', '$in');
+        $statusCondition = $this->generateFilterCondition($request, 'status', '$in');
         $this->status = $statusCondition[0];
         $this->pipeline = $statusCondition[1];
         $phaseCondition = $this->generateFilterCondition($request, 'phase', '$in');
@@ -549,7 +552,7 @@ class ClinicalTrialModel extends Eloquent {
                         array(
                             '$match' => array(
                                 '$and' => array(
-                                    // array('phase_id' => array($this->phasePipeline => ($this->phase))),
+                                    array('phase_id' => array($this->phasePipeline => ($this->phase))),
                                     //                      array('sponsor_id' => array($this->sponsorPipeline => ($this->sponsor))),
                                     //                        array('condition_id' => array($this->conditionPipeline => ($this->condition))),
                                     array('status_id' => array($this->pipeline => ($this->status))),
@@ -750,7 +753,7 @@ class ClinicalTrialModel extends Eloquent {
                                     array('phase_id' => array($this->phasePipeline => ($this->phase))),
                                     // array('sponsor_id' => array($this->sponsorPipeline => ($this->sponsor))),
                                     array('status_id' => array($this->pipeline => ($this->status))),
-                                    // array('condition_id' => array($this->conditionPipeline => ($this->condition))),
+                                // array('condition_id' => array($this->conditionPipeline => ($this->condition))),
                                 ),
                             ),
                         ),
@@ -903,30 +906,36 @@ class ClinicalTrialModel extends Eloquent {
 //        print_r($values);
 //        exit;
         $this->field = $field;
-        $this->value = new \MongoDB\BSON\ObjectId($values);
-        $this->pipeline = $pipeline;
-        $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
-            return $collection->aggregate(array(
-                        array(
-                            '$match' => array(
-                                '$and' => array(
-                                    array('isActive' => 1),
-                                    array((string) $this->field => array($this->pipeline => array($this->value))),
+        $totalRecords = 0;
+        $details = array();
+        if (!empty($values) && ($values != "all")) {
+            $this->value = new \MongoDB\BSON\ObjectId($values);
+            $this->pipeline = $pipeline;
+
+            $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
+                return $collection->aggregate(array(
+                            array(
+                                '$match' => array(
+                                    '$and' => array(
+                                        array('isActive' => 1),
+                                        array((string) $this->field => array($this->pipeline => array($this->value))),
+                                    ),
                                 ),
                             ),
-                        ),
-                        array('$project' => array(
-                                '_id' => 1,
-                                $this->field => '$_id',
-                            )),
-            ));
-        });
-        $details = array();
-        $phase = array();
-        foreach ($result as $query) {
-            array_push($details, (string) $query['_id']);
+                            array('$project' => array(
+                                    '_id' => 1,
+                                    $this->field => '$_id',
+                                )),
+                ));
+            });            
+            $phase = array();
+            foreach ($result as $query) {
+                array_push($details, (string) $query['_id']);
+            }
+            return array($details, sizeof($details));
+        } else {
+            return array($details, 0);
         }
-        return sizeof($details);
     }
 
     public function getSponsorDashboardResults() {
@@ -1129,7 +1138,7 @@ class ClinicalTrialModel extends Eloquent {
                         ),
                         array(
                             '$group' => array(
-                                '_id' => array('$substr' => array('$study_completion_date', 4, -1)),
+                                '_id' => array('$substr' => array('$study_completion_date', 0, 4)),
                                 'count' => array('$sum' => 1),
                             ),
                         ),
@@ -1151,7 +1160,7 @@ class ClinicalTrialModel extends Eloquent {
         }
         return $details;
     }
-    
+
     public function getEstimatedCompletionForCurrentYear() {
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
@@ -1186,6 +1195,6 @@ class ClinicalTrialModel extends Eloquent {
             array_push($details, $temp);
         }
         return $details;
-    }    
+    }
 
 }

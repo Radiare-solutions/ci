@@ -67,7 +67,7 @@ Route::post('load_molecule_detail/{id}/{id1}/{id2}', 'Feed_Management_Controller
 
 /* start of mohana priya codes */
 Route::get('clinical_trial', 'ClinicalController@Extract');
-Route::get('detail_study_summary', 'ClinicalDetailStudyController@index');
+Route::get('detail_study_summary/{id}', 'ClinicalDetailStudyController@index');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
 /* end of mohana priya codes */
 
@@ -145,10 +145,11 @@ Route::post('add_client_setup', 'Client\ClientSetupController@store');
 
 
 /* start of clinical trial - archana codes */
-Route::get('study_summary', 'ClinicalTrials\StudySummaryController@loadStudySummary');
+Route::post('study_summary/{id}', 'ClinicalTrials\StudySummaryController@loadStudySummary');
 
 Route::get('dashboard', 'ClinicalTrials\DashboardController@index');
 Route::get('list_studies/{type}/{value}', 'ClinicalTrials\ListStudiesController@loadStudyList');
+Route::get('list_studies', 'ClinicalTrials\ListStudiesController@loadStudyList');
 Route::post('filter_studies/{page}/{sort_field}/{order}', 'ClinicalTrials\ListStudiesController@filterStudies');
 /* end of clinical trial - archana codes */
 

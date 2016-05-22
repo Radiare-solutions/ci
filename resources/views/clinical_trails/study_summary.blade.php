@@ -22,7 +22,7 @@
 
                                 <div class="card-actionbar-row pull-right ">
                                     <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="#"><i class="fa fa-lg fa-chevron-left"></i></a>
-                                    <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="results-text.html"><i class="fa fa-lg fa-th-large"></i></a>
+                                    <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="/list_studies"><i class="fa fa-lg fa-th-large"></i></a>
 
                                     <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="#"><i class="fa fa-lg fa-chevron-right"></i></a>
 
@@ -33,7 +33,7 @@
                             </div><!--end .col -->
 
                             <div class="col-md-1 col-xs-4">
-                                <a class="btn ink-reaction btn-floating-action btn-lg btn-accent" href="dashboard-level.html" data-toggle="tooltip" data-placement="top" data-original-title="Deatiled Study">
+                                <a class="btn ink-reaction btn-floating-action btn-lg btn-accent" href="<?php echo '/detail_study_summary/'.$detailSummary['_id'];?>" data-toggle="tooltip" data-placement="top" data-original-title="Detailed Study">
                                     <i class="md md-find-in-page "></i>
                                 </a>
                             </div>
@@ -77,7 +77,7 @@
                                         <span class="text">Sponsor</span>
                                     </div>
                                     <div class="col-md-4 text-center " >
-                                        <strong class="text-xl"><?php echo $detailSummary['phase']; ?></strong><br/>
+                                        <strong class="text-xl"><?php echo $verifyNames['phase_name']; ?></strong><br/>
                                         <span class="text">Study Phase </span>
                                     </div>
                                     <?php
@@ -160,7 +160,7 @@
                                                     Intervention
                                                     <p class="text-light text-xs no-margin">
                                                     <ul>
-                                                         <?php echo ViewHelper::displayRevisedText($detailSummary['intervention']); ?>
+                                                         <?php echo str_replace("<br>", "", ViewHelper::displayRevisedText($detailSummary['intervention'])); ?>
                                                     </ul>
                                                     </p>
                                                 </div>

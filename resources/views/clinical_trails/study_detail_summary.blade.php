@@ -16,7 +16,7 @@
                                                         </div><!--end .col -->
                                                         <div class="col-md-4 col-xs-4">
                                                                 <div class="card-actionbar-row pull-right small-padding">
-                                                                        <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="study-summary.html"><i class="fa fa-lg fa-reply"></i></a>
+                                                                        <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="/study_summary/<?php echo $detail['_id'];?>"><i class="fa fa-lg fa-reply"></i></a>
                                                                         <a class="width-1 btn btn-icon-toggle btn-danger ink-reaction pull-left" href="javascript:void(0);"><i class="fa fa-lg fa-heart"></i></a>
                                                                         <a class="width-1 btn btn-icon-toggle btn-white ink-reaction pull-left" href="javascript:void(0);"><i class="fa fa-lg fa-ellipsis-v "></i></a>
 
@@ -60,7 +60,7 @@
                                                         </div>
                                                         <div class="col-md-3 text-center pull-right">
                                                                 <strong class="text-lg">Study Phase </strong><br/>
-                                                                <span class="text"><?php echo $detail['phase']; ?></span>
+                                                                <span class="text"><?php echo $detail['phase_name']; ?></span>
                                                         </div>
 
                                                         <div class="col-md-3 text-center pull-right">

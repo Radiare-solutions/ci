@@ -2150,3 +2150,28 @@ function sort_result_pager(field, order) {
     $("#order").val(order);
     load_result_pager(page_id, field, order);
 }
+
+function load_summary(study_id) {
+    console.log("id : " + study_id);
+    var url = "/study_summary/"+study_id;
+    var data = $('#filter_data').serialize();
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        dataType: 'html',
+                async: false,
+        success: function (data) {
+            console.log(data);
+           $("html").html(data);
+        },
+        error: function (data) {
+            console.log("error");
+            $("html").html(data);
+            if (typeof data.responseJSON != "undefined")
+            {
+
+            }
+        }
+    });
+}

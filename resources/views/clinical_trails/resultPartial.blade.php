@@ -27,7 +27,7 @@ if (count($details) > 0) {
 
 <div class="col-xs-11 no-padding">
     <p class="no-padding no-margin">
-        <a class="text-medium text-lg text-primary" href="study-summary.html">' . $detail["title"] . '</a><br/>
+        <a class="text-medium text-lg text-primary" href="javascript:void(0);" onclick=load_summary("'.$detail['url'].'")>' . $detail["title"] . '</a><br/>
     </p>
     <div class="col-md-10">
         <div class="col-md-4">

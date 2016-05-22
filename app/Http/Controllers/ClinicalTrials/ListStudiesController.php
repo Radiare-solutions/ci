@@ -19,7 +19,7 @@ class ListStudiesController extends Controller {
     public $type = "";
     public $value = "";
 
-    public function loadStudyList($type, $value) {
+    public function loadStudyList($type='status_id', $value='all') {
         $statusData = $this->statusData();
         $this->type = $type;
         $this->value = $value;
