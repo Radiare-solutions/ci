@@ -29,9 +29,9 @@ class DashboardController extends Controller {
         
         $phaseTop = $phaseData[0][1];
         $estimatedCompletionTotal = $obData->getEstimatedCompletionForCurrentYear();
-//        echo '<pre>';
-//        print_r($estimatedCompletionTotal);
-//        exit;
+        echo '<pre>';
+        print_r($estimatedCompletionData);
+        exit;
         return view('clinical_trails\dashboard', array(
             'statusData' => $statusData,
             'phaseData' => $phaseData,

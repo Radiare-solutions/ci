@@ -932,9 +932,9 @@ class ClinicalTrialModel extends Eloquent {
             foreach ($result as $query) {
                 array_push($details, (string) $query['_id']);
             }
-            return array($details, sizeof($details));
+            return sizeof($details);
         } else {
-            return array($details, 0);
+            return 0;
         }
     }
 
@@ -1138,7 +1138,7 @@ class ClinicalTrialModel extends Eloquent {
                         ),
                         array(
                             '$group' => array(
-                                '_id' => array('$substr' => array('$study_completion_date', 0, 4)),
+                                '_id' => array('$substr' => array('$study_completion_date', 4, -1)),
                                 'count' => array('$sum' => 1),
                             ),
                         ),

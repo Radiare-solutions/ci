@@ -145,7 +145,7 @@ Route::post('add_client_setup', 'Client\ClientSetupController@store');
 
 
 /* start of clinical trial - archana codes */
-Route::post('study_summary/{id}', 'ClinicalTrials\StudySummaryController@loadStudySummary');
+Route::get('study_summary/{id}', 'ClinicalTrials\StudySummaryController@loadStudySummary');
 
 Route::get('dashboard', 'ClinicalTrials\DashboardController@index');
 Route::get('list_studies/{type}/{value}', 'ClinicalTrials\ListStudiesController@loadStudyList');

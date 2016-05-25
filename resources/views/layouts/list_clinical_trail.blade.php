@@ -237,42 +237,11 @@
         <!-- BEGIN BASE-->
         <div id="base">
 
-            <!-- BEGIN OFFCANVAS LEFT -->
-            <div class="offcanvas">
-
-                <!-- BEGIN OFFCANVAS DEMO LEFT -->
-                <div id="offcanvas-demo-size4" class="offcanvas-pane width-12">
-                    <div class="offcanvas-head card-bordered style-accent">
-                        <header >Breif Summary</header>
-                        <div class="offcanvas-tools">
-                            <a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
-                                <i class="md md-close"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="offcanvas-body">
-                        <p class="text-normal">
-                            To evaluate the potential of adalimumab to inhibit radiographic progression in joint destruction compared with placebo in adult Japanese subjects with recent onset of rheumatoid arthritis.
-                        </p>
-                    </div>
-                    <div class="force-padding stick-bottom-right">
-                        <a data-toggle="offcanvas" href="#" class="btn btn-icon-toggle btn-accent">
-                            <i class="md md-arrow-back"></i>
-                        </a>
-                        <a class="btn btn-floating-action btn-accent " href="#offcanvas-demo-size2" data-toggle="offcanvas">
-                            <i class="md md-arrow-forward"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- END OFFCANVAS DEMO LEFT -->
-
-            </div><!--end .offcanvas-->
-            <!-- END OFFCANVAS LEFT -->
 
             <!-- BEGIN CONTENT-->
             <div id="content">
                 @yield('content')
-            </div><!--end #content-->
+                </div><!--end #content-->
             <!-- END CONTENT -->
 
             <!-- BEGIN MENUBAR-->
@@ -368,87 +337,26 @@
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script src="{{ URL::asset("js/vend/c3.js") }}"></script>
 
-        <script src="{{ URL::asset("js/libs/moment/moment.min.js") }}"></script>
-        <script src="{{ URL::asset("js/libs/bootstrap-datepicker/bootstrap-datepicker.js") }}"></script>
-        <script src="{{ URL::asset("js/libs/bootstrap-multiselect/bootstrap-multiselect.js") }}"></script>
-        <script src="{{ URL::asset("js/libs/microtemplating/microtemplating.min.js") }}"></script>
-        <script src="{{ URL::asset("js/libs/jquery-knob/jquery.knob.min.js") }}"></script>
-        <script src="{{ URL::asset("js/core/demo/DemoPageSearch.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/moment/moment.min.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/bootstrap-datepicker/bootstrap-datepicker.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/bootstrap-multiselect/bootstrap-multiselect.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/microtemplating/microtemplating.min.js") }}"></script>
+		<script src="{{ URL::asset("js/libs/jquery-knob/jquery.knob.min.js") }}"></script>
+		<script src="{{ URL::asset("js/core/demo/DemoPageSearch.js") }}"></script>
         <!-- END JAVASCRIPT -->
-        <script>
-if ($('#morris-bar-graph').length > 0) {
-    Morris.Bar({
-        element: 'morris-bar-graph',
-        data: [
-            {x: '<?php echo $test; ?> ', y: <?php echo $serious_adv_value_1; ?>},
-            {x: 'DB Placebo ', y: <?php echo $serious_adv_value_2; ?>},
-            {x: 'Any Adalimumab ', y: <?php echo $serious_adv_value_3; ?>}
+<script>
+$('.dial').each(function () {
+			var options = materialadmin.App.getKnobStyle($(this));
+			$(this).knob(options);
 
-        ],
-        xkey: 'x',
-        ykeys: ['y'],
-        hideHover: true,
-        labels: ['#participants affected / at risk  '],
-        barColors: function (row, series, type) {
-            if (type === 'bar') {
-                var red = Math.ceil(200 * row.y / this.ymax);
-                return 'rgb(' + red + ',0,255)';
-            } else {
-                return '#000';
-            }
-        }
-    });
-}
+		});
 
-
+</script>
 
 
         </script>
 
-        <script>
-            if ($('#morris-bar-graph1').length > 0) {
-                Morris.Bar({
-                    element: 'morris-bar-graph1',
-                    data: [
-                        {x: 'DB Adalimumab ', y: <?php echo $other_adv_value_1; ?>},
-                        {x: 'DB Placebo ', y: <?php echo $other_adv_value_2; ?>},
-                        {x: 'Any Adalimumab ', y: <?php echo $other_adv_value_3; ?>}
-
-                    ],
-                    xkey: 'x',
-                    ykeys: ['y'],
-                    hideHover: true,
-                    labels: ['#participants affected / at risk  '],
-                    barColors: function (row, series, type) {
-                        if (type === 'bar') {
-                            var blue = Math.ceil(100 * row.y / this.ymax);
-                            return 'rgb(' + blue + ',20,12)';
-                        } else {
-                            return '#000';
-                        }
-                    }
 
 
-
-
-
-                });
-            }
-
-        </script>
-        <script>
-            $('.dial').each(function () {
-                var options = materialadmin.App.getKnobStyle($(this));
-                $(this).knob(options);
-
-            });
-
-        </script>
-
-
-    </script>
-
-
-
-</body>
+    </body>
 </html>

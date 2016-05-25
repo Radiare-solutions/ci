@@ -1,4 +1,4 @@
-@extends('layouts.clinical_trail', 
+@extends('layouts.list_clinical_trail', 
 array(
 'test' => 'hello world'
 )

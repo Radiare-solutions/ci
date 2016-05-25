@@ -1,9 +1,37 @@
 <?php
     $detailSummary = $summaryData['attributes'];
+    $serious_ad_event_val = $detailSummary['serious_adv_event_val'];
+    $other_ad_event_val = $detailSummary['other_adv_event_val'];
+    $svalue1 = 0;
+    $svalue2 = 0;
+    $svalue3 = 0;
+    
+    $ovalue1 = 0;
+    $ovalue2 = 0;
+    $ovalue3 = 0;
+    if(!empty($serious_ad_event_val['value']))
+    {
+        $svalue1 = $serious_ad_event_val['value'][0];
+        $svalue2 = $serious_ad_event_val['value'][1];
+        $svalue3 = $serious_ad_event_val['value'][2];
+    }
+    if(!empty($other_ad_event_val['value']))
+    {
+        $ovalue1 = $other_ad_event_val['value'][0];
+        $ovalue2 = $other_ad_event_val['value'][1];
+        $ovalue3 = $other_ad_event_val['value'][2];
+    }    
 ?>
 @extends('layouts.clinical_trail', 
             array(
-                    'test' => 'hello world'
+                    'test' => 'hello world',
+                    'serious_adv_value_1' => $svalue1,
+                    'serious_adv_value_2' => $svalue2,
+                    'serious_adv_value_3' => $svalue3,
+                    
+                    'other_adv_value_1' => $ovalue1,
+                    'other_adv_value_2' => $ovalue2,
+                    'other_adv_value_3' => $ovalue3,
                 )
         )
 
@@ -72,8 +100,7 @@
                                         <?php
                                             $sponsor = explode(" ", $verifyNames['sponsor_name']);
                                         ?>
-                                        <strong class="text-xl"><?php echo $verifyNames['sponsor_name']; ?></strong><br/>
-                                         <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $verifyNames['sponsor_name']; ?>" ><?php echo $sponsor[0];?></strong><br/>
+                                        <strong class="text-xl" data-toggle="tooltip" data-placement="top" data-original-title="<?php echo $verifyNames['sponsor_name']; ?>" ><?php echo $sponsor[0];?></strong><br/>
                                         <span class="text">Sponsor</span>
                                     </div>
                                     <div class="col-md-4 text-center " >
@@ -300,9 +327,9 @@
                                                     <h6 class="text-bold">Additional information </h6>
                                                     <div class="text-caption holder">
                                                         <ul class="text-caption">
-                                                            <li>No Text Entered</li>
-                                                            <li>No Text Entered</li>
-                                                            <li>No Text Entered</li>
+                                                            <li><?php echo $detailSummary['primary_outcome_res1']; ?></li>
+                                                            <li><?php echo $detailSummary['primary_outcome_res2']; ?></li>
+                                                            <li><?php echo $detailSummary['primary_outcome_res3']; ?></li>                                                            
                                                         </ul>
                                                     </div>
                                                 </div>
