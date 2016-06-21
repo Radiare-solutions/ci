@@ -129,7 +129,7 @@ class Feed_Management_Controller extends Controller {
         $str = '<option value="">select</option>';
         foreach ($therapy as $data) {
             $clas = "";
-            if ($tid == $data['_id'])
+            if ((!is_null($tid)) && ($tid == $data['_id']))
                 $clas = "selected=selected";
             $str.='<option value="' . $data['_id'] . '" ' . $clas . '>' . $data['therapy'] . '</option>';
         }

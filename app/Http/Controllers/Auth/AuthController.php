@@ -28,6 +28,9 @@ class AuthController extends Controller
      *
      * @var string
      */
+    
+    protected  $username = 'email';
+
     protected $redirectTo = '/';
 
     /**
@@ -68,5 +71,26 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+    
+    public function postLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email', 'password' => 'required',
+        ]);
+//        if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
+//            return redirect($this->loginPath())
+//                ->withInput($request->only('email', 'remember'))
+//                ->withErrors('Your account is Inactive or not verified');
+//        }
+//        $credentials  = array('email' => $request->email, 'password' => $request->password);
+//        if ($this->auth->attempt($credentials, $request->has('remember'))){
+//                return redirect()->intended($this->redirectPath());
+//        }
+//        return redirect($this->loginPath())
+//            ->withInput($request->only('email', 'remember'))
+//            ->withErrors([
+//                'email' => 'Incorrect email address or password',
+//            ]);
     }
 }

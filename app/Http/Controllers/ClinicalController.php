@@ -30,12 +30,13 @@ class ClinicalController extends Controller
      * return value - none
      *  null - if no match found
      */
-   public function Extract(){
+   public function Extract(Request $request){
        set_time_limit(0);
        ini_set('max_execution_time', 0);
        $molecule_or_indication=urlencode("adalimumab");
        
-       $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       // $api_query="https://clinicaltrials.gov/search?term=$molecule_or_indication&displayxml=true";
+       $api_query = $request->trial;
        
        $content = file_get_contents($api_query);
        $xml=simplexml_load_string($content);

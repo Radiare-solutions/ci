@@ -2054,7 +2054,7 @@ function add_client_setup() {
                 error: function (data) {
                 }
             });
-            window.location.href="feeds.html";
+            //window.location.href="feeds.html";
         },
         error: function (data) {
             if (typeof data.responseJSON != "undefined")

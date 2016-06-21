@@ -244,7 +244,8 @@ class Indication extends Eloquent {
     public function getTherapeutic($iid) {
         $therapy = array();
         if(!is_null($iid)) {
-        $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+        // $this->indicationID = new \MongoDB\BSON\ObjectId($iid);
+            $this->indicationID = $iid;
         $result = \Illuminate\Support\Facades\DB::collection($this->collection)->raw(function($collection) {
             return $collection->aggregate(array(
                         array('$unwind' => '$Indication'),

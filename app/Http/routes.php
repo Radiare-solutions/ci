@@ -66,7 +66,7 @@ Route::post('load_molecule_detail/{id}/{id1}/{id2}', 'Feed_Management_Controller
 /* end of soumya codes */
 
 /* start of mohana priya codes */
-Route::get('clinical_trial', 'ClinicalController@Extract');
+Route::post('clinical_trial', 'ClinicalController@Extract');
 Route::get('detail_study_summary/{id}', 'ClinicalDetailStudyController@index');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
 /* end of mohana priya codes */
@@ -164,6 +164,25 @@ Route::post('filter_studies/{page}/{sort_field}/{order}', 'ClinicalTrials\ListSt
 |
 */
 
+
+
 Route::group(['middleware' => ['web']], function () {
-    //
+    Route::auth();
+// Authentication routes...
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+// Registration routes...
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+
+Route::controllers([
+   'password' => 'Auth\PasswordController',
+]);
+Route::get('/home', 'HomeController@index');
+
+Route::get('login', 'LoginController@index');
 });
+
