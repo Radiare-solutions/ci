@@ -15,7 +15,8 @@
         "laravel/framework": "5.2.*",
         "jenssegers/mongodb": "^3.0",
         "simple-html-dom/simple-html-dom": "*",
-        "os/php-excel": "^2.1"
+        "os/php-excel": "^2.1",
+        "jenssegers/mongodb-session": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

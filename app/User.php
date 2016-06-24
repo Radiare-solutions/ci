@@ -1,29 +1,22 @@
 <?php
-
 namespace App;
+
+use Illuminate\Auth\Authenticatable as AuthenticableTrait;;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
-//class User extends Eloquent
-{
-        protected $collection = 'users';
-    protected $fillable = array('email','pass');
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-//    protected $fillable = [
-//        'name', 'email', 'password',
-//    ];
+class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'pass'
-    ];
+    use AuthenticableTrait, CanResetPassword;
+
+    // protected $collection = 'users'; 
+
+    protected $fillable = ['email', 'password'];
+    
+    protected $hidden = ['password','remember_token'];
 }
+
+?>

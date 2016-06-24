@@ -52,6 +52,7 @@ class Feed_Management_Models extends Eloquent {
         );
 
         Feed_Management_Models::insert(array($insert_details));
+        return $arr;
     }
 
     public function edit_user_submit($id, $request) {

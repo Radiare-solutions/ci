@@ -114,12 +114,25 @@ class Feed_Management_Controller extends Controller {
                             ], 422);
         } else {
             $FeedObj = new Feed_Management_Models();
-            $FeedObj->add_feeds($request);
-
+            $response = $FeedObj->add_feeds($request);
+            
+            /*foreach($response as $dataTypeName => $urls) {
+                $urlArray = explode(",", $urls);
+                if($dataTypeName == 'Patents') {
+                    foreach($urlArray as $url) {
+                        
+                    }
+                }
+            }
+            echo '<pre>';
+            print_r($response);
+            exit; */
+            
             return response()->json([
                         'success' => true,
+                        'urlArray' => $response,
                         'message' => "Feed Added Successfully"
-                            ], 200);
+                            ], 200); 
         }
     }
 

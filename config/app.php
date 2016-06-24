@@ -157,6 +157,11 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
 Jenssegers\Mongodb\MongodbServiceProvider::class,
+        Jenssegers\Mongodb\Session\SessionServiceProvider::class,
+
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+    App\Providers\CustomAuthServiceProvider::class,
 //PHPExcel\PHPExcel::class,
     ],
 

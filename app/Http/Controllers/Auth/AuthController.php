@@ -76,21 +76,23 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email', 'password' => 'required',
+            'email' => 'required', 'password' => 'required',
         ]);
-//        if ($this->auth->validate(['email' => $request->email, 'password' => $request->password, 'active' => 0])) {
-//            return redirect($this->loginPath())
-//                ->withInput($request->only('email', 'remember'))
-//                ->withErrors('Your account is Inactive or not verified');
-//        }
-//        $credentials  = array('email' => $request->email, 'password' => $request->password);
-//        if ($this->auth->attempt($credentials, $request->has('remember'))){
-//                return redirect()->intended($this->redirectPath());
-//        }
-//        return redirect($this->loginPath())
-//            ->withInput($request->only('email', 'remember'))
-//            ->withErrors([
-//                'email' => 'Incorrect email address or password',
-//            ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember')))
+       // if($request->get('email') == "admin@test.com")
+        { //this if validate if the user is on the database line 1
+            return redirect()->intended($this->redirectPath());
+            //this redirect if user is the db line 2
+        }
+
+        return redirect($this->loginPath())
+                    ->withInput($request->only('email', 'remember'))
+                    ->withErrors([
+                        'email' => $this->getFailedLoginMessage(),
+                    ]);
+          //redirect again to login view with some errors line 3
     }
 }

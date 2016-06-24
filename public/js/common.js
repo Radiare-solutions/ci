@@ -1439,6 +1439,89 @@ function load_edit_feed(id) {
     });
 }
 
+function news_data(url) {
+    console.log("news log : " + url);
+    $.ajax({
+        type: 'post',
+        url: "news",
+        async:false,
+        data: {trial:url},
+        crossDomain: true,
+        dataType: 'json',
+        jsonp:false,
+        success: function (data) {
+        },
+        error: function (data) {
+        }
+    });
+}
+
+function patents_data(url) {
+    console.log("patents log : " + url);
+    $.ajax({
+        type: 'post',
+        url: "patents",
+        async:false,
+        data: {trial:url},
+        crossDomain: true,
+        dataType: 'json',
+        jsonp:false,
+        success: function (data) {
+        },
+        error: function (data) {
+        }
+    });
+}
+
+function publications_data(url) {
+    console.log("publications log : " + url);
+    $.ajax({
+        type: 'post',
+        url: "publications",
+        async:false,
+        data: {trial:url},
+        crossDomain: true,
+        dataType: 'json',
+        jsonp:false,
+        success: function (data) {
+        },
+        error: function (data) {
+        }
+    });
+}
+
+function conference_coverage_data(url) {
+    console.log("conference coverage log : " + url);
+    $.ajax({
+        type: 'post',
+        url: "conference_coverage",
+        async:false,
+        data: {trial:url},
+        crossDomain: true,
+        dataType: 'json',
+        jsonp:false,
+        success: function (data) {
+        },
+        error: function (data) {
+        }
+    });
+}
+
+function parseURL(urlValue, functionName) {    
+    if(urlValue.indexOf(',') > -1)
+    {
+        var Arr = urlValue.split(",");
+        for(var i=0;i<Arr.length;i++)
+        {                    
+            eval(functionName+'("'+Arr[i]+'")');        
+        }             
+    }
+    else 
+    {
+        eval(functionName+'("'+urlValue+'")');        
+    }
+}
+
 function add_new_feed() {
     console.log("submit feed");
     var url = "add_feed";
@@ -1452,7 +1535,15 @@ function add_new_feed() {
             // success logic
             $('form#add_user #errorResponse').removeClass("alert alert-danger");
             $('form#add_user #errorResponse').show().html("RSS Feed Added successfully");
-            $('form#add_user #errorResponse').addClass("alert alert-success");
+            $('form#add_user #errorResponse').addClass("alert alert-success");            
+            var news = data.urlArray.News;
+            parseURL(news, 'news_data');
+            var patents = (data.urlArray.Patents);
+            parseURL(patents, 'patents_data');
+            var publications = (data.urlArray.Publications);
+            parseURL(publicationss, 'publications_data');
+            var conference_coverage = data.urlArray.Conferencecoverage;
+            parseURL(conference_coverage, 'conference_coverage_data');
             window.location.reload();
         },
         error: function (data) {

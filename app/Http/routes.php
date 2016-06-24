@@ -69,6 +69,15 @@ Route::post('load_molecule_detail/{id}/{id1}/{id2}', 'Feed_Management_Controller
 Route::post('clinical_trial', 'ClinicalController@Extract');
 Route::get('detail_study_summary/{id}', 'ClinicalDetailStudyController@index');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
+Route::post('conference_coverage', 'ConfCoverageController@Extract');
+Route::post('publications', 'PublicationController@Extract');
+Route::post('patents', 'PatentController@Extract');
+Route::post('news', 'NewsController@Extract');
+Route::get('/detailed_clinical', 'ClinicalDetailStudyController@index');
+Route::get('/patient_reviews', 'PatientReviewController@Extract');
+Route::get('/adverse_events', 'AdverseController@Extract');
+Route::get('/ci_conf_calendar', 'ConfCalendarController@showConfcalendar');
+Route::get('/publications1', 'PublicationController@SpecPubExtract');
 /* end of mohana priya codes */
 
 Route::get('import_indication_data', 'ImportIndicationDataController@load');
