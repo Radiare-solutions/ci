@@ -16,9 +16,9 @@
 });*/
 
 /* start of soumya codes */
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('layouts/index');
-});
+});*/
 Route::get('/home.html', function () {
     return view('layouts/index');
 });
@@ -173,12 +173,15 @@ Route::post('filter_studies/{page}/{sort_field}/{order}', 'ClinicalTrials\ListSt
 |
 */
 
+Route::get('/', ['middleware' => 'auth:api','uses' => 'ClinicalTrials\DashboardController@index']); 
 
-
-Route::group(['middleware' => ['web']], function () {
-    Route::auth();
+Route::group(['middleware' => 'web'], function () {
+   Route::get('/', 'HomeController@index'); 
+    
+   Route::auth();
 // Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
+// Route::get('auth/login', 'Auth\AuthController@getLogin');
+   Route::get('auth/login', 'LoginController@index');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
@@ -186,12 +189,14 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-
 Route::controllers([
+    //'auth' => 'Auth\AuthController',
    'password' => 'Auth\PasswordController',
 ]);
 Route::get('/home', 'HomeController@index');
 
 Route::get('login', 'LoginController@index');
 });
+
+
 

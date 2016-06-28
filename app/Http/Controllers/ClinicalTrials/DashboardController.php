@@ -15,7 +15,12 @@ use App\Models\StatusModel;
 
 class DashboardController extends Controller {
 
+    public function __construct() {
+      //$this->middleware('guest');
+    }  
+    
     public function index() {
+        
         $obData = new ClinicalTrialModel();
         $statusData = $obData->getStatusDashboardResults();
         $conditionData = $obData->getConditionDashboardResults();
@@ -28,8 +33,8 @@ class DashboardController extends Controller {
         $phaseData = $obData->getPhaseDashboardResults();
         
         $phaseTop = $phaseData[0][1];
-        $estimatedCompletionTotal = $obData->getEstimatedCompletionForCurrentYear();
-        echo '<pre>';
+        $estimatedCompletionTotal = $obData->getEstimatedCompletionForCurrentYear();        
+        echo '<pre>';        
         print_r($estimatedCompletionData);
         exit;
         return view('clinical_trails\dashboard', array(

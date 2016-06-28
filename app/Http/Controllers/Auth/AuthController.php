@@ -7,6 +7,8 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -40,7 +42,8 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        // $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware('guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -76,18 +79,18 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required', 'password' => 'required',
+            'email' => 'required|email', 'password' => 'required',
         ]);
 
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember')))
+        if (Auth::guard($this->getGuard())->loginUsingId($credentials, $request->has('remember')))
        // if($request->get('email') == "admin@test.com")
         { //this if validate if the user is on the database line 1
             return redirect()->intended($this->redirectPath());
             //this redirect if user is the db line 2
         }
-
+        
         return redirect($this->loginPath())
                     ->withInput($request->only('email', 'remember'))
                     ->withErrors([

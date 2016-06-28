@@ -36,7 +36,7 @@
                     <i class="fa fa-key"></i>
                 </span>
                 <!-- <input type="password"  id="txtpassword"  placeholder="Password" class="form-control" required> -->
-                <input type="password" class="form-control" name="password">
+                <input type="password" class="form-control" name="password" value="admin">
                 
                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">                            
                             <div class="col-md-12">
@@ -58,7 +58,7 @@
         <div class="control-group  col-md-12">
             <div class="checkbox checkbox check-success pull-left text-white">
 
-                <input type="checkbox" id="checkbox1" value="1">
+                <input type="checkbox" id="checkbox1" name="remember">
                 <label for="checkbox1" class="text-white">Keep me logged in </label>
 
             </div>
