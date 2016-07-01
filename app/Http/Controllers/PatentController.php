@@ -7,6 +7,8 @@ use App\Models\RssModel as RssModel;
 
 use App\Models\PatentModel as PatentModel;
 
+use App\Models\ApplicantModel as ApplicantModel;
+
 use App\Http\Requests;
 
 /* 
@@ -31,6 +33,9 @@ class PatentController extends Controller
            
         //Checking whether the Feed URL is exist or not.
         $rssModel= new rssModel();
+        $Patent_Modal=new PatentModel(); 
+        $ApplicantModel= new ApplicantModel();
+        
         $feedExist=$rssModel->rssFeedselect($api_query,$rss_feed_type);
         if($feedExist==null){
             // Inserting RSS FEED into ci_rss_feeds table
@@ -47,7 +52,7 @@ class PatentController extends Controller
         $channel=$xml->channel;
         $items=$channel->item;
         
-        $insert_details=array();
+
         foreach ($items as $answer){
             $patent_title=trim((string)$answer->title);
             $patent_link=(string)$answer->link;
@@ -72,7 +77,7 @@ class PatentController extends Controller
     
             $abstract_arr=array();
             foreach($xpath->query('.//p[@class="printAbstract"]') as $abstract_content){ 
-            $abstract_arr[]=preg_replace('!\s+!',' ', trim($abstract_content->nodeValue)); 
+                 $abstract_arr[]=preg_replace('!\s+!',' ', trim($abstract_content->nodeValue)); 
             }
             $abstract=implode("", $abstract_arr);
             
@@ -86,57 +91,74 @@ class PatentController extends Controller
             foreach($xpath->query('.//span[@id="applicants"]') as $applicants){ 
                 $applicants_arr[]=preg_replace('!\s+!',' ', trim(strip_tags($applicants->nodeValue)));
             }
-            $applicants=  implode("", $applicants_arr);
-              
-            $index_array=$this->getTable($patent_content);
-            $classification = "";
-        if(isset($index_array[3])){
-        $classification=preg_replace("/Classification:/i","",str_replace("less","",$index_array[3]));
-        }
-        
-        $application_no = "";
-        $filed_date = "";
-        if(isset($index_array[4])){
-        $Application_node=preg_replace("/Application number:/i","" ,$index_array[4]);
-        $application= array_values(array_filter(explode(" ", $Application_node)));
-        $application_no=$application[0];
-        $filed_date=$application[1];
-        }
-        
-        $priority_no = "";
-        if(isset($index_array[5])){ 
-        $replace=explode(":",$index_array[5]);
-        $priority_no1=array_values(array_filter(explode(";",$replace[1])));
-        $priority_no=implode(",",$priority_no1);
-        }
-        
-        $published_as = "";
-        if(isset($index_array[6])){
-        $published_as=str_replace("less","",$index_array[6]);
-        }
-        
             
-        $insert_details[]=array("rss_feed_id"=>$rss_feed_id,
-        "title"=>$patent_title,
-        "link"=>$patent_link,
-        "published_date"=>$patent_pubDate,
-        "publication_no"=>$pub_no,
-        "publication_date"=>$pub_date,
-        "abstract"=>$abstract,
-        "inventors"=>$inventors,
-        "applicants"=>$applicants,
-        "classification"=>$classification,
-        "application_no"=>$application_no,
-        "filed_date"=>$filed_date,
-        "priority_no"=>$priority_no,
-        "published_as"=>$published_as);
+            $applicants=explode(";", implode("", $applicants_arr));
+            $index_array=$this->getTable($patent_content);
+    
+            if(isset($index_array[3])){
+                 $classification=preg_replace("/Classification:/i","",str_replace("less","",$index_array[3]));
+            }
+
+            if(isset($index_array[4])){
+                $Application_node=preg_replace("/Application number:/i","" ,$index_array[4]);
+                $application= array_values(array_filter(explode(" ", $Application_node)));
+                $application_no=$application[0];
+                $filed_date=(int)$application[1];
+            }
         
-        }
+            if(isset($index_array[5])){ 
+                $replace=explode(":",$index_array[5]);
+                $priority_no1=array_values(array_filter(explode(";",$replace[1])));
+                $priority_no=implode(",",$priority_no1);
+            }
         
-        $Patent_Modal=new PatentModel();              
+            if(isset($index_array[6])){
+                $published_as=str_replace("less","",$index_array[6]);
+            }
+           
+            $applicant_id_arr=array();
+            foreach ($applicants as $value){
+
+                $applicant_name= preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "",$value);
+                $applicant_name_id1=$ApplicantModel->FetchApplicant(trim($applicant_name)); //checking whether the applicant name is exist or not exist
+
+                 if($applicant_name_id1==0) //we are adding the applicant into the applicant collection if applicant is not exist
+                { 
+                  $applicant_id_arr[]=$ApplicantModel->AddApplicant($value);
+                }else{
+                  $applicant_id_arr[]=$applicant_name_id1['_id']; 
+                }
+            }
+             
+            $applicant_id=array();
+            foreach ($applicant_id_arr as $value) {
+               $applicant_id[]=array("_id"=>$value,"isActive"=>1);
+            }
+
+
+        $filed_by_month=DATE("F",strtotime($filed_date));
+        $filed_by_year=DATE("Y",strtotime($filed_date));
+        
+        $insert_details=array("rss_feed_id"=>$rss_feed_id,
+            "title"=>$patent_title,
+            "link"=>$patent_link,
+            "published_date"=>$patent_pubDate,
+            "publication_no"=>$pub_no,
+            "publication_date"=>$pub_date,
+            "applicant_id"=>$applicant_id,
+            "abstract"=>$abstract,
+            "inventors"=>$inventors,
+            "classification"=>$classification,
+            "application_no"=>$application_no,
+            "filed_date"=>$filed_date,
+            "filed_by_month"=>$filed_by_month,
+            "filed_by_year"=>$filed_by_year,
+            "priority_no"=>$priority_no,
+            "published_as"=>$published_as);
+        
         $Patent_Modal->PatentInsert($insert_details);  
-  
-        
+        }
+    
    }
      
     public function getTable($patent_content){
@@ -150,7 +172,7 @@ class PatentController extends Controller
             return array_values(array_filter($index_array));
     }
 
-     public function domElement($content){
+    public function domElement($content){
          if(!empty($content)) {
           $dom= new \DOMDocument();
           libxml_use_internal_errors(true);

@@ -48,7 +48,7 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
         $conference_url="http://www.conference-service.com/conferences/$href";
         
         $conference_content_extraction = file_get_html($conference_url);
-        $insert_details=array();
+
         foreach($conference_content_extraction->find('div[class=panel panel-primary]') as $conference_html){
     
                         $spans_label=$this->DOM($conference_html);
@@ -67,8 +67,8 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
                         for($i=0; $i<$conflist_label_length; $i++){
                             
                         foreach ($conference_html->find('div.row < div.conflist_label',$i) as $conflist_label) {
-                        if(isset($conflist_label->innertext)){
-                        array_push($column_array,strip_tags($conflist_label->innertext));
+                        if(isset($conflist_label->innertext)){ 
+                        array_push($column_array,str_replace(" ", "_", strtolower(strip_tags($conflist_label->innertext))));
                         }
                         }
                         
@@ -95,26 +95,70 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
                         $a=$a+1;
                         
                         }
+
+                        if(array_key_exists("dates",$conf_column_arr)){
+                            $dates=explode("-",$conf_column_arr['dates']);
                             
-                 $insert_details[] =array("rss_feed_id"=>$rss_feed_id,"specialty_name"=>$specialty_name,"conference_url"=>$conference_url,
-                "conference_title"=>$conference_title,"conf_column_name_value"=>$conf_column_arr);
-        }
- $ConfCalendarModel->AddCoverage($insert_details); 
+                            $start_year=DATE("Y",strtotime($dates[0]));
+                            $end_year=DATE("Y",strtotime($dates[1]));
+                            
+                            $start_month=DATE("F",strtotime($dates[0]));
+                            $end_month=DATE("F",strtotime($dates[1]));
+                            
+                        }else if(array_key_exists("start_date",$conf_column_arr)){
+                              
+                            // replacing dates with start date
+                            $conf_column_arr['dates']= $conf_column_arr['start_date'];
+                            unset($conf_column_arr['start_date']);
+                            
+                            $dates=$conf_column_arr['dates'];
+                            
+                            $start_year=DATE("Y",strtotime($dates));
+                            $end_year=DATE("Y",strtotime($dates));
+                            
+                            $start_month=DATE("F",strtotime($dates));
+                            $end_month=DATE("F",strtotime($dates));
+                        }
+                        
+                        $conf_column_arr['start_month']=$start_month;
+                        $conf_column_arr['end_month']=$end_month;
+                        $conf_column_arr['year']=$start_year;
+                        
+                        if($start_year==$end_year){
+                            if($conference_title!=""){
+                            if(isset($conf_column_arr['id']))
+                            {
+                                $conf_count = $ConfCalendarModel->CalenderById($conf_column_arr['id']);
+
+                                if($conf_count!="" || $conf_column_arr!= NULL || count($conf_column_arr)!=0){
+
+                                $ConfCalendarModel->AddCoverage(array("rss_feed_id"=>$rss_feed_id,"specialty_name"=>$specialty_name,"conference_url"=>$conference_url,
+                                "conference_title"=>$conference_title,"conf_column_name_value"=>$conf_column_arr));
+                                }
+                           }else{
+                                $ConfCalendarModel->AddCoverage(array("rss_feed_id"=>$rss_feed_id,"specialty_name"=>$specialty_name,"conference_url"=>$conference_url,
+                               "conference_title"=>$conference_title,"conf_column_name_value"=>$conf_column_arr));   
+                           }
+                         }
+                    }
+                }  
 }  
 }
 
- public function showConfcalendar()
-    {
+ public function showConfcalendar(Request $request){
+     
+        $year_url=$request->get('year'); 
         $ConfCalendarModel= new ConfCalendarModel();
-        $Conf_Calendar_Data = $ConfCalendarModel->FetchConfcalender(); 
-        // echo '<pre>'; print_r($Conf_Calendar_Data)."</pre>";
+        $conf_calendar_data = $ConfCalendarModel->CalenderByYear($year_url); 
 
-        if(!empty($Conf_Calendar_Data))
-        {
+        if(!empty($conf_calendar_data)){
+            
             $jan=0;$feb=0;$mar=0;$apr=0;$may=0;$jun=0;$jul=0;$aug=0;$sep=0;$oct=0;$nov=0;$dec=0;
             $month_arr=array("January","February","March","April","May","June","July","August","September","October","November","December");
-            
-            $Monthly_Calender=array("January"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
+//            echo "<pre>";
+//            print_r($month_arr);
+//            exit();
+            $monthly_calender=array("January"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
                 "February"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
                 "March"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
                 "April"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
@@ -126,80 +170,115 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
                 "October"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
                 "November"=>array("Total_Conf"=>0, "Conf_Details"=>array()),
                 "December"=>array("Total_Conf"=>0, "Conf_Details"=>array())); 
-             
-           foreach ($Conf_Calendar_Data as $post)
-            {
+            
+                $conf_detail_arr=array();  
+                foreach ($conf_calendar_data as $post){
+                    
                 $attributes=$post['attributes'];
-                $Conf_Details = $attributes["conf_column_name_value"];
 
-                $rss_feed_id = isset($attributes["rss_feed_id"]) ? $attributes["rss_feed_id"] : "";
-                $specialty_name = isset($attributes["specialty_name"]) ? $attributes["specialty_name"] : "";
-                $conference_url = isset($attributes["conference_url"]) ? $attributes["conference_url"] : "";
+                $conf_details = $attributes["conf_column_name_value"];
+                $unique_id = $attributes["_id"];
                 $conference_title = isset($attributes["conference_title"]) ? $attributes["conference_title"] : "";
 
-                if(!empty($Conf_Details))
-                {
-                    $ID = isset($Conf_Details["ID"]) ? $Conf_Details["ID"] : 0;
-                    $Dates = isset($Conf_Details["Dates"]) ? $Conf_Details["Dates"] : "";
-                    $Location = isset($Conf_Details["Location"]) ? $Conf_Details["Location"] : "";
-                    $Abstract = isset($Conf_Details["Abstract"]) ? $Conf_Details["Abstract"] : "";
-                    $Contact = isset($Conf_Details["Contact"]) ? $Conf_Details["Contact"] : "";
-                    $Topics = isset($Conf_Details["Topics"]) ? $Conf_Details["Topics"] : "";
-                    $Related_subject = isset($Conf_Details["Related subject(s)"]) ? $Conf_Details["Related subject(s)"] : "";
-                    $Event_website = isset($Conf_Details["Event website"]) ? $Conf_Details["Event website"] : "";
+                if(!empty($conf_details)){
+                    $id= isset($conf_details["id"]) ? $conf_details["id"] : 0;
+                    $dates = isset($conf_details["dates"]) ? $conf_details["dates"] : "";
+                    $start_month= isset($conf_details["start_month"]) ? $conf_details["start_month"] : "";
+                    $end_month= isset($conf_details["end_month"]) ? $conf_details["end_month"] : "";
+                    $year= isset($conf_details["year"]) ? $conf_details["year"] : "";
                 }
-                $explode_date= explode("-", $Dates);
-
-                $year=DATE("Y",strtotime($explode_date[0]));
-                $month=DATE("F",strtotime($explode_date[0]));
-  
-                $conf_details=array();
                 
-                if(in_array($month, $month_arr)){
-                    if($conference_title!="")
-                    {
-                    $conf_details=array("Conf_Id"=>$ID, "Conf_title"=>$conference_title, "Conf_Date"=>$Dates);   
+                if($start_month==$end_month){
+                    
+                   if(in_array($start_month, $month_arr)){
+                    $conf_detail_arr["conf_id"]=$id;
+                    $conf_detail_arr["conf_title"]=$conference_title;
+                    $conf_detail_arr["conf_date"]=$dates;
+                    $conf_detail_arr["unique_id"]=$unique_id;
+                    $conf_detail_arr["month"]=$start_month;   
+                    $conf_detail_arr["year"]=$year;
+                 } 
+ 
+                 if(isset($monthly_calender[$start_month]) && !empty($conf_detail_arr)){
+                    $monthly_calender[$start_month]["Conf_Details"][$id]=$conf_detail_arr;
+                    $monthly_calender[$start_month]["Total_Conf"]=count($monthly_calender[$start_month]['Conf_Details']);
+                 }
+                 
+                }else if($start_month!=$end_month) {
+                    $start_mn_index=array_search($start_month,$month_arr);
+
+                    $end_mn_index=array_search($end_month,$month_arr);
+
+                    for ($month_i=$start_mn_index; $month_i<=$end_mn_index; $month_i++){
+                        
+                            $conf_detail_arr["conf_id"]=$id;
+                            $conf_detail_arr["conf_title"]=$conference_title;
+                            $conf_detail_arr["conf_date"]=$dates;
+                            $conf_detail_arr["unique_id"]=$unique_id;
+                            $conf_detail_arr["month"]=$month_arr[$month_i];   
+                            $conf_detail_arr["year"]=$year;
+
+                            if(isset($monthly_calender[$month_arr[$month_i]]) && !empty($conf_detail_arr)){
+                                $monthly_calender[$month_arr[$month_i]]["Conf_Details"][$id]=$conf_detail_arr;
+                                $monthly_calender[$month_arr[$month_i]]["Total_Conf"]++;
+                            }
+                   
                     }
-                }
-//                echo "<pre>";
-//                var_dump($month_arr);
-//                exit();
-                if(isset($Monthly_Calender[$month]) && !empty($conf_details))
-                {
-                    $Monthly_Calender[$month]["Total_Conf"]++;
-                    $Monthly_Calender[$month]["Conf_Details"][$ID]=$conf_details;
-                }
-//                else 
-//                {
-//                    $Monthly_Calender[$month]["Total_Conf"]=0;
-//                    $Monthly_Calender[$month]["Conf_Details"][$ID]=$conf_details;
-//                }
-            }
-//        echo "<pre>";
-//        print_r($Monthly_Calender);
-//        echo "</pre>";
-//        exit();
-//
-//        $Monthly_Calender = array("January"=>
-//            array("Total_Conf"=>12, "Conf_Details"=>array(
-//               "1"=>array("Conf_Id"=> 1, "Conf_title"=>"Jan_Title1", "Conf_Date"=>"01 May 2016 - 05 May 2016"), 
-//                2=>array("Conf_Id"=> 2, "Conf_title"=>"Jan_Title1", "Conf_Date"=>"01 May 2016 - 05 May 2016"),
-//                3=>array("Conf_Id"=> 3, "Conf_title"=>"Jan_Title1", "Conf_Date"=>"01 May 2016 - 05 May 2016")
-//                )), 
-//
-//            "Feburary"=>
-//            array("Total_Conf"=>15, "Conf_Details"=>array("2"=>array("Conf_Id"=> 2, "Conf_title"=>"Feb_Title1", "Conf_Date"=>"01 May 2016 - 05 May 2016"))), 
-//
-//            "March"=>
-//            array("Total_Conf"=>0, "Conf_Details"=>array()) );
-        
-//         $Monthly_Calender = array("january"=>array("Total_Conf"=>12, "Conf_Details"=>array("1"=>array("Conf_Id"=> 1, "Conf_title"=>"Jan_Title1", "Conf_Date"=>"01 May 2016 - 05 May 2016"))), "Feburary"=>array("Total_Conf"=>0, "Conf_Details"=>array())  );
 
+                }
 
-        return  view('conference_calendar/view_conf_calendar', array('Monthly_Calender'=>$Monthly_Calender));
-       
+                }
+           
+        return  view('conference_calendar/view_conf_calendar', array('monthly_calender'=>$monthly_calender));
        
      }
+    }
+    
+    public function getConference(Request $request){
+       $ConfCalendarModel= new ConfCalendarModel();
+       
+       $month=$request->get('month'); 
+       $year=$request->get('year');
+       $nav_key=$request->get('nav_key');
+
+         $conf_content=$ConfCalendarModel->CalenderByYearandMonth($month,$year);
+
+         $conf_detail_arr=array();
+         
+         $position=0;
+         foreach ($conf_content as $conference_detail_key) {
+
+            $conference_id=$conference_detail_key['_id'];
+            $conference_title=$conference_detail_key['conference_title'];
+            
+            $conf_detail_arr["$position"]["conf_id"]=$conference_id;
+            $conf_detail_arr["$position"]["conf_title"]=$conference_title;
+            $value=$conference_detail_key['conf_column_name_value'];
+            
+            if(array_key_exists("id",$value)){ $conf_detail_arr["$position"]["id"]=$value['id'];
+            }   
+            if(array_key_exists("dates",$value)){ $conf_detail_arr["$position"]["dates"]=$value['dates'];
+            }               
+            if(array_key_exists("location",$value)){ $conf_detail_arr["$position"]["location"]=$value['location']; 
+            }
+            if(array_key_exists("contact",$value)){ $conf_detail_arr["$position"]["contact"]=$value['contact']; 
+            }
+            if(array_key_exists("topics",$value)){ $conf_detail_arr["$position"]["topics"]=$value['topics']; 
+            }
+            if(array_key_exists("related_subject(s)",$value)){ $conf_detail_arr["$position"]["related_subject"]=$value['related_subject(s)']; 
+            }
+            if(array_key_exists("event_website",$value)){ $conf_detail_arr["$position"]["event_website"]=$value['event_website']; 
+            }
+            if(array_key_exists("abstract",$value)){ $conf_detail_arr["$position"]["abstract"]=$value['abstract']; 
+            }
+            $position++;
+      }
+//      echo "<pre>";
+//      print_r($conf_detail_arr);
+//      echo "</pre>";
+//       exit();
+       $data=array("content"=>$conf_detail_arr,"month"=>$month,"year"=>$year,"nav_key"=>$nav_key);
+       return view('conference_calendar/get_detailed_conf',array('conference_detail'=>$data));   
     }
     
     public function DOM($html){

@@ -78,6 +78,7 @@ Route::get('/patient_reviews', 'PatientReviewController@Extract');
 Route::get('/adverse_events', 'AdverseController@Extract');
 Route::get('/ci_conf_calendar', 'ConfCalendarController@showConfcalendar');
 Route::get('/publications1', 'PublicationController@SpecPubExtract');
+Route::get('/ci_conf_calendar_1', 'ConfCalendarController@getConference');
 /* end of mohana priya codes */
 
 Route::get('import_indication_data', 'ImportIndicationDataController@load');
@@ -177,7 +178,7 @@ Route::get('/', ['middleware' => 'auth:api','uses' => 'ClinicalTrials\DashboardC
 
 Route::group(['middleware' => 'web'], function () {
    Route::get('/', 'HomeController@index'); 
-    
+   Route::get('patents', 'Patents\PatentsController@index');
    Route::auth();
 // Authentication routes...
 // Route::get('auth/login', 'Auth\AuthController@getLogin');

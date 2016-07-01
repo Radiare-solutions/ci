@@ -67,7 +67,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 ">
-            <button class="btn btn-primary btn-cons pull-right" type="submit" style="background:#ff7900;">Login</button>
+            <button class="btn btn-primary btn-cons pull-right" type="submit" name="login" style="background:#ff7900;">Login</button>
         </div>
     </div>
 </form>
