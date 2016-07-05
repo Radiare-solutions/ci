@@ -1658,7 +1658,7 @@ body.modal-open .chat-window-wrapper {
   opacity: 1;
 }
 .horizontal-menu .bar-inner > ul > li.open {
-  background: transparent;
+  background: #fff;
 }
 .horizontal-menu .bar-inner > ul > li.open > .classic {
   max-height: 999px;
@@ -1674,7 +1674,7 @@ body.modal-open .chat-window-wrapper {
   margin: 0;
   padding: 0;
   position: absolute;
-  background-color: transparent;
+  background-color: #fff;
   list-style: none;
   left: 0;
   right: 0;
@@ -1710,7 +1710,7 @@ body.modal-open .chat-window-wrapper {
   top: 40px;
   padding: 0;
   position: absolute;
-  background-color: transparent;
+  background-color: #fff;
   list-style: none;
   display: none;
   left: 0;
@@ -1736,7 +1736,7 @@ body.modal-open .chat-window-wrapper {
   top: 40px;
   padding: 0;
   position: absolute;
-  background-color: transparent;
+  background-color: #fff;
   list-style: none;
   display: none;
   left: 0;
@@ -2161,8 +2161,7 @@ hr {
 span.iconset {
   display: block;
 }
-.iconset {
-  background: url("../img/icon/top-tray.png") no-repeat;
+.iconset {  
   position: relative;
   top: 1px;
 }
@@ -2563,6 +2562,10 @@ span.iconset {
 .m-r-5 {
   margin-right: 5px;
 }
+.m-l-0{
+margin-left:0px !important;
+
+}
 .m-l-5 {
   margin-left: 5px;
 }
@@ -2604,6 +2607,14 @@ span.iconset {
 }
 .m-b-20 {
   margin-bottom: 20px;
+}
+.m-t-0{
+margin-top:0px !important;
+
+}
+.m-t-15{
+margin-top:15px !important;
+
 }
 .m-t-25 {
   margin-top: 25px;

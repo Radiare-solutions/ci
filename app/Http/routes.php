@@ -179,6 +179,7 @@ Route::get('/', ['middleware' => 'auth:api','uses' => 'ClinicalTrials\DashboardC
 Route::group(['middleware' => 'web'], function () {
    Route::get('/', 'HomeController@index'); 
    Route::get('patents', 'Patents\PatentsController@index');
+   Route::get('home', 'Dashboard\DashboardController@index');
    Route::auth();
 // Authentication routes...
 // Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -194,7 +195,7 @@ Route::controllers([
     //'auth' => 'Auth\AuthController',
    'password' => 'Auth\PasswordController',
 ]);
-Route::get('/home', 'HomeController@index');
+//Route::get('/home', 'HomeController@index');
 
 Route::get('login', 'LoginController@index');
 });
