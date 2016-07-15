@@ -27,8 +27,8 @@
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
-        <script type="text/javascript" src="assets/js/libs/utils/html5shiv.js?1403934957"></script>
-        <script type="text/javascript" src="assets/js/libs/utils/respond.min.js?1403934956"></script>
+        <script type="text/javascript" src="js/libs/utils/html5shiv.js?1403934957"></script>
+        <script type="text/javascript" src="js/libs/utils/respond.min.js?1403934956"></script>
         <![endif]-->
 
         <link rel="stylesheet" href="{{ URL::asset("dist/jqcloud.min.css") }}">
@@ -228,13 +228,13 @@
         <!-- BEGIN HEADER-->
         <header id="header" class="">
             <div class="headerbar">
-                <!-- Brand and toggle get grouped for better mobile display -->
+                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="headerbar-left">
                     <ul class="header-nav header-nav-options">
                         <li class="header-nav-brand" >
                             <div class="brand-holder">
                                 <a href="#">
-                                    <img src="assets/logo/rad-logo.png"/>
+                                    <img src="logo/rad-logo.png"/>
                                 </a>
                             </div>
                         </li>
@@ -250,11 +250,11 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Collect the nav links, forms, and other content for toggling -->
+                 <!--Collect the nav links, forms, and other content for toggling -->
                 <div class="headerbar-right">
                     <ul class="header-nav header-nav-options">
                         <li>
-                            <!-- Search form -->
+                             <!-- Search form -->
                             <form role="search" class="navbar-search">
                                 <div class="form-group">
                                     <input type="text" placeholder="Enter your keyword" name="headerSearch" class="form-control">
@@ -285,8 +285,8 @@
                                 <li class="dropdown-header">Options</li>
                                 <li></li>
                                 <li></li>
-                            </ul><!--end .dropdown-menu -->
-                        </li><!--end .dropdown -->
+                            </ul> <!--end .dropdown-menu -->
+                        </li> <!--end .dropdown -->
                         <li class="dropdown hidden-xs">
                             <a data-toggle="dropdown" class="btn btn-icon-toggle btn-default" href="javascript:void(0);">
                                 <i class="fa fa-area-chart"></i>
@@ -319,7 +319,7 @@
                                         </div>
                                         <div class="progress"><div style="width: 74%" class="progress-bar progress-bar-warning"></div></div>
                                     </a>
-                                </li><!--end .dropdown-progress -->
+                                </li> <!--end .dropdown-progress -->
                             </ul><!--end .dropdown-menu -->
                         </li><!--end .dropdown -->
                     </ul>
@@ -327,7 +327,7 @@
                     <ul class="header-nav header-nav-profile">
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
-                                <img src="assets/img/avatar1.jpg?1403934956" alt="" />
+                                <img src="img/avatar1.jpg?1403934956" alt="" />
                                 <span class="profile-info">
                                     Steve Jobs
                                     <small>Administrator</small>
@@ -345,23 +345,39 @@
                         </li><!--end .dropdown -->
                     </ul><!--end .header-nav-profile -->
 
-                </div><!--end #header-navbar-collapse -->
+                </div> <!--end #header-navbar-collapse -->
             </div>
         </header>
         <!-- END HEADER-->
 
         <!-- BEGIN BASE-->
         <div id="base">
-
+            <div class="offcanvas" >
+                       	<!-- BEGIN OFFCANVAS DEMO LEFT -->
+                        <div id="offcanvas-demo-size4" class="offcanvas-pane width-12" >
+                            <div class="offcanvas-head card-bordered style-accent">
+                                            <h5 id="patent_title"></h5>
+                                        <div class="offcanvas-tools">
+                                                <a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
+                                                        <i class="md md-close"></i>
+                                                </a>
+                                        </div>
+                            </div>
+                            <div id="detailed_patents">
+                                
+                            </div>
+                        </div>
+              </div>
 
             <!-- BEGIN CONTENT-->
-            <div id="content">
+            
                 @yield('content')
-            </div><!--end #content-->
+            <!--end #content-->
             <!-- END CONTENT -->
 
             <!-- BEGIN MENUBAR-->
-            <div id="menubar" class="menubar-inverse ">
+            <div id="menubar" 
+                 class="menubar-inverse ">
                 <div class="menubar-fixed-panel" style="background:#fff;">
                     <div>
                         <a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
@@ -370,7 +386,7 @@
                     </div>
                     <div class="expanded">
                         <a href="#">
-                            <img src="assets/logo/rad-logo.png"/>
+                            <img src="logo/rad-logo.png"/>
                         </a>
                     </div>
                 </div>
@@ -452,7 +468,7 @@
         <script src="{{ URL::asset("js/libs/d3/d3.min.js") }}"></script>
         <script src="{{ URL::asset("js/libs/select2/select2.min.js") }}"></script>
         <script src="{{ URL::asset("js/libs/bootstrap-multiselect/bootstrap-multiselect.js") }}"></script>
-        // <!-- <script src="assets/js/libs/d3/d3.v3.js"></script> -->
+        // <!-- <script src="js/libs/d3/d3.v3.js"></script> -->
         <script src="{{ URL::asset("js/core/source/App.js") }}"></script>
         <script src="{{ URL::asset("js/core/source/AppNavigation.js") }}"></script>
         <script src="{{ URL::asset("js/core/source/AppOffcanvas.js") }}"></script>
@@ -481,93 +497,214 @@ $('.dial').each(function () {
 </script>
 
 
-
 <script>
-Morris.Bar({
-  element: 'bar-example',
-  data: [
-    { y: 'Jan', a: 100},
-    { y: 'Feb', a: 75},
-    { y: 'Mar', a: 50},
-    { y: 'Apr', a: 75},
-    { y: 'May', a: 50},
-    { y: 'Jun', a: 75},
-    { y: 'Jul', a: 100},    
-    { y: 'Aug', a: 75},
-    { y: 'Sep', a: 50},
-    { y: 'Oct', a: 75},
-    { y: 'Nov', a: 50},
-    { y: 'Dec', a: 75}
-  ],
-  xkey: 'y',
-  ykeys: ['a'],
-  labels: ['Total Patents'],
-  barColors: ["#1AB244", "#B29215"],
-  gridTextColor: ["#000"],
-   xLabelMargin: 5,
+$(document).ready(function(){
+getPatentRS(0,0,3,1,"publication_date",-1);
+getBarChart();
+getAreaChart();
+
+$("#search").click(function() {
+getPatentRS(0,0,3,1,"publication_date",-1);
+getBarChart();
+getAreaChart();
 });
-</script>
 
-
-<script>
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-Morris.Area({
-  element: 'area-example',
-  data:
-   [
-   { m: '2021-01', a: 100 },
-   { m: '2021-02', a: 54},
-   { m: '2021-03', a: 243},
-   { m: '2021-04', a: 154},
-   { m: '2021-05', a: 43}, 
-   { m: '2021-06', a: 524},
-   { m: '2021-07', a: 213},  
-   { m: '2021-08', a: 222},
-   { m: '2021-09', a: 443}, 
-   { m: '2021-10', a: 90},
-   { m: '2021-11', a: 231}, 
-   { m: '2021-12', a: 300}, 
-   ],
-  xkey: 'm',
-  ykeys: ['a'],
-  labels: ['Total Patents'],
-  lineColors: ["#1531B2"],
-  gridTextColor: ["#000"],
-   xLabelMargin: 5,
-  xLabelFormat: function(x) { // <--- x.getMonth() returns valid index
-    var month = months[x.getMonth()];
-    return month;
-  },
-  dateFormat: function(x) {
-    var month = months[new Date(x).getMonth()];
-    return month;
-  },
 });
 
 
-
-</script>
-
-
-
-
-<script>
-var year = 1996;
-var till = "<?php echo date('Y');?>";
-var options = "";
-for(var y=year; y<=till; y++){
-  options += "<option>"+ y +"</option>";
+function getBarChart(){
+ 
+       var year_var=$('#year').val();
+       var applicant_var=patent_form.elements["applicant[]"].selectedIndex; 
+       var applicant_v=$('#applicant').val(); 
+       if(year_var!=0 && applicant_var==-1){
+          var year=year_var;
+          var applicant=0;
+          var url="/filed_by_month";
+       }else if(year_var==0 && applicant_var!=-1){
+          var applicant=applicant_v;
+          var year=0;
+          var url="/filed_by_year";
+       }else if(year_var!=0 && applicant_var!=-1){
+          var year=year_var;
+          var applicant=applicant_v; 
+          var url="/filed_by_month";
+       }else if(year_var==0 && applicant_var==-1){
+          var year=0;
+          var applicant=0;  
+          var url="/filed_by_year"; 
+       }
+        
+      $.ajax({
+        url: url,   
+        data: {"year":year,"applicant":applicant,"area":0},
+        success: function(response) {
+            
+            Morris.Bar({
+                element: 'bar-example',
+                data: response,
+                xkey: 'y',
+                ykeys: ['a'],
+                labels: ['Total Patents'],
+                barColors: ["#1AB244", "#B29215"],
+                gridTextColor: ["#000"],
+                xLabelMargin: 1,
+                xLabelAngle: 45
+            }).on('click', function(i, row){
+                if(url=="/filed_by_year"){
+                 getChartRS(row.y,0,3,1,"publication_date",-1);   
+                }else{
+                 getChartRS(year,row.y,3,1,"publication_date",-1);  
+                }
+            });
+        }
+    });    
 }
-document.getElementById("year").innerHTML = options;
+function getAreaChart(){
+ 
+       var year_var=$('#year').val();
+       var applicant_var=patent_form.elements["applicant[]"].selectedIndex; 
+       var applicant_v=$('#applicant').val(); 
+       if(year_var!=0 && applicant_var==-1){
+          var year=year_var;
+          var applicant=0;
+          var url="/filed_by_month";
+       }else if(year_var==0 && applicant_var!=-1){
+          var applicant=applicant_v;
+          var year=0;
+          var url="/filed_by_year";
+       }else if(year_var!=0 && applicant_var!=-1){
+          var year=year_var;
+          var applicant=applicant_v; 
+          var url="/filed_by_month";
+       }else if(year_var==0 && applicant_var==-1){
+          var year=0;
+          var applicant=0;  
+          var url="/filed_by_year"; 
+       }
+        
+      if(url=="/filed_by_year")  {
+      $.ajax({
+        url: url,   
+        data: {"year":year,"applicant":applicant,"area":1},
+        success: function(response) {
+            Morris.Area({
+                element: 'area-example',
+                data: response,
+                xkey: 'y',
+                ykeys: ['a'],
+                labels: ['Total Patents'],
+                lineColors: ["#1531B2"],
+                gridTextColor: ["#000"],
+                xLabelMargin: 1,
+                xLabelAngle: 45
+            }).on('click', function(i, row){
+                var yr=row.y-10;
+                getChartRS(yr,0,3,1,"publication_date",-1)
+              });
+        }
+    });  
+      }else{
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var month_arr = {"01":"Jan", "02":"Feb", "03":"Mar", "04":"Apr", "05":"May", "06":"Jun", "07":"Jul", "08":"Aug", "09":"Sep", "10":"Oct", "11":"Nov", "12":"Dec"};
+        $.ajax({
+        url: url,   
+        data: {"year":year,"applicant":applicant,"area":1},
+        success: function(response) {
+            
+            Morris.Area({
+                element: 'area-example',
+                data: response,
+                xkey: 'y',
+                ykeys: ['a'],
+                labels: ['Total Patents'],
+                lineColors: ["#1531B2"],
+                gridTextColor: ["#000"],
+                xLabelMargin: 5,
+                xLabelAngle: 45,
+                xLabelFormat: function(x) { // <--- x.getMonth() returns valid index
+                    var month = months[x.getMonth()];
+                    return month;
+                },
+               dateFormat: function(x) {
+                    var month = months[new Date(x).getMonth()];
+                    return month;
+               }
+              }).on('click', function(i, row){
+                var yr=row.y;
+                var split=yr.split('-');
+                var month_number=split[1];
+                var month = month_arr[month_number];
+                getChartRS(split[0],row.y,3,1,"publication_date",-1)
+              });
+            }
+        }); 
+      }
+}
 </script>
 
-
-
 <script>
-function yearChange(){
-var patents_year=$('#patents_year_select').val();
-alert(patents_year);
+function getPatentPopup(nav_key,title,yr,applicant){
+    $.ajax({
+              url: '/patent_popup',
+              type: "get",
+              data:{"nav_key":nav_key,"year":yr,"applicant":applicant},
+              success: function(data){
+                $('#patent_title').html(title);
+                $('#detailed_patents').html(data);
+              }
+        });   
+}
+
+function getPatentRS(year,month,numRecords,pageNum,sort,order){
+    
+    var year_var=$('#year').val();
+       var applicant_var=patent_form.elements["applicant[]"].selectedIndex; 
+       var applicant_v=$('#applicant').val(); 
+       
+       if(year_var!=0 && applicant_var==-1){
+          var year=year_var;
+          var applicant=0;
+       }else if(year_var==0 && applicant_var!=-1){
+          var applicant=applicant_v;
+          var year=0;
+       }else if(year_var!=0 && applicant_var!=-1){
+          var year=year_var;
+          var applicant=applicant_v; 
+       }else if(year_var==0 && applicant_var==-1){
+          var year=0;
+          var applicant=0;   
+       }
+       
+    $.ajax({
+              url: '/patent_list_rs',
+              type: "get",
+              data: {"year":year,"applicant":applicant,"show":numRecords,"pagenum":pageNum,"sort_title":sort,"sort_order":order,"month":"","ajax":"getPatentRS"},
+              success: function(data){
+                $('#patent_list_result').html(data);
+              }
+        });   
+}
+
+function getChartRS(year,month,numRecords,pageNum,sort,order){
+    
+       var applicant_var=patent_form.elements["applicant[]"].selectedIndex; 
+       var applicant_v=$('#applicant').val(); 
+       
+       if(applicant_var==-1){
+          var applicant=0;
+       }else if(applicant_var!=-1){
+          var applicant=applicant_v;  
+       }
+       
+    $.ajax({
+              url: '/patent_list_rs',
+              type: "get",
+              data: {"year":year,"applicant":applicant,"show":numRecords,"pagenum":pageNum,"sort_title":sort,"sort_order":order,"month":month,"ajax":"getChartRS"},
+              success: function(data){
+                $('#patent_list_result').html(data);
+              }
+        });   
 }
 </script>
    </body>

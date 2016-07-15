@@ -22,19 +22,20 @@ class PatentController extends Controller
      * return value - none
      *  null - if no match found
      */
-   public function Extract(Request $request){
+  // public function Extract(Request $request){
+    public function Extract() {
        set_time_limit(0);
        ini_set('max_execution_time', 0);
-        $api_query = $request->trial;
-        // $api_query="http://worldwide.espacenet.com/websyndication/searchFeed?AB=adalimumab&AP=&CPC=&DB=EPODOC&IC=&IN=&PA=&PD=&PN=&PR=&ST=advanced&Submit=Search&TI=&locale=en_EP";
+        //$api_query = $request->trial;
+         $api_query="http://worldwide.espacenet.com/websyndication/searchFeed?AB=adalimumab&AP=&CPC=&DB=EPODOC&IC=&IN=&PA=&PD=&PN=&PR=&ST=advanced&Submit=Search&TI=&locale=en_EP";
         
         //rss feed type is Patents
         $rss_feed_type="Patents";
            
         //Checking whether the Feed URL is exist or not.
         $rssModel= new rssModel();
-        $Patent_Modal=new PatentModel(); 
-        $ApplicantModel= new ApplicantModel();
+        $patentModal=new patentModel(); 
+        $applicantModel= new applicantModel();
         
         $feedExist=$rssModel->rssFeedselect($api_query,$rss_feed_type);
         if($feedExist==null){
@@ -57,6 +58,15 @@ class PatentController extends Controller
             $patent_title=trim((string)$answer->title);
             $patent_link=(string)$answer->link;
             $patent_pubDate=(string)$answer->pubDate;
+            
+            //fetch data from <esp:priorityDate>
+            //Use that namespace
+            $namespaces = $answer->getNameSpaces(true);
+            $esp = $answer->children($namespaces['esp']); 
+            $priorityDate=(String)$esp->priorityDate;
+            $publicationInfo=(String)$esp->publicationCycle;
+            $cpcClassifications=(String)$esp->cpcClassifications;
+            $ipcClassifications=(String)$esp->ipcClassifications;
 
             $patent_content = file_get_contents($patent_link);
 
@@ -95,9 +105,9 @@ class PatentController extends Controller
             $applicants=explode(";", implode("", $applicants_arr));
             $index_array=$this->getTable($patent_content);
     
-            if(isset($index_array[3])){
-                 $classification=preg_replace("/Classification:/i","",str_replace("less","",$index_array[3]));
-            }
+//            if(isset($index_array[3])){
+//                 $classification=preg_replace("/Classification:/i","",str_replace("less","",$index_array[3]));
+//            }
 
             if(isset($index_array[4])){
                 $Application_node=preg_replace("/Application number:/i","" ,$index_array[4]);
@@ -120,11 +130,11 @@ class PatentController extends Controller
             foreach ($applicants as $value){
 
                 $applicant_name= preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "",$value);
-                $applicant_name_id1=$ApplicantModel->FetchApplicant(trim($applicant_name)); //checking whether the applicant name is exist or not exist
+                $applicant_name_id1=$applicantModel->fetchApplicant(trim($applicant_name)); //checking whether the applicant name is exist or not exist
 
                  if($applicant_name_id1==0) //we are adding the applicant into the applicant collection if applicant is not exist
                 { 
-                  $applicant_id_arr[]=$ApplicantModel->AddApplicant($value);
+                  $applicant_id_arr[]=$applicantModel->addApplicant($value);
                 }else{
                   $applicant_id_arr[]=$applicant_name_id1['_id']; 
                 }
@@ -148,15 +158,18 @@ class PatentController extends Controller
             "applicant_id"=>$applicant_id,
             "abstract"=>$abstract,
             "inventors"=>$inventors,
-            "classification"=>$classification,
+            "cpcClassifications"=>$cpcClassifications,
+            "ipcClassifications"=>$ipcClassifications,
             "application_no"=>$application_no,
             "filed_date"=>$filed_date,
             "filed_by_month"=>$filed_by_month,
             "filed_by_year"=>$filed_by_year,
             "priority_no"=>$priority_no,
-            "published_as"=>$published_as);
+            "published_as"=>$published_as,
+            "priority_date"=>$priorityDate,
+            "publication_info"=>$publicationInfo);
         
-        $Patent_Modal->PatentInsert($insert_details);  
+        $patentModal->patentInsert($insert_details);  
         }
     
    }

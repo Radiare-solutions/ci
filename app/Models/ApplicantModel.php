@@ -17,4 +17,13 @@ class ApplicantModel extends Eloquent
        $ApplicantModel=ApplicantModel::where("applicant_name",'=',$applicant_name)->count();
        return $ApplicantModel;
     }
+    
+    public function loadApplicants() {
+        return ApplicantModel::all();
+    }    
+    
+    public function applicantsById($id) {
+        $ob=ApplicantModel::find(new \MongoDB\BSON\ObjectId($id));
+        return $ob;
+    }
 }

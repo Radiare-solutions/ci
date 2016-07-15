@@ -71,7 +71,7 @@ Route::get('detail_study_summary/{id}', 'ClinicalDetailStudyController@index');
 Route::get('/conference_calendar', 'ConfCalendarController@Extract');
 Route::post('conference_coverage', 'ConfCoverageController@Extract');
 Route::post('publications', 'PublicationController@Extract');
-Route::post('patents', 'PatentController@Extract');
+Route::get('patents', 'PatentController@Extract');
 Route::post('news', 'NewsController@Extract');
 Route::get('/detailed_clinical', 'ClinicalDetailStudyController@index');
 Route::get('/patient_reviews', 'PatientReviewController@Extract');
@@ -79,6 +79,11 @@ Route::get('/adverse_events', 'AdverseController@Extract');
 Route::get('/ci_conf_calendar', 'ConfCalendarController@showConfcalendar');
 Route::get('/publications1', 'PublicationController@SpecPubExtract');
 Route::get('/ci_conf_calendar_1', 'ConfCalendarController@getConference');
+
+Route::get('/patent_popup', 'Patents\PatentsController@getPatentPopup');
+Route::get('/filed_by_month', 'Patents\PatentsController@getMonthJSON');
+Route::get('/filed_by_year', 'Patents\PatentsController@getYearJSON');
+Route::get('/patent_list_rs', 'Patents\PatentsController@getPatentResults');
 /* end of mohana priya codes */
 
 Route::get('import_indication_data', 'ImportIndicationDataController@load');
@@ -178,7 +183,7 @@ Route::get('/', ['middleware' => 'auth:api','uses' => 'ClinicalTrials\DashboardC
 
 Route::group(['middleware' => 'web'], function () {
    Route::get('/', 'HomeController@index'); 
-   Route::get('patents', 'Patents\PatentsController@index');
+   Route::get('patents1', 'Patents\PatentsController@index');
    Route::get('home', 'Dashboard\DashboardController@index');
    Route::auth();
 // Authentication routes...
