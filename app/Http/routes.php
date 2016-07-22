@@ -207,3 +207,11 @@ Route::get('login', 'LoginController@index');
 
 
 
+Route::get('/clinical_trial', 'ClinicalController@Extract');//Clinical Trial Extraction
+//Route::get('/detailed_clinical', 'ClinicalDetailStudyController@index');
+Route::get('/clinicaltrial_dashboard', 'ClinicalTrials\DashboardController@index');
+Route::get('/clinical_study_summary', 'ClinicalTrials\SummaryController@studySummary');
+Route::get('/clinical_adverse_chart', 'ClinicalTrials\SummaryController@createAdverseChart');
+Route::get('/clinical_study_detail', 'ClinicalTrials\DetailSummaryController@detailedStudy');
+Route::get('/list_studies/{type}/{value}', 'ClinicalTrials\ClinicalSearchController@searchStudy');
+Route::get('/get_clinical_rs', 'ClinicalTrials\ClinicalSearchController@getAllClinicalRS');

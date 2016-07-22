@@ -32,5 +32,9 @@ class SponsorModel extends Eloquent
     public function removeSponsor($id) {        
         SponsorModel::where('_id', $id)->update(array('isActive' => 0));
     }
+    public function loadSponsor() {
+        $model=SponsorModel::all()  ;   
+        return $model;
+    }
     
 }

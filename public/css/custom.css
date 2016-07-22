@@ -62,9 +62,9 @@ li.quicklinks i {
     vertical-align: top;
  
 }
-ul > li {
+/*ul > li {
     line-height: 30px;
-}
+}*/
 
 h1, h2, h3, h4, h5, h6 {
     color: #000 !important;
@@ -204,3 +204,100 @@ background: transparent !important;
 background: #fff !important;
 
 }
+
+.bg-background{
+
+background: #f1f1f1 !important;
+
+}
+
+.bg-blue-info-button{
+background: #0094D2 !important;
+color: #fff !important;
+
+} 
+
+.page-title i.none-18 {
+    font-size: 18px !important;
+ 
+}
+
+.page-title i.info-color-bg {
+    background: #0094D2 !important;
+color: #fff !important;
+    font-size: 30px;
+    margin-top:-30px !important ;
+    padding:25px 10px 10px !important;
+   
+   
+}
+
+
+.grid-title .tools > a.height-5 {
+    display: inline-block;
+    height: 5px;
+    margin-left: 5px;
+}
+
+.tiles.tile-bg-custom{
+    background: transparent !important;
+    color: #000;
+}
+
+.text-orange{
+color:#FF7800 !important;
+
+}
+.text-blue-custom{
+color:#0094D2 !important;
+
+}
+
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+
+
+.height-220{
+height:220px !important;
+
+};
+.height-210{
+    height: 210px ;
+}
+
+.text-italic{
+font-style: italic !important;
+}
+
+.bg-blue-custom{
+    background: #0094D2 !important;
+    color:#fff !important;
+
+
+}
+
+
+.b-all{
+
+    border: 1px solid #000 !important;
+} 
+
+.morris-chart text {
+  fill: #000000 !important;
+}
+
+.text-jusitfy{
+
+   text-align: justify;
+    text-justify: inter-word;
+}
+
+.border-width-t{
+border-width: 1px 0 0 !important; 
+
+} 

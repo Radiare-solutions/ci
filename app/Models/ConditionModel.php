@@ -32,4 +32,8 @@ class ConditionModel extends Eloquent
     public function removeCondition($id) {        
         ConditionModel::where('_id', $id)->update(array('isActive' => 0));
     }
+    public function loadCondition() {
+        $model=ConditionModel::all()  ;   
+        return $model;
+    }
 }

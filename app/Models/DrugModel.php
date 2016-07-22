@@ -32,4 +32,8 @@ class DrugModel extends Eloquent
     public function removeDrug($id) {        
        DrugModel::where('_id', $id)->update(array('isActive' => 0));
     }
+    public function loadDrugs() {
+        $model=DrugModel::all()  ;   
+        return $model;
+    }
 }
