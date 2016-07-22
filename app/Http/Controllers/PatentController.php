@@ -22,6 +22,7 @@ class PatentController extends Controller
      * return value - none
      *  null - if no match found
      */
+    
   // public function Extract(Request $request){
     public function Extract() {
        set_time_limit(0);

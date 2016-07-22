@@ -10,7 +10,7 @@
 
 
     <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-    <div id="portlet-config" class="modal hide">
+<div id="portlet-config" class="modal hide">
       <div class="modal-header">
         <button data-dismiss="modal" class="close" type="button"></button>
         <h3>Widget Settings</h3>
@@ -20,8 +20,7 @@
     <div class="clearfix"></div>
     <div class="content" style="padding-top:0 !important;">  
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-7">
+        <div class="col-md-8">
           <div class="row">
             <div class="col-md-12 m-b-10" >
             <div class="col-md-12">
@@ -37,7 +36,7 @@
               </div>
             </a>
             <a href="#">
-              <div class="col-md-4 width-200 height-200 tiles light-blue" style="margin-left:200px;background:url('{{ URL::asset("images/home/publications.png')" ) }} !important;">
+              <div class="col-md-4 width-200 height-200 tiles light-blue" style="margin-left:400px;background:url('{{ URL::asset("images/home/publications.png')" ) }} !important;">
                 <div class="overlayer bottom-left">
                   <div class="p-l-5 p-b-5">
                     <h4 class="text-white bold">Publications</h4>
@@ -50,7 +49,7 @@
             <div class="row tiles-container">
               <div class="col-md-4 width-200 height-200 tiles no-background no-padding">
                 <a href="#">
-                 <div class="col-md-6 width-100 height-100 tiles red no-padding" style="margin-right:200px;background:url('{{ URL::asset("images/home/ConferenceCalendar.png')") }} !important;">
+                 <div class="col-md-6 width-100 height-100 tiles red no-padding" style="margin-left:100px;margin-right:200px;background:url('{{ URL::asset("images/home/ConferenceCalendar.png')") }} !important;">
                  <div class="overlayer bottom-left">
                   <div class="p-l-5">
                     <h5 class="text-white bold">Conference Calendar</h5>
@@ -60,7 +59,7 @@
               </div>
             </a>
             <a href="#">
-              <div class="col-md-6 width-100 height-100 tiles red no-padding" style="margin-left:100px;background:url('{{ URL::asset("images/home/AdverseReaction.png')") }} !important;"> 
+              <div class="col-md-6 width-100 height-100 tiles red no-padding" style="margin-left:200px;background:url('{{ URL::asset("images/home/AdverseReaction.png')") }} !important;"> 
               <div class="overlayer bottom-left">
                   <div class="p-l-5">
                     <h5 class="text-white bold">Adverse Reaction</h5>
@@ -72,7 +71,7 @@
                 
               </div>
             <a href="#">
-              <div class="col-md-4 width-200 height-200 tiles light-blue" style="background:url('{{ URL::asset("images/home/clinicalresearch.png')") }} !important;">
+              <div class="col-md-4 width-200 height-200 tiles light-blue" style="margin-left:100px;background:url('{{ URL::asset("images/home/clinicalresearch.png')") }} !important;">
                 <div class="overlayer bottom-left">
                   <div class="p-l-5 p-b-5">
                     <h4 class="text-white bold">Clinical Research</h4>
@@ -126,7 +125,7 @@
               <div class="col-md-4 width-200 height-200 tiles no-background no-padding">
 
             <a href="#">
-              <div class="col-md-4 width-200 height-200 tiles light-blue" style="margin-left:200px;background:url('{{ URL::asset("images/home/PatientReviews.png')") }} !important;">
+              <div class="col-md-4 width-200 height-200 tiles light-blue" style="margin-left:400px;background:url('{{ URL::asset("images/home/PatientReviews.png')") }} !important;">
                 <div class="overlayer bottom-left">
                   <div class="p-l-5 p-b-5">
                     <h4 class="text-white bold">Patient Reviews</h4>
@@ -175,7 +174,7 @@
               <i class="fa fa-2x fa-refresh"></i>
               </div>
               <h5 class="text-white semi-bold">What's New</h5>
-            </div>
+  </div>
             <div class="tiles white p-r-5 ">
               <div class="p-t-5 p-b-0 b-b b-grey" style="background:#E9ECEE;">
                 <div class="post p-l-20">
