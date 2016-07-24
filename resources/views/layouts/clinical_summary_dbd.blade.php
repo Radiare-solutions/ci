@@ -6,27 +6,30 @@
 <title></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <!-- BEGIN PLUGIN CSS -->
-<link href="{{ URL::asset("assets/plugins/pace/pace-theme-flash.css") }}" rel="stylesheet" type="text/css" media="screen"/>
-<link rel="stylesheet" href="{{ URL::asset("assets/plugins/jquery-morris-chart/css/morris.css") }}" type="text/css" media="screen">
+
+        <link href="{{ URL::asset("css/theme-1/libs/pace/pace-theme-flash.css") }}" rel="stylesheet" type="text/css" media="screen"/>
+        <link type="text/css" rel="stylesheet" href="{{ URL::asset("css/theme-1/libs/morris/morris.core.css?1420463396") }}" />
 <!-- END PLUGIN CSS -->
 <!-- BEGIN CORE CSS FRAMEWORK -->
-<link href="{{ URL::asset("assets/plugins/boostrapv3/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/plugins/boostrapv3/css/bootstrap-theme.min.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/plugins/font-awesome/css/font-awesome.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/css/animate.min.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/plugins/jquery-scrollbar/jquery.scrollbar.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/bootstrap-theme.min.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/font-awesome.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/animate.min.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/theme-1/libs/jquery-scrollbar/jquery.scrollbar.css") }}" rel="stylesheet" type="text/css"/>
 <!-- END CORE CSS FRAMEWORK -->
 <!-- BEGIN CSS TEMPLATE -->
-<link href="{{ URL::asset("assets/css/style.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/css/responsive.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/css/custom-icon-set.css") }}" rel="stylesheet" type="text/css"/>
-<link href="{{ URL::asset("assets/css/custom.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/style.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/responsive.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/custom-icon-set.css") }}" rel="stylesheet" type="text/css"/>
+<link href="{{ URL::asset("css/custom.css") }}" rel="stylesheet" type="text/css"/>
 <!-- END CSS TEMPLATE -->
 <style>
 .grid.simple .grid-title .tools a, .grid.solid .grid-title .tools a {
     background: none !important;
 }
-
+body {
+                background:url( {{ URL::asset("images/bg.jpg") }}) !important;            
+            }
 
 </style>
 </head>
@@ -63,24 +66,24 @@
  </div>
 <!-- END CONTAINER -->
 <!-- BEGIN CORE JS FRAMEWORK--> 
-<script src="{{ URL::asset("assets/plugins/jquery-1.8.3.min.js")}}" type="text/javascript"></script> 
-<script src="{{ URL::asset("assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js")}}" type="text/javascript"></script> 
-<script src="{{ URL::asset("assets/plugins/boostrapv3/js/bootstrap.min.js")}}" type="text/javascript"></script> 
-<script src="{{ URL::asset("assets/plugins/breakpoints.js")}}" type="text/javascript"></script> 
-<script src="{{ URL::asset("assets/plugins/jquery-unveil/jquery.unveil.min.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/plugins/jquery-1.8.3.min.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/plugins/bootstrapv3/bootstrap.min.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/plugins/breakpoints.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/plugins/jquery-unveil/jquery.unveil.min.js")}}" type="text/javascript"></script> 
 <!-- END CORE JS FRAMEWORK --> 
 <!-- BEGIN PAGE LEVEL JS --> 	
-<script src="{{ URL::asset("assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js")}}" type="text/javascript"></script>
-<script src="{{ URL::asset("assets/plugins/pace/pace.min.js")}}" type="text/javascript"></script>  
-<script src="{{ URL::asset("assets/plugins/jquery-numberAnimate/jquery.animateNumbers.js")}}" type="text/javascript"></script>
+<script src="{{ URL::asset("js/plugins/jquery-scrollbar/jquery.scrollbar.min.js")}}" type="text/javascript"></script>
+<script src="{{ URL::asset("js/plugins/pace/pace.min.js")}}" type="text/javascript"></script>  
+<script src="{{ URL::asset("js/plugins/jquery-numberAnimate/jquery.animateNumbers.js")}}" type="text/javascript"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="{{ URL::asset("assets/plugins/jquery-morris-chart/js/morris.min.js")}}"></script>
+<script src="{{ URL::asset("js/plugins/jquery-morris-chart/js/morris.min.js")}}"></script>
 <!-- END PAGE LEVEL PLUGINS --> 	
 
 <!-- BEGIN CORE TEMPLATE JS --> 
-<script src="{{ URL::asset("assets/js/core.js")}}" type="text/javascript"></script> 
-<script src="{{ URL::asset("assets/js/chat.js")}}" type="text/javascript"></script> 
-<script src="{{ URL::asset("assets/js/demo.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/core.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/chat.js")}}" type="text/javascript"></script> 
+<script src="{{ URL::asset("js/demo.js")}}" type="text/javascript"></script> 
 <!-- END CORE TEMPLATE JS --> 
 
 <script>
