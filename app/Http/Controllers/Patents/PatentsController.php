@@ -16,9 +16,9 @@ class PatentsController extends Controller {
      * to check whether the user has been logged in or not
      */
     public function __construct() {
-        // $this->middleware('auth');
-        $this->patentModel=new patentModel();
-        $this->applicantModel = new applicantModel();
+        //$this->middleware('auth');
+        $this->patentModel=new patentModel;
+        $this->applicantModel = new applicantModel;
     }
     
     public function index(Request $request){
@@ -51,10 +51,10 @@ class PatentsController extends Controller {
          return view('patents.dashboard',$data);  
     }
     public function getPatentPopup(Request $request){
-        
-        $patent_year=$request->get('year');
-        $patent_applicant=$request->get('applicant');
-        
+        ini_set('max_execution_time',0);
+        $patent_year=$request->input('year');
+        $patent_applicant=$request->input('applicant');
+
         if(($patent_year!=0) && ($patent_applicant==0)){
             
         $patentsData = iterator_to_array($this->patentModel->loadPatentsByYear($patent_year,"",0,0,"publication_date",-1));
@@ -67,13 +67,13 @@ class PatentsController extends Controller {
 
            $patentsData=iterator_to_array($this->patentModel->loadPatentsByApplicants($patent_applicant,0,0,"publication_date",-1));
         }
-        else if(($patent_year==0) && ($patent_applicant==0)){
-           $patentsData = $this->patentModel->loadPatents(0,0,"publication_date",-1); 
+        else{
+           $patentsData =iterator_to_array( $this->patentModel->loadPatents(0,0,"publication_date",-1)); 
         }
         
-       $nav_key=$request->get('nav_key');
+       $nav_key=$request->input('nav_key');
 
-        
+
         $patentArr = array();
         $position=0;
         foreach($patentsData as $patent) {
@@ -85,6 +85,7 @@ class PatentsController extends Controller {
                 $patentAttr = $patent;   
             }
             $patentArr[$position]['patent_id']=$patentAttr['_id'];
+           
             $patentArr[$position]['title']=(String)$patentAttr['title'];
             $patentArr[$position]['link']=$patentAttr['link'];
             $patentArr[$position]['abstract']=$patentAttr['abstract'];
@@ -115,18 +116,22 @@ class PatentsController extends Controller {
             $applicant_name_arr=array();
             foreach ($applicant_arr as $value){ 
                 $applicant_id=$value['_id'];
+                if($applicant_id!=""){
                 $applicnt_arr=$this->applicantModel->applicantsById($applicant_id);
                 $applicant_name_arr[]=$applicnt_arr['attributes']['applicant_name'];
+                }
             }
-            if(count($applicant_name_arr)>1){
+            if(count($applicant_name_arr)>1){               
                $num=count($applicant_name_arr)-1;
                $applicant_name= $applicant_name_arr[0]." (+".$num.")";
             }else{
-               $applicant_name= $applicant_name_arr[0]; 
+               $applicant_name= implode("",$applicant_name_arr); 
             }
-            $patentArr[$position]['applicants']=$applicant_name;
+            $patentArr[$position]['applicants']=$applicant_name; 
             $position++;
         }
+//        var_dump($patentArr);
+//exit;
         
        
         if(($patent_year!=0 ) && ($patent_applicant==0)){
@@ -138,11 +143,12 @@ class PatentsController extends Controller {
         else if(($patent_year==0) && ($patent_applicant!=0)){
            $data=array("content"=>$patentArr,"nav_key"=>$nav_key,"yr"=>0,"app"=>$patent_applicant);  
         }
-        else if(($patent_year==0) && ($patent_applicant==0)){
+        else{
            $data=array("content"=>$patentArr,"nav_key"=>$nav_key,"yr"=>0,"app"=>0);
         }
         
-        return view('patents.get_detail_patents',array('patent_detail'=>$data));    
+        
+        return view('patents.popup_detail_patents',array('patent_detail'=>$data));    
     }
     
     public function getMonthJSON(Request $request){
@@ -271,10 +277,10 @@ class PatentsController extends Controller {
     }
     public function getPatentResults(Request $request){
         
-        $patent_year=$request->get('year');
-        $pat_app=$request->get('applicant');
-        $month=$request->get('month');
-//        echo "Month Name: ".$month."<br/>";
+        $patent_year=$request->input('year');
+        $pat_app=$request->input('applicant');
+        $month=$request->input('month');
+//      echo "Month Name: ".$month."<br/>";
         $take=(int)$request->get('show');
         $pagenum=(int)$request->get('pagenum');
         $sort_by=$request->get('sort_title');
@@ -346,23 +352,23 @@ class PatentsController extends Controller {
             $applicant_name_arr=array();
             foreach ($applicant_arr as $value){ 
                 $applicant_id=$value['_id'];
+                if($applicant_id!=""){
                 $applicnt_arr=$this->applicantModel->applicantsById($applicant_id);
                 $applicant_name_arr[]=$applicnt_arr['attributes']['applicant_name'];
+                }
             }
             if(count($applicant_name_arr)>1){
                $num=count($applicant_name_arr)-1;
                $applicant_name= $applicant_name_arr[0]." (+".$num.")";
             }else{
-               $applicant_name= $applicant_name_arr[0]; 
+               $applicant_name= implode(',',$applicant_name_arr); 
             }
             $patentArr[$position]['applicants']=$applicant_name;
             $position++;
         }
         
-        $cnt1=count($totalPageArr);
-        $cnt=count($patentArr);
+        $cnt1=count($totalPageArr); // all count
         $last =ceil($cnt1/$take);
-        
         
          if(($patent_year!=0) && ($pat_app==0)){
             $yr=$patent_year;
@@ -380,7 +386,7 @@ class PatentsController extends Controller {
             $yr=0;
             $app=0;
          }
-         $data=array("patentData"=>$patentArr,"yr"=>$yr,"app"=>$app,"pageLimit"=>$take,"pageNum"=>$pagenum,"last"=>$last,"totalPage"=>$cnt,"skip"=>$skip,"sort"=>$sort_by,"order"=>$order,"month"=>$month,"ajax"=>$ajaxCallName);   
+         $data=array("patentData"=>$patentArr,"yr"=>$yr,"app"=>$app,"pageLimit"=>$take,"pageNum"=>$pagenum,"last"=>$last,"totalPage"=>$cnt1,"skip"=>$skip,"sort"=>$sort_by,"order"=>$order,"month"=>$month,"ajax"=>$ajaxCallName);   
          
         return view('patents.get_patent_result',array('patent_rs'=>$data));    
     }

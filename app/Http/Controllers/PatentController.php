@@ -22,7 +22,11 @@ class PatentController extends Controller
      * return value - none
      *  null - if no match found
      */
-    
+    public function __construct() {
+       $this->applicantModel=new ApplicantModel;
+       $this->rssModel=new rssModel;
+       $this->patentModel=new patentModel;
+    }
   // public function Extract(Request $request){
     public function Extract() {
        set_time_limit(0);
@@ -34,14 +38,11 @@ class PatentController extends Controller
         $rss_feed_type="Patents";
            
         //Checking whether the Feed URL is exist or not.
-        $rssModel= new rssModel();
-        $patentModal=new patentModel(); 
-        $applicantModel= new applicantModel();
         
-        $feedExist=$rssModel->rssFeedselect($api_query,$rss_feed_type);
+        $feedExist=$this->rssModel->rssFeedselect($api_query,$rss_feed_type);
         if($feedExist==null){
             // Inserting RSS FEED into ci_rss_feeds table
-           $feedInsert=$rssModel->rssFeedinsert($api_query,$rss_feed_type);
+           $feedInsert=$this->rssModel->rssFeedinsert($api_query,$rss_feed_type);
            $rss_feed_id=$feedInsert->_id; 
         }else{
            // fetching primary key from Rss Feed Collection
@@ -131,11 +132,12 @@ class PatentController extends Controller
             foreach ($applicants as $value){
 
                 $applicant_name= preg_replace("/[^a-zA-Z0-9 -_=#,.%&*(){}\s]/", "",$value);
-                $applicant_name_id1=$applicantModel->fetchApplicant(trim($applicant_name)); //checking whether the applicant name is exist or not exist
+                $applicant_name_id1=$this->applicantModel->fetchApplicant(trim($applicant_name)); //checking whether the applicant name is exist or not exist
 
                  if($applicant_name_id1==0) //we are adding the applicant into the applicant collection if applicant is not exist
                 { 
-                  $applicant_id_arr[]=$applicantModel->addApplicant($value);
+                  $applicant_id_to_objectId =$this->applicantModel->addApplicant(trim($value));
+                  $applicant_id_arr[]=new \MongoDB\BSON\ObjectId($applicant_id_to_objectId);
                 }else{
                   $applicant_id_arr[]=$applicant_name_id1['_id']; 
                 }
@@ -170,7 +172,7 @@ class PatentController extends Controller
             "priority_date"=>$priorityDate,
             "publication_info"=>$publicationInfo);
         
-        $patentModal->patentInsert($insert_details);  
+       $this->patentModel->patentInsert($insert_details);  
         }
     
    }

@@ -215,3 +215,16 @@ Route::get('/clinical_adverse_chart', 'ClinicalTrials\SummaryController@createAd
 Route::get('/clinical_study_detail', 'ClinicalTrials\DetailSummaryController@detailedStudy');
 Route::get('/list_studies/{type}/{value}', 'ClinicalTrials\ClinicalSearchController@searchStudy');
 Route::get('/get_clinical_rs', 'ClinicalTrials\ClinicalSearchController@getAllClinicalRS');
+
+Route::get('/conference_calendar', 'ConfCalendarController@Extract'); //Conference calendar data Extraction
+Route::get('/ci_conf_calendar', 'ConferenceCalendar\YearConfCalendarController@index');
+Route::get('/ci_calendar_by_month/yr/{yr}/mn/{mn}', 'ConferenceCalendar\MonthConfCalendarController@index');
+Route::get('/ci_conf_month_event', 'ConferenceCalendar\MonthConfCalendarController@getEventMonthWise');
+Route::get('/calendar_popup', 'ConferenceCalendar\YearConfCalendarController@getConference');
+
+Route::get('/patents', 'PatentController@Extract');//Patent data Extraction
+Route::match(array('GET', 'POST'),'/ci_patents', 'Patents\PatentsController@index');
+Route::match(array('GET', 'POST'),'/patent_popup', 'Patents\PatentsController@getPatentPopup');
+Route::match(array('GET', 'POST'),'/filed_by_month', 'Patents\PatentsController@getMonthJSON');
+Route::match(array('GET', 'POST'),'/filed_by_year', 'Patents\PatentsController@getYearJSON');
+Route::match(array('GET', 'POST'),'/patent_list_rs', 'Patents\PatentsController@getPatentResults');

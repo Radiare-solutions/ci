@@ -150,7 +150,9 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
         $year_url=$request->get('year'); 
         $ConfCalendarModel= new ConfCalendarModel();
         $conf_calendar_data = $ConfCalendarModel->CalenderByYear($year_url); 
-
+//         echo "<pre>";
+//         print_r($conf_calendar_data);
+//         exit();
         if(!empty($conf_calendar_data)){
             
             $jan=0;$feb=0;$mar=0;$apr=0;$may=0;$jun=0;$jul=0;$aug=0;$sep=0;$oct=0;$nov=0;$dec=0;
@@ -190,45 +192,49 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
                 
                 if($start_month==$end_month){
                     
-                   if(in_array($start_month, $month_arr)){
                     $conf_detail_arr["conf_id"]=$id;
                     $conf_detail_arr["conf_title"]=$conference_title;
                     $conf_detail_arr["conf_date"]=$dates;
                     $conf_detail_arr["unique_id"]=$unique_id;
                     $conf_detail_arr["month"]=$start_month;   
                     $conf_detail_arr["year"]=$year;
-                 } 
- 
+
                  if(isset($monthly_calender[$start_month]) && !empty($conf_detail_arr)){
-                    $monthly_calender[$start_month]["Conf_Details"][$id]=$conf_detail_arr;
-                    $monthly_calender[$start_month]["Total_Conf"]=count($monthly_calender[$start_month]['Conf_Details']);
+                    $monthly_calender[$start_month]["Conf_Details"]["$unique_id"]=$conf_detail_arr;
+                    $monthly_calender[$start_month]['Total_Conf']++;
                  }
                  
-                }else if($start_month!=$end_month) {
-                    $start_mn_index=array_search($start_month,$month_arr);
-
-                    $end_mn_index=array_search($end_month,$month_arr);
-
-                    for ($month_i=$start_mn_index; $month_i<=$end_mn_index; $month_i++){
-                        
-                            $conf_detail_arr["conf_id"]=$id;
-                            $conf_detail_arr["conf_title"]=$conference_title;
-                            $conf_detail_arr["conf_date"]=$dates;
-                            $conf_detail_arr["unique_id"]=$unique_id;
-                            $conf_detail_arr["month"]=$month_arr[$month_i];   
-                            $conf_detail_arr["year"]=$year;
-
-                            if(isset($monthly_calender[$month_arr[$month_i]]) && !empty($conf_detail_arr)){
-                                $monthly_calender[$month_arr[$month_i]]["Conf_Details"][$id]=$conf_detail_arr;
-                                $monthly_calender[$month_arr[$month_i]]["Total_Conf"]++;
-                            }
-                   
-                    }
-
+                }
+//                else if("$start_month" != "$end_month"){
+//                    $start_mn_index=array_search($start_month,$month_arr);
+//
+//                    $end_mn_index=array_search($end_month,$month_arr);
+//                    
+//                    if(abs($start_mn_index - $end_mn_index)==1){ 
+//                    for ($month_i=$start_mn_index; $month_i<=$end_mn_index; $month_i++){
+//
+//                            $conf_detail_arr["conf_id"]=$id;
+//                            $conf_detail_arr["conf_title"]=$conference_title;
+//                            $conf_detail_arr["conf_date"]=$dates;
+//                            $conf_detail_arr["unique_id"]=$unique_id;
+//                            $conf_detail_arr["month"]=$month_arr[$month_i];   
+//                            $conf_detail_arr["year"]=$year;
+//
+//                            if(isset($monthly_calender[$month_arr[$month_i]]) && !empty($conf_detail_arr)){
+//                                
+//                                $monthly_calender[$month_arr[$month_i]]["Conf_Details"]["$unique_id"]=$conf_detail_arr;
+//                                $monthly_calender[$month_arr[$month_i]]['Total_Conf']++;
+//                            }
+//                    }
+//
+//                }
+//                }
                 }
 
-                }
-           
+//        echo "<pre>";
+//        print_r($monthly_calender['November']);
+//        echo "</pre>";
+//        exit();
         return  view('conference_calendar/view_conf_calendar', array('monthly_calender'=>$monthly_calender));
        
      }
@@ -240,8 +246,13 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
        $month=$request->get('month'); 
        $year=$request->get('year');
        $nav_key=$request->get('nav_key');
+//       $month="September";
+//       $year=2016;
+//       $nav_key=0;
+       
 
-         $conf_content=$ConfCalendarModel->CalenderByYearandMonth($month,$year);
+         $conf_content1=$ConfCalendarModel->CalenderByYearandMonth($month,$year);
+         $conf_content=iterator_to_array($conf_content1);
 
          $conf_detail_arr=array();
          
@@ -251,32 +262,34 @@ foreach($content->find('a[class=subjectlinks]') as $current_div){
             $conference_id=$conference_detail_key['_id'];
             $conference_title=$conference_detail_key['conference_title'];
             
-            $conf_detail_arr["$position"]["conf_id"]=$conference_id;
-            $conf_detail_arr["$position"]["conf_title"]=$conference_title;
-            $value=$conference_detail_key['conf_column_name_value'];
+            $conf_detail_arr[$position]["conf_id"]=$conference_id;
+            $conf_detail_arr[$position]["conf_title"]=$conference_title;
             
-            if(array_key_exists("id",$value)){ $conf_detail_arr["$position"]["id"]=$value['id'];
+            foreach ($conference_detail_key['conf_column_name_value'] as $value){
+            
+            if(array_key_exists("id",$value)){ $conf_detail_arr[$position]["id"]=$value['id'];
             }   
-            if(array_key_exists("dates",$value)){ $conf_detail_arr["$position"]["dates"]=$value['dates'];
+            if(array_key_exists("dates",$value)){ $conf_detail_arr[$position]["dates"]=$value['dates'];
             }               
-            if(array_key_exists("location",$value)){ $conf_detail_arr["$position"]["location"]=$value['location']; 
+            if(array_key_exists("location",$value)){ $conf_detail_arr[$position]["location"]=$value['location']; 
             }
-            if(array_key_exists("contact",$value)){ $conf_detail_arr["$position"]["contact"]=$value['contact']; 
+            if(array_key_exists("contact",$value)){ $conf_detail_arr[$position]["contact"]=$value['contact']; 
             }
-            if(array_key_exists("topics",$value)){ $conf_detail_arr["$position"]["topics"]=$value['topics']; 
+            if(array_key_exists("topics",$value)){ $conf_detail_arr[$position]["topics"]=$value['topics']; 
             }
-            if(array_key_exists("related_subject(s)",$value)){ $conf_detail_arr["$position"]["related_subject"]=$value['related_subject(s)']; 
+            if(array_key_exists("related_subject(s)",$value)){ $conf_detail_arr[$position]["related_subject"]=$value['related_subject(s)']; 
             }
-            if(array_key_exists("event_website",$value)){ $conf_detail_arr["$position"]["event_website"]=$value['event_website']; 
+            if(array_key_exists("event_website",$value)){ $conf_detail_arr[$position]["event_website"]=$value['event_website']; 
             }
-            if(array_key_exists("abstract",$value)){ $conf_detail_arr["$position"]["abstract"]=$value['abstract']; 
+            if(array_key_exists("abstract",$value)){ $conf_detail_arr[$position]["abstract"]=$value['abstract']; 
+            }
             }
             $position++;
       }
-//      echo "<pre>";
-//      print_r($conf_detail_arr);
-//      echo "</pre>";
-//       exit();
+//         echo "<pre>";
+//        print_r($conf_detail_arr);
+//        echo "</pre>";
+//        exit();
        $data=array("content"=>$conf_detail_arr,"month"=>$month,"year"=>$year,"nav_key"=>$nav_key);
        return view('conference_calendar/get_detailed_conf',array('conference_detail'=>$data));   
     }
