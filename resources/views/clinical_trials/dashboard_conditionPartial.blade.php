@@ -1,4 +1,3 @@
-<svg id="conditional" width="433" height="287">
 <div class="row">
     <div class="col-md-12 m-t-10 m-b-10 sortable">
         <div class="grid simple no-margin">
@@ -16,4 +15,3 @@
         </div>
     </div>
 </div>
-</svg>
